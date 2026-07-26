@@ -4,19 +4,21 @@
 
 	"compilerOptions": {
 		"lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator", "ESNext.Promise"],
-		"module": "nodenext",
+		"module": "ESNext",
 		"target": "es2024",
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
-		"moduleResolution": "node16",
+		"moduleResolution": "Bundler",
 		"outDir": "./build",
-		"baseUrl": "./",
+		"rootDir": "./",
+		"types": ["node"],
+		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*", "./prisma/*"]
-		},
-		"types": ["vitest/globals"]
+		}
+		// "types": ["vitest/globals"]
 	}
 }

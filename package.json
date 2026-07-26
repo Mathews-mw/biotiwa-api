@@ -3,10 +3,18 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx --no-warnings --env-file=.env --watch src/infra/server.ts",
     "start": "node build/server.js",
-    "build": "tsup src --out-dir build"
+    "build": "tsup src --out-dir build",
+    "lint": "eslint --ext .ts --fix src",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false",
+    "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
+    "test:e2e:watch": "vitest --config ./vitest.config.e2e.ts"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +26,6 @@
       "onFail": "download"
     }
   },
-  "type": "module",
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^26.1.1",
@@ -33,21 +40,31 @@
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-promise": "^7.3.0",
     "prettier": "^3.9.5",
+    "prisma": "^7.9.0",
     "tsup": "^8.5.1",
     "tsx": "^4.23.1",
-    "typescript": "^7.0.2",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.64.0"
   },
   "dependencies": {
+    "@better-auth/prisma-adapter": "^1.6.23",
     "@fastify/cookie": "^11.1.2",
     "@fastify/cors": "^11.3.0",
     "@fastify/jwt": "^10.2.0",
     "@fastify/swagger": "^9.8.1",
     "@fastify/swagger-ui": "^6.1.0",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.9.0",
+    "bcryptjs": "^3.0.3",
+    "better-auth": "^1.6.23",
+    "dayjs": "^1.11.21",
     "dotenv": "^17.4.2",
     "fastify": "^5.10.0",
     "fastify-plugin": "^6.0.0",
     "fastify-type-provider-zod": "^7.0.0",
+    "pg": "^8.22.0",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.10.0",
     "zod": "^4.4.3"
   }
 }

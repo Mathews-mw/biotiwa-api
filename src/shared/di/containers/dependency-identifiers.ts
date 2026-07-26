@@ -1,0 +1,15 @@
+export const DEPENDENCY_IDENTIFIERS = {
+	// Repositories
+	ACCOUNTS_REPOSITORY: Symbol('AccountsRepository'),
+	ADDRESSES_REPOSITORY: Symbol('AddressesRepository'),
+	CONSENT_TERMS_REPOSITORY: Symbol('ConsentTermsRepository'),
+	CUSTOMER_PROFILES_REPOSITORY: Symbol('CustomerProfilesRepository'),
+	SESSIONS_REPOSITORY: Symbol('SessionsRepository'),
+	USER_CONSENTS_REPOSITORY: Symbol('UserConsentsRepository'),
+	USERS_REPOSITORY: Symbol('UsersRepository'),
+
+	// Providers
+	IDENTITY_PROVIDER: Symbol('IdentityProvider'),
+} as const;
+
+export type DependencyIdentifiers = (typeof DEPENDENCY_IDENTIFIERS)[keyof typeof DEPENDENCY_IDENTIFIERS];
