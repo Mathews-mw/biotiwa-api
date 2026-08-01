@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { UserPresenter } from '../../presenters/user-presenter';
+import { UserProfilePresenter } from '../../presenters/user-profile-presenter';
 import { getAuthenticatedSession } from '../../helpers/get-authenticated-session';
 import { GetCurrentUserUseCase } from '@/domains/main/application/modules/users/use-cases/get-current-user-use-case';
 
@@ -18,5 +18,7 @@ export async function getCurrentUserController(request: FastifyRequest, reply: F
 		throw result.value;
 	}
 
-	return reply.status(200).send(UserPresenter.toHTTP(result.value.user));
+	return reply
+		.status(200)
+		.send(UserProfilePresenter.toHTTP({ user: result.value.user, profile: result.value.customerProfile ?? null }));
 }

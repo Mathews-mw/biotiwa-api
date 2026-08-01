@@ -58,7 +58,12 @@ export const ModelName = {
   CustomerProfile: 'CustomerProfile',
   Address: 'Address',
   UserConsent: 'UserConsent',
-  ConsentTerm: 'ConsentTerm'
+  ConsentTerm: 'ConsentTerm',
+  Market: 'Market',
+  Product: 'Product',
+  Offer: 'Offer',
+  OfferItem: 'OfferItem',
+  OrderBump: 'OrderBump'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -197,6 +202,85 @@ export const ConsentTermScalarFieldEnum = {
 } as const
 
 export type ConsentTermScalarFieldEnum = (typeof ConsentTermScalarFieldEnum)[keyof typeof ConsentTermScalarFieldEnum]
+
+
+export const MarketScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  label: 'label',
+  locale: 'locale',
+  currency: 'currency',
+  shippingAmount: 'shippingAmount',
+  taxRate: 'taxRate',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketScalarFieldEnum = (typeof MarketScalarFieldEnum)[keyof typeof MarketScalarFieldEnum]
+
+
+export const ProductScalarFieldEnum = {
+  id: 'id',
+  sku: 'sku',
+  slug: 'slug',
+  name: 'name',
+  shortDescription: 'shortDescription',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  pillsPerPack: 'pillsPerPack',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const OfferScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  marketCode: 'marketCode',
+  name: 'name',
+  description: 'description',
+  unitAmount: 'unitAmount',
+  discountPercent: 'discountPercent',
+  isHighlighted: 'isHighlighted',
+  status: 'status',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OfferScalarFieldEnum = (typeof OfferScalarFieldEnum)[keyof typeof OfferScalarFieldEnum]
+
+
+export const OfferItemScalarFieldEnum = {
+  id: 'id',
+  offerId: 'offerId',
+  productId: 'productId',
+  quantity: 'quantity',
+  createdAt: 'createdAt'
+} as const
+
+export type OfferItemScalarFieldEnum = (typeof OfferItemScalarFieldEnum)[keyof typeof OfferItemScalarFieldEnum]
+
+
+export const OrderBumpScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  marketCode: 'marketCode',
+  name: 'name',
+  description: 'description',
+  unitAmount: 'unitAmount',
+  quantity: 'quantity',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderBumpScalarFieldEnum = (typeof OrderBumpScalarFieldEnum)[keyof typeof OrderBumpScalarFieldEnum]
 
 
 export const SortOrder = {

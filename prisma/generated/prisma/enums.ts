@@ -25,6 +25,15 @@ export const AccountProvider = {
 export type AccountProvider = (typeof AccountProvider)[keyof typeof AccountProvider]
 
 
+export const ConsentType = {
+  TERMS_OF_USE: 'TERMS_OF_USE',
+  PRIVACY_POLICY: 'PRIVACY_POLICY',
+  MARKETING: 'MARKETING'
+} as const
+
+export type ConsentType = (typeof ConsentType)[keyof typeof ConsentType]
+
+
 export const MarketCode = {
   BR: 'BR',
   US: 'US'
@@ -33,10 +42,27 @@ export const MarketCode = {
 export type MarketCode = (typeof MarketCode)[keyof typeof MarketCode]
 
 
-export const ConsentType = {
-  TERMS_OF_USE: 'TERMS_OF_USE',
-  PRIVACY_POLICY: 'PRIVACY_POLICY',
-  MARKETING: 'MARKETING'
+export const CurrencyCode = {
+  BRL: 'BRL',
+  USD: 'USD'
 } as const
 
-export type ConsentType = (typeof ConsentType)[keyof typeof ConsentType]
+export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode]
+
+
+export const ProductStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus]
+
+
+export const OfferStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type OfferStatus = (typeof OfferStatus)[keyof typeof OfferStatus]

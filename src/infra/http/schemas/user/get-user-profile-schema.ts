@@ -1,8 +1,8 @@
 import z from 'zod';
 import { FastifySchema } from 'fastify/types/schema';
-import { userSchema } from './user-schema';
+import { userProfileSchema } from './user-profile-scheme';
 
-const responseSchema = userSchema;
+const responseSchema = userProfileSchema;
 
 export type GetUserProfileResponse = z.infer<typeof responseSchema>;
 

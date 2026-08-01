@@ -5,10 +5,19 @@ CREATE TYPE "UserRole" AS ENUM ('CUSTOMER', 'ADMIN');
 CREATE TYPE "AccountProvider" AS ENUM ('CREDENTIALS', 'GOOGLE');
 
 -- CreateEnum
+CREATE TYPE "ConsentType" AS ENUM ('TERMS_OF_USE', 'PRIVACY_POLICY', 'MARKETING');
+
+-- CreateEnum
 CREATE TYPE "MarketCode" AS ENUM ('BR', 'US');
 
 -- CreateEnum
-CREATE TYPE "ConsentType" AS ENUM ('TERMS_OF_USE', 'PRIVACY_POLICY', 'MARKETING');
+CREATE TYPE "CurrencyCode" AS ENUM ('BRL', 'USD');
+
+-- CreateEnum
+CREATE TYPE "ProductStatus" AS ENUM ('DRAFT', 'ACTIVE', 'ARCHIVED');
+
+-- CreateEnum
+CREATE TYPE "OfferStatus" AS ENUM ('DRAFT', 'ACTIVE', 'ARCHIVED');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -78,6 +87,7 @@ CREATE TABLE "customer_profiles" (
     "preferred_market" "MarketCode",
     "phone" TEXT,
     "birth_date" TIMESTAMP(3),
+    "document" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
 
@@ -131,6 +141,85 @@ CREATE TABLE "consent_terms" (
     CONSTRAINT "consent_terms_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "markets" (
+    "id" TEXT NOT NULL,
+    "code" "MarketCode" NOT NULL,
+    "label" TEXT NOT NULL,
+    "locale" TEXT NOT NULL,
+    "currency" "CurrencyCode" NOT NULL,
+    "shipping_amount" INTEGER NOT NULL,
+    "tax_rate" DECIMAL(5,4) NOT NULL,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
+
+    CONSTRAINT "markets_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "products" (
+    "id" TEXT NOT NULL,
+    "sku" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "short_description" TEXT NOT NULL,
+    "description" TEXT,
+    "image_url" TEXT,
+    "pills_per_pack" INTEGER,
+    "status" "ProductStatus" NOT NULL DEFAULT 'DRAFT',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
+
+    CONSTRAINT "products_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "offers" (
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "market_code" "MarketCode" NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "unit_amount" INTEGER NOT NULL,
+    "discount_percent" INTEGER NOT NULL DEFAULT 0,
+    "is_highlighted" BOOLEAN NOT NULL DEFAULT false,
+    "status" "OfferStatus" NOT NULL DEFAULT 'DRAFT',
+    "sort_order" INTEGER NOT NULL DEFAULT 0,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
+
+    CONSTRAINT "offers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "offer_items" (
+    "id" TEXT NOT NULL,
+    "offer_id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+    "quantity" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "offer_items_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "order_bumps" (
+    "id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+    "market_code" "MarketCode" NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "unit_amount" INTEGER NOT NULL,
+    "quantity" INTEGER NOT NULL DEFAULT 1,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "sort_order" INTEGER NOT NULL DEFAULT 0,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
+
+    CONSTRAINT "order_bumps_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_id_key" ON "users"("id");
 
@@ -171,9 +260,6 @@ CREATE INDEX "address_market_idx" ON "address"("market");
 CREATE INDEX "address_user_id_is_default_idx" ON "address"("user_id", "is_default");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "address_user_id_is_default_key" ON "address"("user_id", "is_default");
-
--- CreateIndex
 CREATE INDEX "user_consent_user_id_idx" ON "user_consent"("user_id");
 
 -- CreateIndex
@@ -184,6 +270,36 @@ CREATE INDEX "consent_terms_type_idx" ON "consent_terms"("type");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "consent_terms_type_version_key" ON "consent_terms"("type", "version");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "markets_code_key" ON "markets"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "products_sku_key" ON "products"("sku");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "products_slug_key" ON "products"("slug");
+
+-- CreateIndex
+CREATE INDEX "offers_market_code_idx" ON "offers"("market_code");
+
+-- CreateIndex
+CREATE INDEX "offers_status_idx" ON "offers"("status");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "offers_market_code_slug_key" ON "offers"("market_code", "slug");
+
+-- CreateIndex
+CREATE INDEX "offer_items_offer_id_idx" ON "offer_items"("offer_id");
+
+-- CreateIndex
+CREATE INDEX "offer_items_product_id_idx" ON "offer_items"("product_id");
+
+-- CreateIndex
+CREATE INDEX "order_bumps_market_code_idx" ON "order_bumps"("market_code");
+
+-- CreateIndex
+CREATE INDEX "order_bumps_product_id_idx" ON "order_bumps"("product_id");
 
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -202,3 +318,18 @@ ALTER TABLE "user_consent" ADD CONSTRAINT "user_consent_user_id_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "user_consent" ADD CONSTRAINT "user_consent_term_id_fkey" FOREIGN KEY ("term_id") REFERENCES "consent_terms"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "offers" ADD CONSTRAINT "offers_market_code_fkey" FOREIGN KEY ("market_code") REFERENCES "markets"("code") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "offer_items" ADD CONSTRAINT "offer_items_offer_id_fkey" FOREIGN KEY ("offer_id") REFERENCES "offers"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "offer_items" ADD CONSTRAINT "offer_items_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "order_bumps" ADD CONSTRAINT "order_bumps_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "order_bumps" ADD CONSTRAINT "order_bumps_market_code_fkey" FOREIGN KEY ("market_code") REFERENCES "markets"("code") ON DELETE RESTRICT ON UPDATE CASCADE;

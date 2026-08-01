@@ -9,6 +9,7 @@ export const userSchema = z.object({
 	image: z.string().nullable().optional(),
 	role: rolesSchema,
 	created_at: z.coerce.date(),
+	updated_at: z.coerce.date().nullable().optional(),
 });
 
 export type IUserResponseSchema = z.infer<typeof userSchema>;

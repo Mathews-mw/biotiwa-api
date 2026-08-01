@@ -7,6 +7,10 @@ const connectionString = `${env.DATABASE_URL}`;
 
 const globalForPrisma = global as unknown as {
 	prisma: PrismaClient;
+	migrations: {
+		path: 'prisma/migrations';
+		seed: 'tsx prisma/seed.ts';
+	};
 };
 
 const adapter = new PrismaPg({ connectionString }, { schema: 'biotiwa' });

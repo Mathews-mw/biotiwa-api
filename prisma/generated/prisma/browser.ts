@@ -57,3 +57,28 @@ export type UserConsent = Prisma.UserConsentModel
  * 
  */
 export type ConsentTerm = Prisma.ConsentTermModel
+/**
+ * Model Market
+ * 
+ */
+export type Market = Prisma.MarketModel
+/**
+ * Model Product
+ * 
+ */
+export type Product = Prisma.ProductModel
+/**
+ * Model Offer
+ * 
+ */
+export type Offer = Prisma.OfferModel
+/**
+ * Model OfferItem
+ * 
+ */
+export type OfferItem = Prisma.OfferItemModel
+/**
+ * Model OrderBump
+ * 
+ */
+export type OrderBump = Prisma.OrderBumpModel
