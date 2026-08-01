@@ -30,6 +30,7 @@ export type CustomerProfileMinAggregateOutputType = {
   preferredMarket: $Enums.MarketCode | null
   phone: string | null
   birthDate: Date | null
+  document: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -40,6 +41,7 @@ export type CustomerProfileMaxAggregateOutputType = {
   preferredMarket: $Enums.MarketCode | null
   phone: string | null
   birthDate: Date | null
+  document: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,6 +52,7 @@ export type CustomerProfileCountAggregateOutputType = {
   preferredMarket: number
   phone: number
   birthDate: number
+  document: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -62,6 +65,7 @@ export type CustomerProfileMinAggregateInputType = {
   preferredMarket?: true
   phone?: true
   birthDate?: true
+  document?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -72,6 +76,7 @@ export type CustomerProfileMaxAggregateInputType = {
   preferredMarket?: true
   phone?: true
   birthDate?: true
+  document?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +87,7 @@ export type CustomerProfileCountAggregateInputType = {
   preferredMarket?: true
   phone?: true
   birthDate?: true
+  document?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -165,6 +171,7 @@ export type CustomerProfileGroupByOutputType = {
   preferredMarket: $Enums.MarketCode | null
   phone: string | null
   birthDate: Date | null
+  document: string | null
   createdAt: Date
   updatedAt: Date | null
   _count: CustomerProfileCountAggregateOutputType | null
@@ -196,6 +203,7 @@ export type CustomerProfileWhereInput = {
   preferredMarket?: Prisma.EnumMarketCodeNullableFilter<"CustomerProfile"> | $Enums.MarketCode | null
   phone?: Prisma.StringNullableFilter<"CustomerProfile"> | string | null
   birthDate?: Prisma.DateTimeNullableFilter<"CustomerProfile"> | Date | string | null
+  document?: Prisma.StringNullableFilter<"CustomerProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CustomerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"CustomerProfile"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -207,6 +215,7 @@ export type CustomerProfileOrderByWithRelationInput = {
   preferredMarket?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  document?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -221,6 +230,7 @@ export type CustomerProfileWhereUniqueInput = Prisma.AtLeast<{
   preferredMarket?: Prisma.EnumMarketCodeNullableFilter<"CustomerProfile"> | $Enums.MarketCode | null
   phone?: Prisma.StringNullableFilter<"CustomerProfile"> | string | null
   birthDate?: Prisma.DateTimeNullableFilter<"CustomerProfile"> | Date | string | null
+  document?: Prisma.StringNullableFilter<"CustomerProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CustomerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"CustomerProfile"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -232,6 +242,7 @@ export type CustomerProfileOrderByWithAggregationInput = {
   preferredMarket?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  document?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.CustomerProfileCountOrderByAggregateInput
@@ -248,6 +259,7 @@ export type CustomerProfileScalarWhereWithAggregatesInput = {
   preferredMarket?: Prisma.EnumMarketCodeNullableWithAggregatesFilter<"CustomerProfile"> | $Enums.MarketCode | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"CustomerProfile"> | string | null
   birthDate?: Prisma.DateTimeNullableWithAggregatesFilter<"CustomerProfile"> | Date | string | null
+  document?: Prisma.StringNullableWithAggregatesFilter<"CustomerProfile"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CustomerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"CustomerProfile"> | Date | string | null
 }
@@ -257,6 +269,7 @@ export type CustomerProfileCreateInput = {
   preferredMarket?: $Enums.MarketCode | null
   phone?: string | null
   birthDate?: Date | string | null
+  document?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutCustomerProfileInput
@@ -268,6 +281,7 @@ export type CustomerProfileUncheckedCreateInput = {
   preferredMarket?: $Enums.MarketCode | null
   phone?: string | null
   birthDate?: Date | string | null
+  document?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string | null
 }
@@ -277,6 +291,7 @@ export type CustomerProfileUpdateInput = {
   preferredMarket?: Prisma.NullableEnumMarketCodeFieldUpdateOperationsInput | $Enums.MarketCode | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutCustomerProfileNestedInput
@@ -288,6 +303,7 @@ export type CustomerProfileUncheckedUpdateInput = {
   preferredMarket?: Prisma.NullableEnumMarketCodeFieldUpdateOperationsInput | $Enums.MarketCode | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -298,6 +314,7 @@ export type CustomerProfileCreateManyInput = {
   preferredMarket?: $Enums.MarketCode | null
   phone?: string | null
   birthDate?: Date | string | null
+  document?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string | null
 }
@@ -307,6 +324,7 @@ export type CustomerProfileUpdateManyMutationInput = {
   preferredMarket?: Prisma.NullableEnumMarketCodeFieldUpdateOperationsInput | $Enums.MarketCode | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -317,6 +335,7 @@ export type CustomerProfileUncheckedUpdateManyInput = {
   preferredMarket?: Prisma.NullableEnumMarketCodeFieldUpdateOperationsInput | $Enums.MarketCode | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -332,6 +351,7 @@ export type CustomerProfileCountOrderByAggregateInput = {
   preferredMarket?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
+  document?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -342,6 +362,7 @@ export type CustomerProfileMaxOrderByAggregateInput = {
   preferredMarket?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
+  document?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -352,6 +373,7 @@ export type CustomerProfileMinOrderByAggregateInput = {
   preferredMarket?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
+  document?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -397,6 +419,7 @@ export type CustomerProfileCreateWithoutUserInput = {
   preferredMarket?: $Enums.MarketCode | null
   phone?: string | null
   birthDate?: Date | string | null
+  document?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string | null
 }
@@ -406,6 +429,7 @@ export type CustomerProfileUncheckedCreateWithoutUserInput = {
   preferredMarket?: $Enums.MarketCode | null
   phone?: string | null
   birthDate?: Date | string | null
+  document?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string | null
 }
@@ -431,6 +455,7 @@ export type CustomerProfileUpdateWithoutUserInput = {
   preferredMarket?: Prisma.NullableEnumMarketCodeFieldUpdateOperationsInput | $Enums.MarketCode | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -440,6 +465,7 @@ export type CustomerProfileUncheckedUpdateWithoutUserInput = {
   preferredMarket?: Prisma.NullableEnumMarketCodeFieldUpdateOperationsInput | $Enums.MarketCode | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -452,6 +478,7 @@ export type CustomerProfileSelect<ExtArgs extends runtime.Types.Extensions.Inter
   preferredMarket?: boolean
   phone?: boolean
   birthDate?: boolean
+  document?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -463,6 +490,7 @@ export type CustomerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   preferredMarket?: boolean
   phone?: boolean
   birthDate?: boolean
+  document?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -474,6 +502,7 @@ export type CustomerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   preferredMarket?: boolean
   phone?: boolean
   birthDate?: boolean
+  document?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -485,11 +514,12 @@ export type CustomerProfileSelectScalar = {
   preferredMarket?: boolean
   phone?: boolean
   birthDate?: boolean
+  document?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CustomerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "preferredMarket" | "phone" | "birthDate" | "createdAt" | "updatedAt", ExtArgs["result"]["customerProfile"]>
+export type CustomerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "preferredMarket" | "phone" | "birthDate" | "document" | "createdAt" | "updatedAt", ExtArgs["result"]["customerProfile"]>
 export type CustomerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -511,6 +541,7 @@ export type $CustomerProfilePayload<ExtArgs extends runtime.Types.Extensions.Int
     preferredMarket: $Enums.MarketCode | null
     phone: string | null
     birthDate: Date | null
+    document: string | null
     createdAt: Date
     updatedAt: Date | null
   }, ExtArgs["result"]["customerProfile"]>
@@ -942,6 +973,7 @@ export interface CustomerProfileFieldRefs {
   readonly preferredMarket: Prisma.FieldRef<"CustomerProfile", 'MarketCode'>
   readonly phone: Prisma.FieldRef<"CustomerProfile", 'String'>
   readonly birthDate: Prisma.FieldRef<"CustomerProfile", 'DateTime'>
+  readonly document: Prisma.FieldRef<"CustomerProfile", 'String'>
   readonly createdAt: Prisma.FieldRef<"CustomerProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CustomerProfile", 'DateTime'>
 }

@@ -10,6 +10,7 @@ export class CustomerProfileMapper {
 				preferredMarket: data.preferredMarket,
 				phone: data.phone,
 				birthDate: data.birthDate,
+				document: data.document,
 				createdAt: data.createdAt,
 				updatedAt: data.updatedAt,
 			},
@@ -24,6 +25,7 @@ export class CustomerProfileMapper {
 			preferredMarket: data.preferredMarket ?? null,
 			phone: data.phone ?? null,
 			birthDate: data.birthDate ?? null,
+			document: data.document ?? null,
 			createdAt: data.createdAt,
 			updatedAt: data.updatedAt ?? null,
 		};

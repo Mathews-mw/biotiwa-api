@@ -3,10 +3,10 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { ICreateAddressRequest } from '../../schemas/user/create-address-schema';
 import { CreateAddressUseCase } from '@/domains/main/application/modules/users/use-cases/create-address-use-case';
+import { getAuthenticatedSession } from '../../helpers/get-authenticated-session';
 
 export async function createAddressController(request: FastifyRequest, reply: FastifyReply) {
 	const {
-		user_id,
 		market,
 		label,
 		recipient,
@@ -21,10 +21,12 @@ export async function createAddressController(request: FastifyRequest, reply: Fa
 		is_default,
 	} = request.body as ICreateAddressRequest;
 
+	const session = getAuthenticatedSession(request);
+
 	const service = container.resolve(CreateAddressUseCase);
 
 	const result = await service.execute({
-		userId: user_id,
+		userId: session.userId,
 		market,
 		label,
 		recipient,

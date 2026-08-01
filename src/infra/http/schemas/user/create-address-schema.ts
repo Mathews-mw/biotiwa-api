@@ -4,7 +4,6 @@ import { FastifySchema } from 'fastify/types/schema';
 import { marketCodeSchema } from '@/core/types/market-code';
 
 const bodySchema = z.object({
-	user_id: z.string(),
 	market: marketCodeSchema,
 	label: z.string().optional(),
 	recipient: z.string().optional(),

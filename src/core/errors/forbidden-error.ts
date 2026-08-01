@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const code = z
+export const code403Schema = z
 	.union([
 		z.literal('FORBIDDEN_ERROR'),
 		z.literal('SAME_EMAIL_ERROR'),
@@ -9,7 +9,7 @@ const code = z
 	])
 	.default('FORBIDDEN_ERROR');
 
-type Code = z.infer<typeof code>;
+type Code = z.infer<typeof code403Schema>;
 
 export class ForbiddenError extends Error {
 	readonly code: Code;

@@ -144,6 +144,7 @@ export const CustomerProfileScalarFieldEnum = {
   preferredMarket: 'preferredMarket',
   phone: 'phone',
   birthDate: 'birthDate',
+  document: 'document',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -4,12 +4,14 @@ import type { IUserRepository } from '../repositories/user-repository';
 import type { IIdentityProvider } from '../../../ports/identity-provider';
 import type { IConsentType } from '@/domains/main/models/entities/consent-term';
 import type { IUserConsentRepository } from '../repositories/user-consent-repository';
+import type { ICustomerProfileRepository } from '../repositories/customer-profile-repository';
 import type { IConsentTermRepository } from '../../consent-terms/repositories/consent-term-repository';
 
 import { failure, Outcome, success } from '@/core/outcome';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { UserConsent } from '@/domains/main/models/entities/user-consent';
+import { CustomerProfile } from '@/domains/main/models/entities/customer-profile';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
 
 interface IRequest {
@@ -54,6 +56,8 @@ export class CreateUserUseCase {
 		@inject(DEPENDENCY_IDENTIFIERS.USERS_REPOSITORY) private usersRepository: IUserRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.IDENTITY_PROVIDER) private identityProvider: IIdentityProvider,
 		@inject(DEPENDENCY_IDENTIFIERS.USER_CONSENTS_REPOSITORY) private userConsentsRepository: IUserConsentRepository,
+		@inject(DEPENDENCY_IDENTIFIERS.CUSTOMER_PROFILES_REPOSITORY)
+		private customerProfilesRepository: ICustomerProfileRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.CONSENT_TERMS_REPOSITORY)
 		private consentTermsRepository: IConsentTermRepository
 	) {}
@@ -107,6 +111,12 @@ export class CreateUserUseCase {
 		if (userConsentsToCreate.length > 0) {
 			await this.userConsentsRepository.createMany(userConsentsToCreate);
 		}
+
+		const newProfile = CustomerProfile.create({
+			userId: new UniqueEntityId(registeredIdentity.user.id),
+		});
+
+		await this.customerProfilesRepository.create(newProfile);
 
 		return success({ user: registeredIdentity.user, responseHeaders: registeredIdentity.responseHeaders });
 	}

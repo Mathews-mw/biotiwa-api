@@ -2,6 +2,7 @@ import z from 'zod';
 import { FastifySchema } from 'fastify/types/schema';
 
 import { consentTypeSchema } from '@/domains/main/models/entities/consent-term';
+import { badRequestErrorSchema, resourceNotFoundErrorSchema } from '../erros/erros-schemas';
 
 const bodySchema = z.object({
 	user_email: z.string(),
@@ -23,10 +24,12 @@ export type IAcceptConsentTermsResponse = z.infer<typeof responseSchema>;
 
 export const acceptConsentTermsSchema: FastifySchema = {
 	tags: ['Users'],
-	summary: 'Create a new customer profile',
+	summary: 'Accept consent terms',
 	security: [{ cookieAuth: [] }],
 	body: bodySchema,
 	response: {
 		201: responseSchema,
+		400: badRequestErrorSchema,
+		404: resourceNotFoundErrorSchema,
 	},
 };

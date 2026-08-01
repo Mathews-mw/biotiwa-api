@@ -54,7 +54,9 @@ app.register(fastifyCors, {
 
 // Debug only
 app.addHook('onRequest', (request, reply, done) => {
-	console.log(`[Method: ${request.method}] - [Protocol: ${request.protocol}] - [Url: ${request.url}]`);
+	console.log(
+		`[Method: ${request.method}] - [Protocol: ${request.protocol}] - [Url: ${request.url}] - [timestamp: ${new Date()}]`
+	);
 	done();
 });
 

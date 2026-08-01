@@ -295,7 +295,6 @@ export type AddressOrderByWithRelationInput = {
 
 export type AddressWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  userId_isDefault?: Prisma.AddressUserIdIsDefaultCompoundUniqueInput
   AND?: Prisma.AddressWhereInput | Prisma.AddressWhereInput[]
   OR?: Prisma.AddressWhereInput[]
   NOT?: Prisma.AddressWhereInput | Prisma.AddressWhereInput[]
@@ -315,7 +314,7 @@ export type AddressWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Address"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Address"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "userId_isDefault">
+}, "id">
 
 export type AddressOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -501,11 +500,6 @@ export type AddressListRelationFilter = {
 
 export type AddressOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type AddressUserIdIsDefaultCompoundUniqueInput = {
-  userId: string
-  isDefault: boolean
 }
 
 export type AddressCountOrderByAggregateInput = {

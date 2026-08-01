@@ -8,6 +8,7 @@ export interface ICustomerProfileProps {
 	preferredMarket?: IMarketCode | null;
 	phone?: string | null;
 	birthDate?: Date | null;
+	document?: string | null;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -46,6 +47,15 @@ export class CustomerProfile extends Entity<ICustomerProfileProps> {
 
 	set birthDate(birthDate: Date | null | undefined) {
 		this.props.birthDate = birthDate;
+		this._touch();
+	}
+
+	get document() {
+		return this.props.document;
+	}
+
+	set document(document: string | null | undefined) {
+		this.props.document = document;
 		this._touch();
 	}
 

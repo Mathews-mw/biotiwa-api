@@ -1,6 +1,7 @@
 import z from 'zod';
 import { FastifySchema } from 'fastify/types/schema';
 import { consentTypeSchema } from '@/domains/main/models/entities/consent-term';
+import { badRequestErrorSchema } from '../erros/erros-schemas';
 
 const bodySchema = z.object({
 	name: z.string(),
@@ -28,9 +29,9 @@ export const createUserSchema: FastifySchema = {
 	tags: ['Users'],
 	summary: 'Create a new user',
 	description: 'Create a new user',
-	security: [{ cookieAuth: [] }],
 	body: bodySchema,
 	response: {
 		201: responseSchema,
+		400: badRequestErrorSchema,
 	},
 };

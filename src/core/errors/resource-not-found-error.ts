@@ -1,10 +1,8 @@
 import z from 'zod';
 
-const code = z
-	.union([z.literal('RESOURCE_NOT_FOUND_ERROR'), z.literal('RESOURCE_NOT_FOUND_ERROR')])
-	.default('RESOURCE_NOT_FOUND_ERROR');
+export const code404Schema = z.union([z.literal('RESOURCE_NOT_FOUND_ERROR')]).default('RESOURCE_NOT_FOUND_ERROR');
 
-type Code = z.infer<typeof code>;
+type Code = z.infer<typeof code404Schema>;
 
 export class ResourceNotFoundError extends Error {
 	readonly code: Code;

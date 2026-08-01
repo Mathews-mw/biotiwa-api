@@ -1,4 +1,5 @@
 import z from 'zod';
+import { APIError } from 'better-auth';
 import { FastifyInstance } from 'fastify/types/instance';
 import { hasZodFastifySchemaValidationErrors } from 'fastify-type-provider-zod';
 
@@ -12,6 +13,8 @@ type FastifyErrorHandler = FastifyInstance['errorHandler'];
 export const errorHandler: FastifyErrorHandler = async (error, request, reply) => {
 	if (error instanceof z.ZodError) {
 		return reply.status(400).send({
+			status: 400,
+			code: 'VALIDATION_ERROR',
 			message: 'Validation error',
 			errors: z.treeifyError(error),
 		});
@@ -27,6 +30,8 @@ export const errorHandler: FastifyErrorHandler = async (error, request, reply) =
 		});
 
 		return reply.status(400).send({
+			status: 400,
+			code: 'VALIDATION_ERROR',
 			message: 'Validation Error',
 			errors: errorsPayload,
 		});
@@ -34,6 +39,7 @@ export const errorHandler: FastifyErrorHandler = async (error, request, reply) =
 
 	if (error instanceof BadRequestError) {
 		return reply.status(400).send({
+			status: 400,
 			code: error.code,
 			message: error.message,
 		});
@@ -41,6 +47,7 @@ export const errorHandler: FastifyErrorHandler = async (error, request, reply) =
 
 	if (error instanceof UnauthorizedError) {
 		return reply.status(401).send({
+			status: 401,
 			code: error.code,
 			message: error.message,
 		});
@@ -48,6 +55,7 @@ export const errorHandler: FastifyErrorHandler = async (error, request, reply) =
 
 	if (error instanceof ForbiddenError) {
 		return reply.status(403).send({
+			status: 403,
 			code: error.code,
 			message: error.message,
 		});
@@ -55,8 +63,17 @@ export const errorHandler: FastifyErrorHandler = async (error, request, reply) =
 
 	if (error instanceof ResourceNotFoundError) {
 		return reply.status(404).send({
+			status: 404,
 			code: error.code,
 			message: error.message,
+		});
+	}
+
+	if (error instanceof APIError) {
+		return reply.status(error.statusCode).send({
+			status: error.statusCode,
+			code: error.body?.code ?? '',
+			message: error.body?.message ?? '',
 		});
 	}
 

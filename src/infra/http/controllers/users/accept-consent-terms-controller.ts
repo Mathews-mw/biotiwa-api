@@ -12,9 +12,6 @@ export async function acceptConsentTermsController(request: FastifyRequest, repl
 	const ipAddress = request.ip ?? null;
 	const userAgent = request.headers['user-agent'] ?? null;
 
-	console.log('ipAddress: ', ipAddress);
-	console.log('userAgent: ', userAgent);
-
 	const result = await service.execute({
 		userEmail: user_email,
 		consents: consents.map((item) => {
