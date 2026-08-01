@@ -7,6 +7,11 @@ export const DEPENDENCY_IDENTIFIERS = {
 	SESSIONS_REPOSITORY: Symbol('SessionsRepository'),
 	USER_CONSENTS_REPOSITORY: Symbol('UserConsentsRepository'),
 	USERS_REPOSITORY: Symbol('UsersRepository'),
+	PRODUCTS_REPOSITORY: Symbol('ProductsRepository'),
+	ORDER_BUMPS_REPOSITORY: Symbol('ProductsRepository'),
+	OFFERS_REPOSITORY: Symbol('ProductsRepository'),
+	OFFER_ITEMS_REPOSITORY: Symbol('ProductsRepository'),
+	MARKETS_REPOSITORY: Symbol('ProductsRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),
