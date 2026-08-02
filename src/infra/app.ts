@@ -11,8 +11,9 @@ import { jsonSchemaTransform, serializerCompiler, validatorCompiler, ZodTypeProv
 import { env } from '@/env';
 import { routes } from './http/routes';
 import { errorHandler } from './error-handler';
+import { prismaPlugin } from './plugins/prisma-plugin';
 
-export const app = fastify().withTypeProvider<ZodTypeProvider>();
+export const app = fastify({ logger: true, trustProxy: true }).withTypeProvider<ZodTypeProvider>();
 
 app.register(fastifyCookie);
 
@@ -53,11 +54,12 @@ app.register(fastifyCors, {
 });
 
 // Debug only
-app.addHook('onRequest', (request, reply, done) => {
-	console.log(
-		`[Method: ${request.method}] - [Protocol: ${request.protocol}] - [Url: ${request.url}] - [timestamp: ${new Date()}]`
-	);
-	done();
-});
+// app.addHook('onRequest', (request, reply, done) => {
+// 	console.log(
+// 		`[Method: ${request.method}] - [Protocol: ${request.protocol}] - [Url: ${request.url}] - [timestamp: ${new Date()}]`
+// 	);
+// 	done();
+// });
 
+app.register(prismaPlugin);
 app.register(routes, { prefix: '/api' });

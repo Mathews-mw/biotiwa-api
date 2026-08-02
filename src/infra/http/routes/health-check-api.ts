@@ -4,7 +4,7 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod';
 
 export async function healthCheckApi(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
-		'/health/check',
+		'/health',
 		{
 			schema: {
 				tags: ['Health Check'],

@@ -8,10 +8,9 @@ export const envSchema = z.object({
 	PORT: z.coerce.number().default(3737),
 	HOST: z.string(),
 	DATABASE_URL: z.string(),
+	DIRECT_URL: z.string(),
 	BETTER_AUTH_SECRET: z.string(),
 	BETTER_AUTH_URL: z.url(),
-	JWT_SECRET: z.string(),
-	JWT_COOKIE_NAME: z.string(),
 	WEB_APP_URL: z.url(),
 });
 

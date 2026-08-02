@@ -4,6 +4,7 @@ build
 
 # Keep environment variables out of version control
 .env
+.env*
 
 notes.md
 
@@ -14,6 +15,7 @@ jwtRS256.key
 jwtRS256.key.pub
 
 prisma/seeds/seed.ts
+prisma/generated
 
 tmp/chat-uploads/**
 

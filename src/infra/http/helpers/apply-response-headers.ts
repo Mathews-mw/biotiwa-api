@@ -17,6 +17,4 @@ export function applyResponseHeaders(reply: FastifyReply, headers: IResponseHead
 	if (setCookies.length > 0) {
 		reply.header('set-cookie', setCookies);
 	}
-
-	console.log('setCookies: ', setCookies);
 }
