@@ -16,6 +16,7 @@ import { PrismaOrderBumpsRepository } from '@/infra/database/repositories/commer
 import { PrismaUserConsentsRepository } from '@/infra/database/repositories/users/prisma-user-consents-repository';
 import { PrismaCustomerProfilesRepository } from '@/infra/database/repositories/users/prisma-customer-profiles-repository';
 import { PrismaConsentTermsRepository } from '@/infra/database/repositories/consent-terms/prisma-consent-terms-repository';
+import { PrismaCommerceCatalogRepository } from '@/infra/database/repositories/commerce/prisma-commerce-catalog-repository';
 
 function registerSingleton<T>(identifier: DependencyIdentifiers, implementation: new (...args: unknown[]) => T) {
 	container.registerSingleton(identifier, implementation);
@@ -34,6 +35,7 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.ORDER_BUMPS_REPOSITORY, PrismaOrderBump
 registerSingleton(DEPENDENCY_IDENTIFIERS.OFFERS_REPOSITORY, PrismaOffersRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.OFFER_ITEMS_REPOSITORY, PrismaOfferItemsRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.MARKETS_REPOSITORY, PrismaMarketsRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.COMMERCE_CATALOG_REPOSITORY, PrismaCommerceCatalogRepository);
 
 // Providers
 registerSingleton(DEPENDENCY_IDENTIFIERS.IDENTITY_PROVIDER, BetterAuthIdentityProvider);

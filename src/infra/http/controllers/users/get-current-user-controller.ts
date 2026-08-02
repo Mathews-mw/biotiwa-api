@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { UserProfilePresenter } from '../../presenters/user-profile-presenter';
+import { UserProfilePresenter } from '../../presenters/users/user-profile-presenter';
 import { getAuthenticatedSession } from '../../helpers/get-authenticated-session';
 import { GetCurrentUserUseCase } from '@/domains/main/application/modules/users/use-cases/get-current-user-use-case';
 

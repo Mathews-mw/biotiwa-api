@@ -12,6 +12,7 @@ export const DEPENDENCY_IDENTIFIERS = {
 	OFFERS_REPOSITORY: Symbol('ProductsRepository'),
 	OFFER_ITEMS_REPOSITORY: Symbol('ProductsRepository'),
 	MARKETS_REPOSITORY: Symbol('ProductsRepository'),
+	COMMERCE_CATALOG_REPOSITORY: Symbol('CommerceCatalogRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),

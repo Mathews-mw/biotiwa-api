@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import type { IGetUserAddressesQuery } from '../../schemas/user/get-user-addresses-schema';
 
-import { AddressPresenter } from '../../presenters/address-presenter';
+import { AddressPresenter } from '../../presenters/users/address-presenter';
 import { getAuthenticatedSession } from '../../helpers/get-authenticated-session';
 import { GetUserAddressesUseCase } from '@/domains/main/application/modules/users/use-cases/get-user-addresses-use-case';
 

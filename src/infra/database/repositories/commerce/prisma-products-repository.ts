@@ -2,7 +2,10 @@ import { prisma } from '../../prisma';
 import { ProductMapper } from '../../mappers/product-mapper';
 import { Product } from '@/domains/main/models/entities/product';
 
-import type { IProductRepository } from '@/domains/main/application/modules/commerce/repositories/product-repository';
+import type {
+	IFindManyParams,
+	IProductRepository,
+} from '@/domains/main/application/modules/commerce/repositories/product-repository';
 
 export class PrismaProductsRepository implements IProductRepository {
 	async create(product: Product) {
@@ -32,8 +35,14 @@ export class PrismaProductsRepository implements IProductRepository {
 		});
 	}
 
-	async findMany(): Promise<Product[]> {
-		const products = await prisma.product.findMany();
+	async findMany(params?: IFindManyParams): Promise<Product[]> {
+		const { status } = params || {};
+
+		const products = await prisma.product.findMany({
+			where: {
+				status,
+			},
+		});
 
 		return products.map(ProductMapper.toDomain);
 	}
@@ -42,6 +51,20 @@ export class PrismaProductsRepository implements IProductRepository {
 		const product = await prisma.product.findUnique({
 			where: {
 				id,
+			},
+		});
+
+		if (!product) {
+			return null;
+		}
+
+		return ProductMapper.toDomain(product);
+	}
+
+	async findBySlug(slug: string): Promise<Product | null> {
+		const product = await prisma.product.findUnique({
+			where: {
+				slug,
 			},
 		});
 

@@ -1,7 +1,7 @@
 import { User } from '@/domains/main/models/entities/user';
 import { CustomerProfilePresenter } from './customer-presenter';
 import { CustomerProfile } from '@/domains/main/models/entities/customer-profile';
-import type { IUserProfileResponseSchema } from '../schemas/user/user-profile-scheme';
+import type { IUserProfileResponseSchema } from '../../schemas/user/user-profile-scheme';
 
 export class UserProfilePresenter {
 	static toHTTP(data: { user: User; profile?: CustomerProfile | null }): IUserProfileResponseSchema {

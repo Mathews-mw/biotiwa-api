@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import type { IUpdateAddressParams, IUpdateAddressRequest } from '../../schemas/user/update-address-schema';
 
-import { AddressPresenter } from '../../presenters/address-presenter';
+import { AddressPresenter } from '../../presenters/users/address-presenter';
 import { UpdateAddressUseCase } from '@/domains/main/application/modules/users/use-cases/update-address-use-case';
 
 export async function updateAddressController(request: FastifyRequest, reply: FastifyReply) {

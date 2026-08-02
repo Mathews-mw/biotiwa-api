@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import type { IUpdateCustomerProfileRequest } from '../../schemas/user/update-customer-profile-schema';
 
-import { CustomerProfilePresenter } from '../../presenters/customer-presenter';
+import { CustomerProfilePresenter } from '../../presenters/users/customer-presenter';
 import { getAuthenticatedSession } from '../../helpers/get-authenticated-session';
 import { UpdateCustomerProfileUseCase } from '@/domains/main/application/modules/users/use-cases/update-customer-profile-use-case';
 

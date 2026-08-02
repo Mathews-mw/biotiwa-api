@@ -2,7 +2,10 @@ import { prisma } from '../../prisma';
 import { OfferMapper } from '../../mappers/offer-mapper';
 import { Offer } from '@/domains/main/models/entities/offer';
 
-import type { IOfferRepository } from '@/domains/main/application/modules/commerce/repositories/offer-repository';
+import type {
+	IFindManyParams,
+	IOfferRepository,
+} from '@/domains/main/application/modules/commerce/repositories/offer-repository';
 
 export class PrismaOffersRepository implements IOfferRepository {
 	async create(offer: Offer) {
@@ -32,8 +35,18 @@ export class PrismaOffersRepository implements IOfferRepository {
 		});
 	}
 
-	async findMany(): Promise<Offer[]> {
-		const offers = await prisma.offer.findMany();
+	async findMany(params?: IFindManyParams): Promise<Offer[]> {
+		const { status, marketCode } = params || {};
+
+		const offers = await prisma.offer.findMany({
+			where: {
+				marketCode,
+				status,
+			},
+			orderBy: {
+				sortOrder: 'asc',
+			},
+		});
 
 		return offers.map(OfferMapper.toDomain);
 	}
@@ -42,6 +55,20 @@ export class PrismaOffersRepository implements IOfferRepository {
 		const offer = await prisma.offer.findUnique({
 			where: {
 				id,
+			},
+		});
+
+		if (!offer) {
+			return null;
+		}
+
+		return OfferMapper.toDomain(offer);
+	}
+
+	async findBySlug(slug: string): Promise<Offer | null> {
+		const offer = await prisma.offer.findFirst({
+			where: {
+				slug,
 			},
 		});
 

@@ -2,7 +2,10 @@ import { prisma } from '../../prisma';
 import { MarketMapper } from '../../mappers/market-mapper';
 import { Market } from '@/domains/main/models/entities/market';
 
-import type { IMarketRepository } from '@/domains/main/application/modules/commerce/repositories/market-repository';
+import type {
+	IFindByCodeParams,
+	IMarketRepository,
+} from '@/domains/main/application/modules/commerce/repositories/market-repository';
 
 export class PrismaMarketsRepository implements IMarketRepository {
 	async create(market: Market) {
@@ -42,6 +45,21 @@ export class PrismaMarketsRepository implements IMarketRepository {
 		const market = await prisma.market.findUnique({
 			where: {
 				id,
+			},
+		});
+
+		if (!market) {
+			return null;
+		}
+
+		return MarketMapper.toDomain(market);
+	}
+
+	async findByCode({ code, isActive }: IFindByCodeParams) {
+		const market = await prisma.market.findUnique({
+			where: {
+				code,
+				isActive,
 			},
 		});
 

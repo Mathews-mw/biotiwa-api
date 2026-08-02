@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { UserPresenter } from '../../presenters/user-presenter';
+import { UserPresenter } from '../../presenters/users/user-presenter';
 import { applyResponseHeaders } from '../../helpers/apply-response-headers';
 import { AuthenticateUserRequest } from '../../schemas/auth/authenticate-user-schema';
 import { AuthenticateWithCredentialsUseCase } from '@/domains/main/application/modules/auth/authenticate-with-credentials-use-case';

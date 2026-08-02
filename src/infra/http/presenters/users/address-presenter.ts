@@ -1,5 +1,5 @@
 import { Address } from '@/domains/main/models/entities/address';
-import { IAddressResponseSchema } from '../schemas/user/address-schema';
+import { IAddressResponseSchema } from '../../schemas/user/address-schema';
 
 export class AddressPresenter {
 	static toHTTP(data: Address): IAddressResponseSchema {

@@ -1,5 +1,5 @@
 import { CustomerProfile } from '@/domains/main/models/entities/customer-profile';
-import type { ICustomerProfileResponseSchema } from '../schemas/user/customer-profile-schema';
+import type { ICustomerProfileResponseSchema } from '../../schemas/user/customer-profile-schema';
 
 export class CustomerProfilePresenter {
 	static toHTTP(data: CustomerProfile): ICustomerProfileResponseSchema {

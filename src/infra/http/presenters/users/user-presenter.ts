@@ -1,5 +1,5 @@
 import { User } from '@/domains/main/models/entities/user';
-import { IUserResponseSchema } from '../schemas/user/user-schema';
+import { IUserResponseSchema } from '../../schemas/user/user-schema';
 
 export class UserPresenter {
 	static toHTTP(data: User): IUserResponseSchema {
