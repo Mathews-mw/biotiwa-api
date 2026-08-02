@@ -7,7 +7,7 @@ import { User } from '@/domains/main/models/entities/user';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { CustomerProfile } from '@/domains/main/models/entities/customer-profile';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
-import { ICustomerProfileRepository } from '../repositories/customer-profile-repository';
+import { ICustomerProfileRepository } from '@/domains/main/application/modules/users/repositories/customer-profile-repository';
 
 interface IRequest {
 	userId: string;

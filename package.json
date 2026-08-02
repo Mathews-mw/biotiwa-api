@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-	"engines": {
+  "engines": {
     "node": ">=24.0.0 <25.0.0"
   },
   "scripts": {
     "dev": "tsx --no-warnings --env-file=.env --watch src/infra/server.ts",
     "build": "tsup src/infra/server.ts --format esm --out-dir build --clean",
     "start": "node build/server.js",
-		"db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:deploy": "prisma migrate deploy",
     "lint": "eslint --ext .ts --fix src",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -31,6 +31,7 @@
     }
   },
   "devDependencies": {
+    "@swc/core": "^1.15.47",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^26.1.1",
     "@typescript-eslint/eslint-plugin": "^8.64.0",
