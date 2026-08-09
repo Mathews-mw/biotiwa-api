@@ -6,6 +6,8 @@ export const code400Schema = z
 		z.literal('SAME_EMAIL_ERROR'),
 		z.literal('TERMS_NOT_ACCEPTED'),
 		z.literal('PRIVACY_POLICY_NOT_ACCEPTED'),
+		z.literal('CART_QUANTITY_ZERO_ERROR'),
+		z.literal('CART_ITEM_DOES_NOT_BELONG_SELECT_MARKET'),
 	])
 	.default('BAD_REQUEST_ERROR');
 

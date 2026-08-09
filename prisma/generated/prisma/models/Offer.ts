@@ -282,6 +282,7 @@ export type OfferWhereInput = {
   updatedAt?: Prisma.DateTimeNullableFilter<"Offer"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   items?: Prisma.OfferItemListRelationFilter
+  cartItems?: Prisma.CartItemListRelationFilter
 }
 
 export type OfferOrderByWithRelationInput = {
@@ -299,6 +300,7 @@ export type OfferOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   items?: Prisma.OfferItemOrderByRelationAggregateInput
+  cartItems?: Prisma.CartItemOrderByRelationAggregateInput
 }
 
 export type OfferWhereUniqueInput = Prisma.AtLeast<{
@@ -320,6 +322,7 @@ export type OfferWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeNullableFilter<"Offer"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   items?: Prisma.OfferItemListRelationFilter
+  cartItems?: Prisma.CartItemListRelationFilter
 }, "id" | "marketCode_slug">
 
 export type OfferOrderByWithAggregationInput = {
@@ -374,6 +377,7 @@ export type OfferCreateInput = {
   updatedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutOffersInput
   items?: Prisma.OfferItemCreateNestedManyWithoutOfferInput
+  cartItems?: Prisma.CartItemCreateNestedManyWithoutOfferInput
 }
 
 export type OfferUncheckedCreateInput = {
@@ -390,6 +394,7 @@ export type OfferUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   items?: Prisma.OfferItemUncheckedCreateNestedManyWithoutOfferInput
+  cartItems?: Prisma.CartItemUncheckedCreateNestedManyWithoutOfferInput
 }
 
 export type OfferUpdateInput = {
@@ -406,6 +411,7 @@ export type OfferUpdateInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutOffersNestedInput
   items?: Prisma.OfferItemUpdateManyWithoutOfferNestedInput
+  cartItems?: Prisma.CartItemUpdateManyWithoutOfferNestedInput
 }
 
 export type OfferUncheckedUpdateInput = {
@@ -422,6 +428,7 @@ export type OfferUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.OfferItemUncheckedUpdateManyWithoutOfferNestedInput
+  cartItems?: Prisma.CartItemUncheckedUpdateManyWithoutOfferNestedInput
 }
 
 export type OfferCreateManyInput = {
@@ -545,6 +552,11 @@ export type OfferScalarRelationFilter = {
   isNot?: Prisma.OfferWhereInput
 }
 
+export type OfferNullableScalarRelationFilter = {
+  is?: Prisma.OfferWhereInput | null
+  isNot?: Prisma.OfferWhereInput | null
+}
+
 export type OfferCreateNestedManyWithoutMarketInput = {
   create?: Prisma.XOR<Prisma.OfferCreateWithoutMarketInput, Prisma.OfferUncheckedCreateWithoutMarketInput> | Prisma.OfferCreateWithoutMarketInput[] | Prisma.OfferUncheckedCreateWithoutMarketInput[]
   connectOrCreate?: Prisma.OfferCreateOrConnectWithoutMarketInput | Prisma.OfferCreateOrConnectWithoutMarketInput[]
@@ -605,6 +617,22 @@ export type OfferUpdateOneRequiredWithoutItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OfferUpdateToOneWithWhereWithoutItemsInput, Prisma.OfferUpdateWithoutItemsInput>, Prisma.OfferUncheckedUpdateWithoutItemsInput>
 }
 
+export type OfferCreateNestedOneWithoutCartItemsInput = {
+  create?: Prisma.XOR<Prisma.OfferCreateWithoutCartItemsInput, Prisma.OfferUncheckedCreateWithoutCartItemsInput>
+  connectOrCreate?: Prisma.OfferCreateOrConnectWithoutCartItemsInput
+  connect?: Prisma.OfferWhereUniqueInput
+}
+
+export type OfferUpdateOneWithoutCartItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.OfferCreateWithoutCartItemsInput, Prisma.OfferUncheckedCreateWithoutCartItemsInput>
+  connectOrCreate?: Prisma.OfferCreateOrConnectWithoutCartItemsInput
+  upsert?: Prisma.OfferUpsertWithoutCartItemsInput
+  disconnect?: Prisma.OfferWhereInput | boolean
+  delete?: Prisma.OfferWhereInput | boolean
+  connect?: Prisma.OfferWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OfferUpdateToOneWithWhereWithoutCartItemsInput, Prisma.OfferUpdateWithoutCartItemsInput>, Prisma.OfferUncheckedUpdateWithoutCartItemsInput>
+}
+
 export type OfferCreateWithoutMarketInput = {
   id?: string
   slug: string
@@ -618,6 +646,7 @@ export type OfferCreateWithoutMarketInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   items?: Prisma.OfferItemCreateNestedManyWithoutOfferInput
+  cartItems?: Prisma.CartItemCreateNestedManyWithoutOfferInput
 }
 
 export type OfferUncheckedCreateWithoutMarketInput = {
@@ -633,6 +662,7 @@ export type OfferUncheckedCreateWithoutMarketInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   items?: Prisma.OfferItemUncheckedCreateNestedManyWithoutOfferInput
+  cartItems?: Prisma.CartItemUncheckedCreateNestedManyWithoutOfferInput
 }
 
 export type OfferCreateOrConnectWithoutMarketInput = {
@@ -692,6 +722,7 @@ export type OfferCreateWithoutItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutOffersInput
+  cartItems?: Prisma.CartItemCreateNestedManyWithoutOfferInput
 }
 
 export type OfferUncheckedCreateWithoutItemsInput = {
@@ -707,6 +738,7 @@ export type OfferUncheckedCreateWithoutItemsInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
+  cartItems?: Prisma.CartItemUncheckedCreateNestedManyWithoutOfferInput
 }
 
 export type OfferCreateOrConnectWithoutItemsInput = {
@@ -738,6 +770,7 @@ export type OfferUpdateWithoutItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutOffersNestedInput
+  cartItems?: Prisma.CartItemUpdateManyWithoutOfferNestedInput
 }
 
 export type OfferUncheckedUpdateWithoutItemsInput = {
@@ -753,6 +786,87 @@ export type OfferUncheckedUpdateWithoutItemsInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cartItems?: Prisma.CartItemUncheckedUpdateManyWithoutOfferNestedInput
+}
+
+export type OfferCreateWithoutCartItemsInput = {
+  id?: string
+  slug: string
+  name: string
+  description: string
+  unitAmount: number
+  discountPercent?: number
+  isHighlighted?: boolean
+  status?: $Enums.OfferStatus
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  market: Prisma.MarketCreateNestedOneWithoutOffersInput
+  items?: Prisma.OfferItemCreateNestedManyWithoutOfferInput
+}
+
+export type OfferUncheckedCreateWithoutCartItemsInput = {
+  id?: string
+  slug: string
+  marketCode: $Enums.MarketCode
+  name: string
+  description: string
+  unitAmount: number
+  discountPercent?: number
+  isHighlighted?: boolean
+  status?: $Enums.OfferStatus
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  items?: Prisma.OfferItemUncheckedCreateNestedManyWithoutOfferInput
+}
+
+export type OfferCreateOrConnectWithoutCartItemsInput = {
+  where: Prisma.OfferWhereUniqueInput
+  create: Prisma.XOR<Prisma.OfferCreateWithoutCartItemsInput, Prisma.OfferUncheckedCreateWithoutCartItemsInput>
+}
+
+export type OfferUpsertWithoutCartItemsInput = {
+  update: Prisma.XOR<Prisma.OfferUpdateWithoutCartItemsInput, Prisma.OfferUncheckedUpdateWithoutCartItemsInput>
+  create: Prisma.XOR<Prisma.OfferCreateWithoutCartItemsInput, Prisma.OfferUncheckedCreateWithoutCartItemsInput>
+  where?: Prisma.OfferWhereInput
+}
+
+export type OfferUpdateToOneWithWhereWithoutCartItemsInput = {
+  where?: Prisma.OfferWhereInput
+  data: Prisma.XOR<Prisma.OfferUpdateWithoutCartItemsInput, Prisma.OfferUncheckedUpdateWithoutCartItemsInput>
+}
+
+export type OfferUpdateWithoutCartItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  unitAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  discountPercent?: Prisma.IntFieldUpdateOperationsInput | number
+  isHighlighted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  market?: Prisma.MarketUpdateOneRequiredWithoutOffersNestedInput
+  items?: Prisma.OfferItemUpdateManyWithoutOfferNestedInput
+}
+
+export type OfferUncheckedUpdateWithoutCartItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  marketCode?: Prisma.EnumMarketCodeFieldUpdateOperationsInput | $Enums.MarketCode
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  unitAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  discountPercent?: Prisma.IntFieldUpdateOperationsInput | number
+  isHighlighted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  items?: Prisma.OfferItemUncheckedUpdateManyWithoutOfferNestedInput
 }
 
 export type OfferCreateManyMarketInput = {
@@ -782,6 +896,7 @@ export type OfferUpdateWithoutMarketInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.OfferItemUpdateManyWithoutOfferNestedInput
+  cartItems?: Prisma.CartItemUpdateManyWithoutOfferNestedInput
 }
 
 export type OfferUncheckedUpdateWithoutMarketInput = {
@@ -797,6 +912,7 @@ export type OfferUncheckedUpdateWithoutMarketInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.OfferItemUncheckedUpdateManyWithoutOfferNestedInput
+  cartItems?: Prisma.CartItemUncheckedUpdateManyWithoutOfferNestedInput
 }
 
 export type OfferUncheckedUpdateManyWithoutMarketInput = {
@@ -820,10 +936,12 @@ export type OfferUncheckedUpdateManyWithoutMarketInput = {
 
 export type OfferCountOutputType = {
   items: number
+  cartItems: number
 }
 
 export type OfferCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | OfferCountOutputTypeCountItemsArgs
+  cartItems?: boolean | OfferCountOutputTypeCountCartItemsArgs
 }
 
 /**
@@ -843,6 +961,13 @@ export type OfferCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.OfferItemWhereInput
 }
 
+/**
+ * OfferCountOutputType without action
+ */
+export type OfferCountOutputTypeCountCartItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CartItemWhereInput
+}
+
 
 export type OfferSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -859,6 +984,7 @@ export type OfferSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   items?: boolean | Prisma.Offer$itemsArgs<ExtArgs>
+  cartItems?: boolean | Prisma.Offer$cartItemsArgs<ExtArgs>
   _count?: boolean | Prisma.OfferCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["offer"]>
 
@@ -913,6 +1039,7 @@ export type OfferOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type OfferInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   items?: boolean | Prisma.Offer$itemsArgs<ExtArgs>
+  cartItems?: boolean | Prisma.Offer$cartItemsArgs<ExtArgs>
   _count?: boolean | Prisma.OfferCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OfferIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -927,6 +1054,7 @@ export type $OfferPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
     items: Prisma.$OfferItemPayload<ExtArgs>[]
+    cartItems: Prisma.$CartItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1337,6 +1465,7 @@ export interface Prisma__OfferClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.Offer$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Offer$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OfferItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cartItems<T extends Prisma.Offer$cartItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Offer$cartItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CartItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1800,6 +1929,30 @@ export type Offer$itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.OfferItemScalarFieldEnum | Prisma.OfferItemScalarFieldEnum[]
+}
+
+/**
+ * Offer.cartItems
+ */
+export type Offer$cartItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CartItem
+   */
+  select?: Prisma.CartItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CartItem
+   */
+  omit?: Prisma.CartItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CartItemInclude<ExtArgs> | null
+  where?: Prisma.CartItemWhereInput
+  orderBy?: Prisma.CartItemOrderByWithRelationInput | Prisma.CartItemOrderByWithRelationInput[]
+  cursor?: Prisma.CartItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CartItemScalarFieldEnum | Prisma.CartItemScalarFieldEnum[]
 }
 
 /**

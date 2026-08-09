@@ -9,9 +9,9 @@ export class UserPresenter {
 			email: data.email,
 			email_verified: data.emailVerified,
 			role: data.role,
-			image: data.image,
+			image: data.image ?? null,
 			created_at: data.createdAt,
-			updated_at: data.updatedAt,
+			updated_at: data.updatedAt ?? null,
 		};
 	}
 }

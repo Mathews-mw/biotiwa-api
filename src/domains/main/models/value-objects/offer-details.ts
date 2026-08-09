@@ -1,14 +1,11 @@
-import { Market } from '../entities/market';
-import { OfferItem } from '../entities/offer-item';
+import { IOfferProps } from '../entities/offer';
+import { OfferItemDetails } from './offer-item-details';
 import { ValueObject } from '@/core/entities/value-object';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 
-import type { IOfferProps } from '../entities/offer';
-
 export interface IOfferDetailsProps extends IOfferProps {
 	id: UniqueEntityId;
-	market: Market | null;
-	items: Array<OfferItem>;
+	items: Array<OfferItemDetails>;
 }
 
 export class OfferDetails extends ValueObject<IOfferDetailsProps> {
@@ -60,17 +57,19 @@ export class OfferDetails extends ValueObject<IOfferDetailsProps> {
 		return this.props.updatedAt;
 	}
 
-	get market() {
-		return this.props.market;
-	}
-
 	get items() {
 		return this.props.items;
 	}
 
-	static create(props: IOfferDetailsProps) {
-		const roomDetails = new OfferDetails(props);
+	get totalProductsQuantity() {
+		return this.props.items.reduce((total, item) => {
+			return total + item.quantity;
+		}, 0);
+	}
 
-		return roomDetails;
+	static create(props: IOfferDetailsProps) {
+		const offer = new OfferDetails(props);
+
+		return offer;
 	}
 }

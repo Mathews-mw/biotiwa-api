@@ -1,5 +1,5 @@
 import { prisma } from '../../prisma';
-import { AddressMapper } from '../../mappers/address-mapper';
+import { AddressMapper } from '../../mappers/user/address-mapper';
 import { Address } from '@/domains/main/models/entities/address';
 import type {
 	IParams,

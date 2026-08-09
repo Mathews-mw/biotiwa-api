@@ -1,5 +1,5 @@
 import { prisma } from '../../prisma';
-import { AccountMapper } from '../../mappers/account-mapper';
+import { AccountMapper } from '../../mappers/user/account-mapper';
 import { Account } from '@/domains/main/models/entities/account';
 import type {
 	IAccountRepository,

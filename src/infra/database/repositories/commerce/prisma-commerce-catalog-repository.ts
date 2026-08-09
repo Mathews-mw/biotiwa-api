@@ -1,13 +1,13 @@
 import { prisma } from '../../prisma';
-import { MarketMapper } from '../../mappers/market-mapper';
-import { ProductMapper } from '../../mappers/product-mapper';
 import { Market } from '@/domains/main/models/entities/market';
 import { Product } from '@/domains/main/models/entities/product';
-import { OrderBumpMapper } from '../../mappers/order-bump-mapper';
+import { MarketMapper } from '../../mappers/commerce/market-mapper';
+import { ProductMapper } from '../../mappers/commerce/product-mapper';
+import { OrderBumpMapper } from '../../mappers/commerce/order-bump-mapper';
+import { OfferDetailsMapper } from '../../mappers/commerce/offer-details-mapper';
 
 import type { IMarketCode } from '@/core/types/market-code';
 import type { ICommerceCatalogRepository } from '@/domains/main/application/modules/commerce/repositories/commerce-catalog-repository';
-import { OfferWithItemsMapper } from '../../mappers/offer-with-items-mapper';
 
 export class PrismaCommerceCatalogRepository implements ICommerceCatalogRepository {
 	async getPublicOffersByMarket(code: IMarketCode) {
@@ -64,7 +64,7 @@ export class PrismaCommerceCatalogRepository implements ICommerceCatalogReposito
 		return {
 			market: MarketMapper.toDomain(market),
 			product: ProductMapper.toDomain(firstProduct),
-			offers: offers.map(OfferWithItemsMapper.toDomain),
+			offers: offers.map(OfferDetailsMapper.toDomain),
 			orderBump: orderBump ? OrderBumpMapper.toDomain(orderBump) : null,
 		};
 	}

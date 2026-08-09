@@ -1,6 +1,6 @@
 import { prisma } from '../../prisma';
-import { OfferItemMapper } from '../../mappers/offer-item-mapper';
 import { OfferItem } from '@/domains/main/models/entities/offer-item';
+import { OfferItemMapper } from '../../mappers/commerce/offer-item-mapper';
 
 import type { IOfferItemRepository } from '@/domains/main/application/modules/commerce/repositories/offer-item-repository';
 

@@ -262,6 +262,7 @@ export type MarketWhereInput = {
   updatedAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
   offers?: Prisma.OfferListRelationFilter
   orderBumps?: Prisma.OrderBumpListRelationFilter
+  carts?: Prisma.CartListRelationFilter
 }
 
 export type MarketOrderByWithRelationInput = {
@@ -277,6 +278,7 @@ export type MarketOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   offers?: Prisma.OfferOrderByRelationAggregateInput
   orderBumps?: Prisma.OrderBumpOrderByRelationAggregateInput
+  carts?: Prisma.CartOrderByRelationAggregateInput
 }
 
 export type MarketWhereUniqueInput = Prisma.AtLeast<{
@@ -295,6 +297,7 @@ export type MarketWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
   offers?: Prisma.OfferListRelationFilter
   orderBumps?: Prisma.OrderBumpListRelationFilter
+  carts?: Prisma.CartListRelationFilter
 }, "id" | "code">
 
 export type MarketOrderByWithAggregationInput = {
@@ -344,6 +347,7 @@ export type MarketCreateInput = {
   updatedAt?: Date | string | null
   offers?: Prisma.OfferCreateNestedManyWithoutMarketInput
   orderBumps?: Prisma.OrderBumpCreateNestedManyWithoutMarketInput
+  carts?: Prisma.CartCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateInput = {
@@ -359,6 +363,7 @@ export type MarketUncheckedCreateInput = {
   updatedAt?: Date | string | null
   offers?: Prisma.OfferUncheckedCreateNestedManyWithoutMarketInput
   orderBumps?: Prisma.OrderBumpUncheckedCreateNestedManyWithoutMarketInput
+  carts?: Prisma.CartUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUpdateInput = {
@@ -374,6 +379,7 @@ export type MarketUpdateInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   offers?: Prisma.OfferUpdateManyWithoutMarketNestedInput
   orderBumps?: Prisma.OrderBumpUpdateManyWithoutMarketNestedInput
+  carts?: Prisma.CartUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateInput = {
@@ -389,6 +395,7 @@ export type MarketUncheckedUpdateInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   offers?: Prisma.OfferUncheckedUpdateManyWithoutMarketNestedInput
   orderBumps?: Prisma.OrderBumpUncheckedUpdateManyWithoutMarketNestedInput
+  carts?: Prisma.CartUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateManyInput = {
@@ -532,6 +539,20 @@ export type MarketUpdateOneRequiredWithoutOrderBumpsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutOrderBumpsInput, Prisma.MarketUpdateWithoutOrderBumpsInput>, Prisma.MarketUncheckedUpdateWithoutOrderBumpsInput>
 }
 
+export type MarketCreateNestedOneWithoutCartsInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutCartsInput, Prisma.MarketUncheckedCreateWithoutCartsInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutCartsInput
+  connect?: Prisma.MarketWhereUniqueInput
+}
+
+export type MarketUpdateOneRequiredWithoutCartsNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutCartsInput, Prisma.MarketUncheckedCreateWithoutCartsInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutCartsInput
+  upsert?: Prisma.MarketUpsertWithoutCartsInput
+  connect?: Prisma.MarketWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutCartsInput, Prisma.MarketUpdateWithoutCartsInput>, Prisma.MarketUncheckedUpdateWithoutCartsInput>
+}
+
 export type MarketCreateWithoutOffersInput = {
   id?: string
   code: $Enums.MarketCode
@@ -544,6 +565,7 @@ export type MarketCreateWithoutOffersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   orderBumps?: Prisma.OrderBumpCreateNestedManyWithoutMarketInput
+  carts?: Prisma.CartCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutOffersInput = {
@@ -558,6 +580,7 @@ export type MarketUncheckedCreateWithoutOffersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   orderBumps?: Prisma.OrderBumpUncheckedCreateNestedManyWithoutMarketInput
+  carts?: Prisma.CartUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutOffersInput = {
@@ -588,6 +611,7 @@ export type MarketUpdateWithoutOffersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   orderBumps?: Prisma.OrderBumpUpdateManyWithoutMarketNestedInput
+  carts?: Prisma.CartUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutOffersInput = {
@@ -602,6 +626,7 @@ export type MarketUncheckedUpdateWithoutOffersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   orderBumps?: Prisma.OrderBumpUncheckedUpdateManyWithoutMarketNestedInput
+  carts?: Prisma.CartUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutOrderBumpsInput = {
@@ -616,6 +641,7 @@ export type MarketCreateWithoutOrderBumpsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   offers?: Prisma.OfferCreateNestedManyWithoutMarketInput
+  carts?: Prisma.CartCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutOrderBumpsInput = {
@@ -630,6 +656,7 @@ export type MarketUncheckedCreateWithoutOrderBumpsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   offers?: Prisma.OfferUncheckedCreateNestedManyWithoutMarketInput
+  carts?: Prisma.CartUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutOrderBumpsInput = {
@@ -660,6 +687,7 @@ export type MarketUpdateWithoutOrderBumpsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   offers?: Prisma.OfferUpdateManyWithoutMarketNestedInput
+  carts?: Prisma.CartUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutOrderBumpsInput = {
@@ -674,6 +702,83 @@ export type MarketUncheckedUpdateWithoutOrderBumpsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   offers?: Prisma.OfferUncheckedUpdateManyWithoutMarketNestedInput
+  carts?: Prisma.CartUncheckedUpdateManyWithoutMarketNestedInput
+}
+
+export type MarketCreateWithoutCartsInput = {
+  id?: string
+  code: $Enums.MarketCode
+  label: string
+  locale: string
+  currency: $Enums.CurrencyCode
+  shippingAmount: number
+  taxRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  offers?: Prisma.OfferCreateNestedManyWithoutMarketInput
+  orderBumps?: Prisma.OrderBumpCreateNestedManyWithoutMarketInput
+}
+
+export type MarketUncheckedCreateWithoutCartsInput = {
+  id?: string
+  code: $Enums.MarketCode
+  label: string
+  locale: string
+  currency: $Enums.CurrencyCode
+  shippingAmount: number
+  taxRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  offers?: Prisma.OfferUncheckedCreateNestedManyWithoutMarketInput
+  orderBumps?: Prisma.OrderBumpUncheckedCreateNestedManyWithoutMarketInput
+}
+
+export type MarketCreateOrConnectWithoutCartsInput = {
+  where: Prisma.MarketWhereUniqueInput
+  create: Prisma.XOR<Prisma.MarketCreateWithoutCartsInput, Prisma.MarketUncheckedCreateWithoutCartsInput>
+}
+
+export type MarketUpsertWithoutCartsInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutCartsInput, Prisma.MarketUncheckedUpdateWithoutCartsInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutCartsInput, Prisma.MarketUncheckedCreateWithoutCartsInput>
+  where?: Prisma.MarketWhereInput
+}
+
+export type MarketUpdateToOneWithWhereWithoutCartsInput = {
+  where?: Prisma.MarketWhereInput
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutCartsInput, Prisma.MarketUncheckedUpdateWithoutCartsInput>
+}
+
+export type MarketUpdateWithoutCartsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.EnumMarketCodeFieldUpdateOperationsInput | $Enums.MarketCode
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  shippingAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  taxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  offers?: Prisma.OfferUpdateManyWithoutMarketNestedInput
+  orderBumps?: Prisma.OrderBumpUpdateManyWithoutMarketNestedInput
+}
+
+export type MarketUncheckedUpdateWithoutCartsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.EnumMarketCodeFieldUpdateOperationsInput | $Enums.MarketCode
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  shippingAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  taxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  offers?: Prisma.OfferUncheckedUpdateManyWithoutMarketNestedInput
+  orderBumps?: Prisma.OrderBumpUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 
@@ -684,11 +789,13 @@ export type MarketUncheckedUpdateWithoutOrderBumpsInput = {
 export type MarketCountOutputType = {
   offers: number
   orderBumps: number
+  carts: number
 }
 
 export type MarketCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   offers?: boolean | MarketCountOutputTypeCountOffersArgs
   orderBumps?: boolean | MarketCountOutputTypeCountOrderBumpsArgs
+  carts?: boolean | MarketCountOutputTypeCountCartsArgs
 }
 
 /**
@@ -715,6 +822,13 @@ export type MarketCountOutputTypeCountOrderBumpsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.OrderBumpWhereInput
 }
 
+/**
+ * MarketCountOutputType without action
+ */
+export type MarketCountOutputTypeCountCartsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CartWhereInput
+}
+
 
 export type MarketSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -729,6 +843,7 @@ export type MarketSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   offers?: boolean | Prisma.Market$offersArgs<ExtArgs>
   orderBumps?: boolean | Prisma.Market$orderBumpsArgs<ExtArgs>
+  carts?: boolean | Prisma.Market$cartsArgs<ExtArgs>
   _count?: boolean | Prisma.MarketCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["market"]>
 
@@ -775,6 +890,7 @@ export type MarketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type MarketInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   offers?: boolean | Prisma.Market$offersArgs<ExtArgs>
   orderBumps?: boolean | Prisma.Market$orderBumpsArgs<ExtArgs>
+  carts?: boolean | Prisma.Market$cartsArgs<ExtArgs>
   _count?: boolean | Prisma.MarketCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MarketIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -785,6 +901,7 @@ export type $MarketPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     offers: Prisma.$OfferPayload<ExtArgs>[]
     orderBumps: Prisma.$OrderBumpPayload<ExtArgs>[]
+    carts: Prisma.$CartPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1193,6 +1310,7 @@ export interface Prisma__MarketClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   offers<T extends Prisma.Market$offersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$offersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orderBumps<T extends Prisma.Market$orderBumpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$orderBumpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderBumpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  carts<T extends Prisma.Market$cartsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$cartsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1670,6 +1788,30 @@ export type Market$orderBumpsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.OrderBumpScalarFieldEnum | Prisma.OrderBumpScalarFieldEnum[]
+}
+
+/**
+ * Market.carts
+ */
+export type Market$cartsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Cart
+   */
+  select?: Prisma.CartSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Cart
+   */
+  omit?: Prisma.CartOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CartInclude<ExtArgs> | null
+  where?: Prisma.CartWhereInput
+  orderBy?: Prisma.CartOrderByWithRelationInput | Prisma.CartOrderByWithRelationInput[]
+  cursor?: Prisma.CartWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CartScalarFieldEnum | Prisma.CartScalarFieldEnum[]
 }
 
 /**

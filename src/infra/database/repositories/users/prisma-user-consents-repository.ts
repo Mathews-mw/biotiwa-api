@@ -1,6 +1,6 @@
 import { prisma } from '../../prisma';
 import { Prisma } from '@/generated/prisma/client';
-import { UserConsentMapper } from '../../mappers/user-consent-mapper';
+import { UserConsentMapper } from '../../mappers/user/user-consent-mapper';
 import { UserConsent } from '@/domains/main/models/entities/user-consent';
 import type {
 	IFindUniqueParams,

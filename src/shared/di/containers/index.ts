@@ -5,6 +5,7 @@ import { DEPENDENCY_IDENTIFIERS, DependencyIdentifiers } from './dependency-iden
 import { BetterAuthIdentityProvider } from '@/infra/auth/better-auth-identity-provider';
 
 import { PrismaUsersRepository } from '@/infra/database/repositories/users/prisma-users-repository';
+import { PrismaCartsRepository } from '@/infra/database/repositories/carts/prisma-carts-repository';
 import { PrismaOffersRepository } from '@/infra/database/repositories/commerce/prisma-offers-repository';
 import { PrismaAccountsRepository } from '@/infra/database/repositories/users/prisma-accounts-repository';
 import { PrismaSessionsRepository } from '@/infra/database/repositories/users/prisma-sessions-repository';
@@ -36,6 +37,7 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.OFFERS_REPOSITORY, PrismaOffersReposito
 registerSingleton(DEPENDENCY_IDENTIFIERS.OFFER_ITEMS_REPOSITORY, PrismaOfferItemsRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.MARKETS_REPOSITORY, PrismaMarketsRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.COMMERCE_CATALOG_REPOSITORY, PrismaCommerceCatalogRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.CARTS_REPOSITORY, PrismaCartsRepository);
 
 // Providers
 registerSingleton(DEPENDENCY_IDENTIFIERS.IDENTITY_PROVIDER, BetterAuthIdentityProvider);

@@ -1,5 +1,5 @@
 import { prisma } from '../../prisma';
-import { CustomerProfileMapper } from '../../mappers/customer-profile-mapper';
+import { CustomerProfileMapper } from '../../mappers/user/customer-profile-mapper';
 import { CustomerProfile } from '@/domains/main/models/entities/customer-profile';
 import type { ICustomerProfileRepository } from '@/domains/main/application/modules/users/repositories/customer-profile-repository';
 

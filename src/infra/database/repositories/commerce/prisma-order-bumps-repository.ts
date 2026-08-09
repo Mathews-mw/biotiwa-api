@@ -1,6 +1,6 @@
 import { prisma } from '../../prisma';
-import { OrderBumpMapper } from '../../mappers/order-bump-mapper';
 import { OrderBump } from '@/domains/main/models/entities/order-bump';
+import { OrderBumpMapper } from '../../mappers/commerce/order-bump-mapper';
 
 import type { IOrderBumpRepository } from '@/domains/main/application/modules/commerce/repositories/order-bump-repository';
 

@@ -82,3 +82,13 @@ export type OfferItem = Prisma.OfferItemModel
  * 
  */
 export type OrderBump = Prisma.OrderBumpModel
+/**
+ * Model Cart
+ * 
+ */
+export type Cart = Prisma.CartModel
+/**
+ * Model CartItem
+ * 
+ */
+export type CartItem = Prisma.CartItemModel

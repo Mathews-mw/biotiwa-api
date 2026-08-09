@@ -274,6 +274,7 @@ export type OrderBumpWhereInput = {
   updatedAt?: Prisma.DateTimeNullableFilter<"OrderBump"> | Date | string | null
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
+  cartItems?: Prisma.CartItemListRelationFilter
 }
 
 export type OrderBumpOrderByWithRelationInput = {
@@ -290,6 +291,7 @@ export type OrderBumpOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   product?: Prisma.ProductOrderByWithRelationInput
   market?: Prisma.MarketOrderByWithRelationInput
+  cartItems?: Prisma.CartItemOrderByRelationAggregateInput
 }
 
 export type OrderBumpWhereUniqueInput = Prisma.AtLeast<{
@@ -309,6 +311,7 @@ export type OrderBumpWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeNullableFilter<"OrderBump"> | Date | string | null
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
+  cartItems?: Prisma.CartItemListRelationFilter
 }, "id">
 
 export type OrderBumpOrderByWithAggregationInput = {
@@ -359,6 +362,7 @@ export type OrderBumpCreateInput = {
   updatedAt?: Date | string | null
   product: Prisma.ProductCreateNestedOneWithoutOrderBumpsInput
   market: Prisma.MarketCreateNestedOneWithoutOrderBumpsInput
+  cartItems?: Prisma.CartItemCreateNestedManyWithoutOrderBumpInput
 }
 
 export type OrderBumpUncheckedCreateInput = {
@@ -373,6 +377,7 @@ export type OrderBumpUncheckedCreateInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
+  cartItems?: Prisma.CartItemUncheckedCreateNestedManyWithoutOrderBumpInput
 }
 
 export type OrderBumpUpdateInput = {
@@ -387,6 +392,7 @@ export type OrderBumpUpdateInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   product?: Prisma.ProductUpdateOneRequiredWithoutOrderBumpsNestedInput
   market?: Prisma.MarketUpdateOneRequiredWithoutOrderBumpsNestedInput
+  cartItems?: Prisma.CartItemUpdateManyWithoutOrderBumpNestedInput
 }
 
 export type OrderBumpUncheckedUpdateInput = {
@@ -401,6 +407,7 @@ export type OrderBumpUncheckedUpdateInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cartItems?: Prisma.CartItemUncheckedUpdateManyWithoutOrderBumpNestedInput
 }
 
 export type OrderBumpCreateManyInput = {
@@ -507,6 +514,11 @@ export type OrderBumpSumOrderByAggregateInput = {
   sortOrder?: Prisma.SortOrder
 }
 
+export type OrderBumpNullableScalarRelationFilter = {
+  is?: Prisma.OrderBumpWhereInput | null
+  isNot?: Prisma.OrderBumpWhereInput | null
+}
+
 export type OrderBumpCreateNestedManyWithoutMarketInput = {
   create?: Prisma.XOR<Prisma.OrderBumpCreateWithoutMarketInput, Prisma.OrderBumpUncheckedCreateWithoutMarketInput> | Prisma.OrderBumpCreateWithoutMarketInput[] | Prisma.OrderBumpUncheckedCreateWithoutMarketInput[]
   connectOrCreate?: Prisma.OrderBumpCreateOrConnectWithoutMarketInput | Prisma.OrderBumpCreateOrConnectWithoutMarketInput[]
@@ -591,6 +603,22 @@ export type OrderBumpUncheckedUpdateManyWithoutProductNestedInput = {
   deleteMany?: Prisma.OrderBumpScalarWhereInput | Prisma.OrderBumpScalarWhereInput[]
 }
 
+export type OrderBumpCreateNestedOneWithoutCartItemsInput = {
+  create?: Prisma.XOR<Prisma.OrderBumpCreateWithoutCartItemsInput, Prisma.OrderBumpUncheckedCreateWithoutCartItemsInput>
+  connectOrCreate?: Prisma.OrderBumpCreateOrConnectWithoutCartItemsInput
+  connect?: Prisma.OrderBumpWhereUniqueInput
+}
+
+export type OrderBumpUpdateOneWithoutCartItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderBumpCreateWithoutCartItemsInput, Prisma.OrderBumpUncheckedCreateWithoutCartItemsInput>
+  connectOrCreate?: Prisma.OrderBumpCreateOrConnectWithoutCartItemsInput
+  upsert?: Prisma.OrderBumpUpsertWithoutCartItemsInput
+  disconnect?: Prisma.OrderBumpWhereInput | boolean
+  delete?: Prisma.OrderBumpWhereInput | boolean
+  connect?: Prisma.OrderBumpWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderBumpUpdateToOneWithWhereWithoutCartItemsInput, Prisma.OrderBumpUpdateWithoutCartItemsInput>, Prisma.OrderBumpUncheckedUpdateWithoutCartItemsInput>
+}
+
 export type OrderBumpCreateWithoutMarketInput = {
   id?: string
   name: string
@@ -602,6 +630,7 @@ export type OrderBumpCreateWithoutMarketInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   product: Prisma.ProductCreateNestedOneWithoutOrderBumpsInput
+  cartItems?: Prisma.CartItemCreateNestedManyWithoutOrderBumpInput
 }
 
 export type OrderBumpUncheckedCreateWithoutMarketInput = {
@@ -615,6 +644,7 @@ export type OrderBumpUncheckedCreateWithoutMarketInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
+  cartItems?: Prisma.CartItemUncheckedCreateNestedManyWithoutOrderBumpInput
 }
 
 export type OrderBumpCreateOrConnectWithoutMarketInput = {
@@ -671,6 +701,7 @@ export type OrderBumpCreateWithoutProductInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutOrderBumpsInput
+  cartItems?: Prisma.CartItemCreateNestedManyWithoutOrderBumpInput
 }
 
 export type OrderBumpUncheckedCreateWithoutProductInput = {
@@ -684,6 +715,7 @@ export type OrderBumpUncheckedCreateWithoutProductInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
+  cartItems?: Prisma.CartItemUncheckedCreateNestedManyWithoutOrderBumpInput
 }
 
 export type OrderBumpCreateOrConnectWithoutProductInput = {
@@ -712,6 +744,78 @@ export type OrderBumpUpdateManyWithWhereWithoutProductInput = {
   data: Prisma.XOR<Prisma.OrderBumpUpdateManyMutationInput, Prisma.OrderBumpUncheckedUpdateManyWithoutProductInput>
 }
 
+export type OrderBumpCreateWithoutCartItemsInput = {
+  id?: string
+  name: string
+  description: string
+  unitAmount: number
+  quantity?: number
+  isActive?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  product: Prisma.ProductCreateNestedOneWithoutOrderBumpsInput
+  market: Prisma.MarketCreateNestedOneWithoutOrderBumpsInput
+}
+
+export type OrderBumpUncheckedCreateWithoutCartItemsInput = {
+  id?: string
+  productId: string
+  marketCode: $Enums.MarketCode
+  name: string
+  description: string
+  unitAmount: number
+  quantity?: number
+  isActive?: boolean
+  sortOrder?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+}
+
+export type OrderBumpCreateOrConnectWithoutCartItemsInput = {
+  where: Prisma.OrderBumpWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderBumpCreateWithoutCartItemsInput, Prisma.OrderBumpUncheckedCreateWithoutCartItemsInput>
+}
+
+export type OrderBumpUpsertWithoutCartItemsInput = {
+  update: Prisma.XOR<Prisma.OrderBumpUpdateWithoutCartItemsInput, Prisma.OrderBumpUncheckedUpdateWithoutCartItemsInput>
+  create: Prisma.XOR<Prisma.OrderBumpCreateWithoutCartItemsInput, Prisma.OrderBumpUncheckedCreateWithoutCartItemsInput>
+  where?: Prisma.OrderBumpWhereInput
+}
+
+export type OrderBumpUpdateToOneWithWhereWithoutCartItemsInput = {
+  where?: Prisma.OrderBumpWhereInput
+  data: Prisma.XOR<Prisma.OrderBumpUpdateWithoutCartItemsInput, Prisma.OrderBumpUncheckedUpdateWithoutCartItemsInput>
+}
+
+export type OrderBumpUpdateWithoutCartItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  unitAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  product?: Prisma.ProductUpdateOneRequiredWithoutOrderBumpsNestedInput
+  market?: Prisma.MarketUpdateOneRequiredWithoutOrderBumpsNestedInput
+}
+
+export type OrderBumpUncheckedUpdateWithoutCartItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  marketCode?: Prisma.EnumMarketCodeFieldUpdateOperationsInput | $Enums.MarketCode
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  unitAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 export type OrderBumpCreateManyMarketInput = {
   id?: string
   productId: string
@@ -736,6 +840,7 @@ export type OrderBumpUpdateWithoutMarketInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   product?: Prisma.ProductUpdateOneRequiredWithoutOrderBumpsNestedInput
+  cartItems?: Prisma.CartItemUpdateManyWithoutOrderBumpNestedInput
 }
 
 export type OrderBumpUncheckedUpdateWithoutMarketInput = {
@@ -749,6 +854,7 @@ export type OrderBumpUncheckedUpdateWithoutMarketInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cartItems?: Prisma.CartItemUncheckedUpdateManyWithoutOrderBumpNestedInput
 }
 
 export type OrderBumpUncheckedUpdateManyWithoutMarketInput = {
@@ -788,6 +894,7 @@ export type OrderBumpUpdateWithoutProductInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutOrderBumpsNestedInput
+  cartItems?: Prisma.CartItemUpdateManyWithoutOrderBumpNestedInput
 }
 
 export type OrderBumpUncheckedUpdateWithoutProductInput = {
@@ -801,6 +908,7 @@ export type OrderBumpUncheckedUpdateWithoutProductInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cartItems?: Prisma.CartItemUncheckedUpdateManyWithoutOrderBumpNestedInput
 }
 
 export type OrderBumpUncheckedUpdateManyWithoutProductInput = {
@@ -817,6 +925,35 @@ export type OrderBumpUncheckedUpdateManyWithoutProductInput = {
 }
 
 
+/**
+ * Count Type OrderBumpCountOutputType
+ */
+
+export type OrderBumpCountOutputType = {
+  cartItems: number
+}
+
+export type OrderBumpCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  cartItems?: boolean | OrderBumpCountOutputTypeCountCartItemsArgs
+}
+
+/**
+ * OrderBumpCountOutputType without action
+ */
+export type OrderBumpCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderBumpCountOutputType
+   */
+  select?: Prisma.OrderBumpCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OrderBumpCountOutputType without action
+ */
+export type OrderBumpCountOutputTypeCountCartItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CartItemWhereInput
+}
+
 
 export type OrderBumpSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -832,6 +969,8 @@ export type OrderBumpSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   updatedAt?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  cartItems?: boolean | Prisma.OrderBump$cartItemsArgs<ExtArgs>
+  _count?: boolean | Prisma.OrderBumpCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["orderBump"]>
 
 export type OrderBumpSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -884,6 +1023,8 @@ export type OrderBumpOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type OrderBumpInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  cartItems?: boolean | Prisma.OrderBump$cartItemsArgs<ExtArgs>
+  _count?: boolean | Prisma.OrderBumpCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderBumpIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -899,6 +1040,7 @@ export type $OrderBumpPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     product: Prisma.$ProductPayload<ExtArgs>
     market: Prisma.$MarketPayload<ExtArgs>
+    cartItems: Prisma.$CartItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1308,6 +1450,7 @@ export interface Prisma__OrderBumpClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   product<T extends Prisma.ProductDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductDefaultArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  cartItems<T extends Prisma.OrderBump$cartItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderBump$cartItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CartItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1746,6 +1889,30 @@ export type OrderBumpDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many OrderBumps to delete.
    */
   limit?: number
+}
+
+/**
+ * OrderBump.cartItems
+ */
+export type OrderBump$cartItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CartItem
+   */
+  select?: Prisma.CartItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CartItem
+   */
+  omit?: Prisma.CartItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CartItemInclude<ExtArgs> | null
+  where?: Prisma.CartItemWhereInput
+  orderBy?: Prisma.CartItemOrderByWithRelationInput | Prisma.CartItemOrderByWithRelationInput[]
+  cursor?: Prisma.CartItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CartItemScalarFieldEnum | Prisma.CartItemScalarFieldEnum[]
 }
 
 /**

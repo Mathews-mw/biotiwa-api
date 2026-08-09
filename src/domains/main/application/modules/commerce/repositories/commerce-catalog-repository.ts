@@ -3,7 +3,7 @@ import type { IMarketCode } from '@/core/types/market-code';
 import { Market } from '@/domains/main/models/entities/market';
 import { Product } from '@/domains/main/models/entities/product';
 import { OrderBump } from '@/domains/main/models/entities/order-bump';
-import { OfferWithItems } from '@/domains/main/models/value-objects/offer-with-item';
+import { OfferDetails } from '@/domains/main/models/value-objects/offer-details';
 
 export abstract class ICommerceCatalogRepository {
 	abstract listActiveMarkets(): Promise<Market[]>;
@@ -11,7 +11,7 @@ export abstract class ICommerceCatalogRepository {
 	abstract getPublicOffersByMarket(code: IMarketCode): Promise<{
 		market: Market;
 		product: Product;
-		offers: OfferWithItems[];
+		offers: OfferDetails[];
 		orderBump: OrderBump | null;
 	} | null>;
 	abstract findProductBySlug(slug: string): Promise<Product | null>;

@@ -1,5 +1,5 @@
 import { prisma } from '../../prisma';
-import { SessionMapper } from '../../mappers/session-mapper';
+import { SessionMapper } from '../../mappers/user/session-mapper';
 import { Session } from '@/domains/main/models/entities/session';
 import type { ISessionRepository } from '@/domains/main/application/modules/users/repositories/session-repository';
 

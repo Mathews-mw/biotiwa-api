@@ -1,6 +1,6 @@
 import { prisma } from '../../prisma';
-import { MarketMapper } from '../../mappers/market-mapper';
 import { Market } from '@/domains/main/models/entities/market';
+import { MarketMapper } from '../../mappers/commerce/market-mapper';
 
 import type {
 	IFindByCodeParams,

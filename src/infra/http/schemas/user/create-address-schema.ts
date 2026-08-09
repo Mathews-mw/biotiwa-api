@@ -20,7 +20,7 @@ const bodySchema = z.object({
 
 const responseSchema = z.object({
 	message: z.string(),
-	address_id: z.uuid(),
+	address_id: z.string(),
 });
 
 export type ICreateAddressRequest = z.infer<typeof bodySchema>;

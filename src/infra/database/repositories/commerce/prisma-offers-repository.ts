@@ -1,6 +1,6 @@
 import { prisma } from '../../prisma';
-import { OfferMapper } from '../../mappers/offer-mapper';
 import { Offer } from '@/domains/main/models/entities/offer';
+import { OfferMapper } from '../../mappers/commerce/offer-mapper';
 
 import type {
 	IFindManyParams,

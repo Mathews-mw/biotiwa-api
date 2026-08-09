@@ -66,3 +66,21 @@ export const OfferStatus = {
 } as const
 
 export type OfferStatus = (typeof OfferStatus)[keyof typeof OfferStatus]
+
+
+export const CartStatus = {
+  ACTIVE: 'ACTIVE',
+  CONVERTED: 'CONVERTED',
+  ABANDONED: 'ABANDONED'
+} as const
+
+export type CartStatus = (typeof CartStatus)[keyof typeof CartStatus]
+
+
+export const CartItemType = {
+  OFFER: 'OFFER',
+  PRODUCT: 'PRODUCT',
+  ORDER_BUMP: 'ORDER_BUMP'
+} as const
+
+export type CartItemType = (typeof CartItemType)[keyof typeof CartItemType]

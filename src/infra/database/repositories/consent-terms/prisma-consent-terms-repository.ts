@@ -1,5 +1,5 @@
 import { prisma } from '../../prisma';
-import { ConsentTermMapper } from '../../mappers/consent-term-mapper';
+import { ConsentTermMapper } from '../../mappers/user/consent-term-mapper';
 import { ConsentTerm } from '@/domains/main/models/entities/consent-term';
 import type {
 	IConsentTermRepository,

@@ -1,6 +1,6 @@
 import { prisma } from '../../prisma';
-import { ProductMapper } from '../../mappers/product-mapper';
 import { Product } from '@/domains/main/models/entities/product';
+import { ProductMapper } from '../../mappers/commerce/product-mapper';
 
 import type {
 	IFindManyParams,

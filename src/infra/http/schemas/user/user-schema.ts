@@ -6,10 +6,10 @@ export const userSchema = z.object({
 	name: z.string(),
 	email: z.email(),
 	email_verified: z.boolean(),
-	image: z.string().nullable().optional(),
+	image: z.string().nullable(),
 	role: rolesSchema,
 	created_at: z.coerce.date(),
-	updated_at: z.coerce.date().nullable().optional(),
+	updated_at: z.coerce.date().nullable(),
 });
 
 export type IUserResponseSchema = z.infer<typeof userSchema>;

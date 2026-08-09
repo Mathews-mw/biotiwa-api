@@ -63,7 +63,9 @@ export const ModelName = {
   Product: 'Product',
   Offer: 'Offer',
   OfferItem: 'OfferItem',
-  OrderBump: 'OrderBump'
+  OrderBump: 'OrderBump',
+  Cart: 'Cart',
+  CartItem: 'CartItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -281,6 +283,33 @@ export const OrderBumpScalarFieldEnum = {
 } as const
 
 export type OrderBumpScalarFieldEnum = (typeof OrderBumpScalarFieldEnum)[keyof typeof OrderBumpScalarFieldEnum]
+
+
+export const CartScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  marketCode: 'marketCode',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartScalarFieldEnum = (typeof CartScalarFieldEnum)[keyof typeof CartScalarFieldEnum]
+
+
+export const CartItemScalarFieldEnum = {
+  id: 'id',
+  cartId: 'cartId',
+  productId: 'productId',
+  offerId: 'offerId',
+  orderBumpId: 'orderBumpId',
+  type: 'type',
+  quantity: 'quantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartItemScalarFieldEnum = (typeof CartItemScalarFieldEnum)[keyof typeof CartItemScalarFieldEnum]
 
 
 export const SortOrder = {

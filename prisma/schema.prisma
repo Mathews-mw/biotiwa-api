@@ -45,6 +45,43 @@ enum OfferStatus {
   ARCHIVED
 }
 
+enum CartStatus {
+  ACTIVE
+  CONVERTED
+  ABANDONED
+}
+
+enum CartItemType {
+  OFFER
+  PRODUCT
+  ORDER_BUMP
+}
+
+// enum OrderStatus {
+//   PENDING_PAYMENT
+//   PAID
+//   PROCESSING
+//   SHIPPED
+//   DELIVERED
+//   CANCELED
+//   REFUNDED
+//   PAYMENT_FAILED
+//   EXPIRED
+// }
+
+// enum OrderItemType {
+//   OFFER_ITEM
+//   ORDER_BUMP
+// }
+
+// enum PaymentStatus {
+//   PENDING
+//   PAID
+//   FAILED
+//   CANCELED
+//   REFUNDED
+// }
+
 model User {
   id            String    @id @unique @default(cuid())
   name          String
@@ -60,6 +97,7 @@ model User {
   consents        UserConsent[]
   accounts        Account[]
   sessions        Session[]
+  carts           Cart[]
 
   @@map("users")
 }
@@ -205,6 +243,7 @@ model Market {
 
   offers     Offer[]
   orderBumps OrderBump[]
+  carts      Cart[]
 
   @@map("markets")
 }
@@ -224,6 +263,7 @@ model Product {
 
   offerItems OfferItem[]
   orderBumps OrderBump[]
+  cartItems  CartItem[]
 
   @@map("products")
 }
@@ -234,7 +274,7 @@ model Offer {
   marketCode      MarketCode  @map("market_code")
   name            String
   description     String
-  unitAmount      Int         @map("unit_amount")
+  unitAmount      Int         @map("unit_amount") // Preço unitário
   discountPercent Int         @default(0) @map("discount_percent")
   isHighlighted   Boolean     @default(false) @map("is_highlighted")
   status          OfferStatus @default(DRAFT)
@@ -242,8 +282,9 @@ model Offer {
   createdAt       DateTime    @default(now()) @map("created_at")
   updatedAt       DateTime?   @updatedAt @map("updated_at")
 
-  market Market      @relation(fields: [marketCode], references: [code])
-  items  OfferItem[]
+  market    Market      @relation(fields: [marketCode], references: [code])
+  items     OfferItem[]
+  cartItems CartItem[]
 
   @@unique([marketCode, slug])
   @@index([marketCode])
@@ -279,10 +320,122 @@ model OrderBump {
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime?  @updatedAt @map("updated_at")
 
-  product Product @relation(fields: [productId], references: [id])
-  market  Market  @relation(fields: [marketCode], references: [code])
+  product   Product    @relation(fields: [productId], references: [id])
+  market    Market     @relation(fields: [marketCode], references: [code])
+  cartItems CartItem[]
 
   @@index([marketCode])
   @@index([productId])
   @@map("order_bumps")
 }
+
+model Cart {
+  id         String     @id @default(cuid())
+  userId     String     @map("user_id")
+  marketCode MarketCode @map("market_code")
+  status     CartStatus @default(ACTIVE)
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime?  @updatedAt @map("updated_at")
+
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  market Market     @relation(fields: [marketCode], references: [code])
+  items  CartItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("carts")
+}
+
+model CartItem {
+  id          String       @id @default(cuid())
+  cartId      String       @map("cart_id")
+  productId   String?      @map("product_id")
+  offerId     String?      @map("offer_id")
+  orderBumpId String?      @map("order_bump_id")
+  type        CartItemType
+  quantity    Int          @default(1)
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime?    @updatedAt @map("updated_at")
+
+  cart      Cart       @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  offer     Offer?     @relation(fields: [offerId], references: [id])
+  orderBump OrderBump? @relation(fields: [orderBumpId], references: [id])
+  product   Product?   @relation(fields: [productId], references: [id])
+
+  @@index([cartId])
+  @@index([offerId])
+  @@index([orderBumpId])
+  @@map("cart_items")
+}
+
+// model Order {
+//   id         String       @id @default(cuid())
+//   userId     String       @map("user_id")
+//   cartId     String?      @map("cart_id")
+//   marketCode MarketCode   @map("market_code")
+//   currency   CurrencyCode
+//   status     OrderStatus  @default(PENDING_PAYMENT)
+
+//   itemsAmount     Int @map("items_amount")
+//   orderBumpAmount Int @default(0) @map("order_bump_amount")
+//   subtotalAmount  Int @map("subtotal_amount")
+//   discountAmount  Int @default(0) @map("discount_amount")
+//   taxAmount       Int @default(0) @map("tax_amount")
+//   shippingAmount  Int @default(0) @map("shipping_amount")
+//   totalAmount     Int @map("total_amount")
+
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
+
+//   user User  @relation(fields: [userId], references: [id])
+//   cart Cart? @relation(fields: [cartId], references: [id])
+
+//   items    OrderItem[]
+//   payments Payment[]
+
+//   @@index([userId])
+//   @@index([status])
+//   @@map("orders")
+// }
+
+// model OrderItem {
+//   id          String        @id @default(cuid())
+//   orderId     String        @map("order_id")
+//   productId   String        @map("product_id")
+//   type        OrderItemType
+//   name        String
+//   sku         String
+//   quantity    Int
+//   unitAmount  Int           @map("unit_amount")
+//   totalAmount Int           @map("total_amount")
+//   metadata    Json?
+
+//   createdAt DateTime @default(now()) @map("created_at")
+
+//   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+//   product Product @relation(fields: [productId], references: [id])
+
+//   @@index([orderId])
+//   @@index([productId])
+//   @@map("order_items")
+// }
+
+// model Payment {
+//   id                    String        @id @default(cuid())
+//   orderId               String        @map("order_id")
+//   provider              String
+//   providerSessionId     String?       @unique @map("provider_session_id")
+//   providerPaymentIntent String?       @map("provider_payment_intent")
+//   status                PaymentStatus @default(PENDING)
+//   amount                Int
+//   currency              CurrencyCode
+//   rawPayload            Json?         @map("raw_payload")
+//   createdAt             DateTime      @default(now()) @map("created_at")
+//   updatedAt             DateTime      @updatedAt @map("updated_at")
+
+//   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+//   @@index([orderId])
+//   @@index([status])
+//   @@map("payments")
+// }
