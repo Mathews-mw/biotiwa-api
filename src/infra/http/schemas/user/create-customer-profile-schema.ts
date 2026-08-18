@@ -2,7 +2,7 @@ import z from 'zod';
 import { FastifySchema } from 'fastify/types/schema';
 
 import { marketCodeSchema } from '@/core/types/market-code';
-import { badRequestErrorSchema } from '../erros/erros-schemas';
+import { getBadRequestErrorSchema } from '../erros/erros-schemas';
 
 const bodySchema = z.object({
 	user_id: z.string(),
@@ -26,6 +26,6 @@ export const createCustomerProfileSchema: FastifySchema = {
 	body: bodySchema,
 	response: {
 		201: responseSchema,
-		400: badRequestErrorSchema,
+		400: getBadRequestErrorSchema.startWith('BAD_REQUEST_ERROR').include('PROFILE_ALREADY_EXISTS').getErrorSchema(),
 	},
 };

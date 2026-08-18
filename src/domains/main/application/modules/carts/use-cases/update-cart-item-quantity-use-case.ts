@@ -32,7 +32,7 @@ export class UpdateCartItemQuantityUseCase {
 
 	async execute({ userId, cartItemId, quantity }: IRequest): Promise<Response> {
 		if (quantity < 1) {
-			return failure(new BadRequestError('Quantity must be greater than zero', 'BAD_REQUEST_ERROR'));
+			return failure(new BadRequestError('Quantity must be greater than zero', 'CART_QUANTITY_ZERO_ERROR'));
 		}
 
 		const item = await this.cartRepository.findItemByIdAndUserId({
@@ -41,7 +41,7 @@ export class UpdateCartItemQuantityUseCase {
 		});
 
 		if (!item) {
-			return failure(new ResourceNotFoundError('Cart item not found', 'RESOURCE_NOT_FOUND_ERROR'));
+			return failure(new ResourceNotFoundError('Cart item not found', 'CART_ITEM_NOT_FOUND'));
 		}
 
 		item.quantity = quantity;

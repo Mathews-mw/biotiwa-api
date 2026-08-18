@@ -52,7 +52,7 @@ export class AddCartItemUseCase {
 		const targetMarketCode = await this.resolveTargetMarketCode(input);
 
 		if (!targetMarketCode) {
-			return failure(new ResourceNotFoundError('Cart item target not found', 'RESOURCE_NOT_FOUND_ERROR'));
+			return failure(new ResourceNotFoundError('Cart item target not found', 'MARKET_CODE_NOT_FOUND'));
 		}
 
 		if (targetMarketCode !== input.marketCode) {

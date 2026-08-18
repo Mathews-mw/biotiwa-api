@@ -1,19 +1,23 @@
 import z from 'zod';
+import { createHttpErrorSchemaFactory } from './http-error-factory';
 
-export const code401Schema = z
-	.union([
-		z.literal('UNAUTHORIZED_ERROR'),
-		z.literal('AUTH_EXPIRED_TOKEN_ERROR'),
-		z.literal('AUTH_INVALID_TOKEN_ERROR'),
-		z.literal('INVALID_SESSION_EXPIRED'),
-		z.literal('AUTH_NO_AUTHORIZATION_IN_COOKIE_ERROR'),
-		z.literal('CREDENTIALS_TYPE_ERROR'),
-		z.literal('AUTH_MIDDLEWARE_NOT_EXECUTED'),
-		z.literal('AUTH_INVALID_CREDENTIALS_ERROR'),
-	])
-	.default('UNAUTHORIZED_ERROR');
+export const unauthorizedErrors = createHttpErrorSchemaFactory({
+	status: 401,
+	codes: [
+		'UNAUTHORIZED_ERROR',
+		'AUTH_EXPIRED_TOKEN_ERROR',
+		'AUTH_INVALID_TOKEN_ERROR',
+		'INVALID_SESSION_EXPIRED',
+		'AUTH_NO_AUTHORIZATION_IN_COOKIE_ERROR',
+		'CREDENTIALS_TYPE_ERROR',
+		'AUTH_MIDDLEWARE_NOT_EXECUTED',
+		'AUTH_INVALID_CREDENTIALS_ERROR',
+	],
+	defaultCode: 'UNAUTHORIZED_ERROR',
+});
 
-type Code = z.infer<typeof code401Schema>;
+type Code = z.infer<typeof unauthorizedErrors.codeSchema>;
+export type Code401Identifiers = Code;
 
 export class UnauthorizedError extends Error {
 	readonly code: Code;

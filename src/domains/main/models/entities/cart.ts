@@ -57,6 +57,11 @@ export class Cart extends Entity<ICartProps> {
 		this.props.updatedAt = new Date();
 	}
 
+	markAsConverted() {
+		this.props.status = 'CONVERTED';
+		this._touch();
+	}
+
 	static create(props: Optional<ICartProps, 'status' | 'createdAt'>, id?: UniqueEntityId) {
 		const cart = new Cart(
 			{

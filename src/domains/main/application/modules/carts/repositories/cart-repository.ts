@@ -12,6 +12,7 @@ export interface ICartRepository {
 	saveItem(cartItem: CartItem): Promise<CartDetails>;
 	removeItem(cartItem: CartItem): Promise<CartDetails>;
 	clearActiveCart(userId: string): Promise<void>;
+	markAsConverted(cartId: string): Promise<void>;
 	findActiveByUserId(userId: string): Promise<CartDetails | null>;
 	findOfferDetailsById(offerId: string): Promise<OfferDetails | null>;
 	findOrderBumpDetailsById(orderBumpId: string): Promise<OrderBumpDetails | null>;

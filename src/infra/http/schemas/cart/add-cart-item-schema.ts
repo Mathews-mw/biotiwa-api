@@ -4,7 +4,7 @@ import { FastifySchema } from 'fastify/types/schema';
 import { cartDetailsSchema } from './cart-details-schema';
 import { cartSummarySchema } from './cart-summary-schema';
 import { marketCodeSchema } from '@/core/types/market-code';
-import { badRequestErrorSchema, resourceNotFoundErrorSchema } from '../erros/erros-schemas';
+import { getBadRequestErrorSchema, getNotFoundErrorSchema } from '../erros/erros-schemas';
 
 const bodySchema = z.union([
 	z.object({
@@ -39,7 +39,11 @@ export const addCartItemSchema: FastifySchema = {
 	body: bodySchema,
 	response: {
 		200: responseSchema,
-		400: badRequestErrorSchema,
-		404: resourceNotFoundErrorSchema,
+		400: getBadRequestErrorSchema
+			.startWith('BAD_REQUEST_ERROR')
+			.include('CART_QUANTITY_ZERO_ERROR')
+			.include('CART_ITEM_DOES_NOT_BELONG_SELECT_MARKET')
+			.getErrorSchema(),
+		404: getNotFoundErrorSchema.startWith('RESOURCE_NOT_FOUND_ERROR').include('MARKET_CODE_NOT_FOUND').getErrorSchema(),
 	},
 };

@@ -1,8 +1,24 @@
 import z from 'zod';
+import { createHttpErrorSchemaFactory } from './http-error-factory';
 
-export const code404Schema = z.union([z.literal('RESOURCE_NOT_FOUND_ERROR')]).default('RESOURCE_NOT_FOUND_ERROR');
+export const notFoundErrors = createHttpErrorSchemaFactory({
+	status: 404,
+	codes: [
+		'RESOURCE_NOT_FOUND_ERROR',
+		'USER_NOT_FOUND',
+		'PROFILE_NOT_FOUND',
+		'ADDRESS_NOT_FOUND',
+		'MARKET_CODE_NOT_FOUND',
+		'CART_NOT_FOUND',
+		'ACTIVE_CART_NOT_FOUND',
+		'CART_ITEM_NOT_FOUND',
+		'ORDER_NOT_FOUND',
+		'PAYMENT_NOT_FOUND',
+	],
+	defaultCode: 'RESOURCE_NOT_FOUND_ERROR',
+});
 
-type Code = z.infer<typeof code404Schema>;
+type Code = z.infer<typeof notFoundErrors.codeSchema>;
 
 export class ResourceNotFoundError extends Error {
 	readonly code: Code;

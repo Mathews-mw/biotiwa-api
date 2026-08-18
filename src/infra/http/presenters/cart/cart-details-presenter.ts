@@ -15,7 +15,7 @@ export class CartDetailsPresenter {
 			market: MarketPresenter.toHTTP(data.market),
 			items: data.items.map(CartItemDetailsPresenter.toHTTP),
 			created_at: data.createdAt,
-			updated_at: data.updatedAt,
+			updated_at: data.updatedAt ?? null,
 		};
 	}
 }

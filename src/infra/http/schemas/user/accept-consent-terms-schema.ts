@@ -1,8 +1,8 @@
 import z from 'zod';
 import { FastifySchema } from 'fastify/types/schema';
 
+import { getNotFoundErrorSchema } from '../erros/erros-schemas';
 import { consentTypeSchema } from '@/domains/main/models/entities/consent-term';
-import { badRequestErrorSchema, resourceNotFoundErrorSchema } from '../erros/erros-schemas';
 
 const bodySchema = z.object({
 	user_email: z.string(),
@@ -29,7 +29,6 @@ export const acceptConsentTermsSchema: FastifySchema = {
 	body: bodySchema,
 	response: {
 		201: responseSchema,
-		400: badRequestErrorSchema,
-		404: resourceNotFoundErrorSchema,
+		404: getNotFoundErrorSchema.startWith('RESOURCE_NOT_FOUND_ERROR').include('USER_NOT_FOUND').getErrorSchema(),
 	},
 };

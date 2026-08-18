@@ -35,7 +35,7 @@ export class RemoveCartItemUseCase {
 		});
 
 		if (!item) {
-			return failure(new ResourceNotFoundError('Cart item not found', 'RESOURCE_NOT_FOUND_ERROR'));
+			return failure(new ResourceNotFoundError('Cart item not found', 'CART_ITEM_NOT_FOUND'));
 		}
 
 		const cart = await this.cartRepository.removeItem(item);

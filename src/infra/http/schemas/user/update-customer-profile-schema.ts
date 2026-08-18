@@ -3,7 +3,7 @@ import { FastifySchema } from 'fastify/types/schema';
 
 import { marketCodeSchema } from '@/core/types/market-code';
 import { customerProfileSchema } from './customer-profile-schema';
-import { resourceNotFoundErrorSchema } from '../erros/erros-schemas';
+import { getNotFoundErrorSchema } from '../erros/erros-schemas';
 
 const bodySchema = z.object({
 	preferred_market: marketCodeSchema.optional().nullable(),
@@ -27,6 +27,6 @@ export const updateCustomerProfileSchema: FastifySchema = {
 	body: bodySchema,
 	response: {
 		200: responseSchema,
-		404: resourceNotFoundErrorSchema,
+		404: getNotFoundErrorSchema.startWith('RESOURCE_NOT_FOUND_ERROR').include('PROFILE_NOT_FOUND').getErrorSchema(),
 	},
 };

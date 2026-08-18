@@ -1,7 +1,7 @@
 import z from 'zod';
 import { FastifySchema } from 'fastify/types/schema';
+import { getBadRequestErrorSchema } from '../erros/erros-schemas';
 import { consentTypeSchema } from '@/domains/main/models/entities/consent-term';
-import { badRequestErrorSchema } from '../erros/erros-schemas';
 
 const bodySchema = z.object({
 	name: z.string(),
@@ -32,6 +32,11 @@ export const createUserSchema: FastifySchema = {
 	body: bodySchema,
 	response: {
 		201: responseSchema,
-		400: badRequestErrorSchema,
+		400: getBadRequestErrorSchema
+			.startWith('BAD_REQUEST_ERROR')
+			.include('SAME_EMAIL_ERROR')
+			.include('TERMS_NOT_ACCEPTED')
+			.include('PRIVACY_POLICY_NOT_ACCEPTED')
+			.getErrorSchema(),
 	},
 };

@@ -29,7 +29,7 @@ export class UpdateCustomerProfileUseCase {
 		const customerProfile = await this.customerProfileRepository.findByUserId(userId);
 
 		if (!customerProfile) {
-			return failure(new ResourceNotFoundError('Customer profile not found', 'RESOURCE_NOT_FOUND_ERROR'));
+			return failure(new ResourceNotFoundError('Customer profile not found', 'PROFILE_NOT_FOUND'));
 		}
 
 		customerProfile.preferredMarket = preferredMarket ?? customerProfile.preferredMarket;

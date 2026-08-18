@@ -10,8 +10,6 @@ export class PrismaAccountsRepository implements IAccountRepository {
 	async create(account: Account) {
 		const data = AccountMapper.toPrisma(account);
 
-		console.log('prisma account data: ', data);
-
 		await prisma.account.create({
 			data,
 		});

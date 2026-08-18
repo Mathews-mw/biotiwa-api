@@ -133,6 +133,17 @@ export class PrismaCartsRepository implements ICartRepository {
 		});
 	}
 
+	async markAsConverted(cartId: string): Promise<void> {
+		await prisma.cart.update({
+			where: {
+				id: cartId.toString(),
+			},
+			data: {
+				status: 'CONVERTED',
+			},
+		});
+	}
+
 	async findActiveByUserId(userId: string): Promise<CartDetails | null> {
 		const cart = await prisma.cart.findFirst({
 			where: {
