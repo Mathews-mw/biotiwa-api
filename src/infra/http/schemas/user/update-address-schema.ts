@@ -3,7 +3,7 @@ import { FastifySchema } from 'fastify/types/schema';
 
 import { addressSchema } from './address-schema';
 import { marketCodeSchema } from '@/core/types/market-code';
-import { resourceNotFoundErrorSchema } from '../erros/erros-schemas';
+import { getNotFoundErrorSchema } from '../erros/erros-schemas';
 
 const paramsSchema = z.object({
 	addressId: z.coerce.string(),
@@ -39,6 +39,6 @@ export const updateAddressSchema: FastifySchema = {
 	body: bodySchema,
 	response: {
 		200: responseSchema,
-		404: resourceNotFoundErrorSchema,
+		404: getNotFoundErrorSchema.startWith('RESOURCE_NOT_FOUND_ERROR').include('ADDRESS_NOT_FOUND').getErrorSchema(),
 	},
 };

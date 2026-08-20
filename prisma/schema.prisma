@@ -57,30 +57,42 @@ enum CartItemType {
   ORDER_BUMP
 }
 
-// enum OrderStatus {
-//   PENDING_PAYMENT
-//   PAID
-//   PROCESSING
-//   SHIPPED
-//   DELIVERED
-//   CANCELED
-//   REFUNDED
-//   PAYMENT_FAILED
-//   EXPIRED
-// }
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+  REFUNDED
+  PAYMENT_FAILED
+  EXPIRED
+}
 
-// enum OrderItemType {
-//   OFFER_ITEM
-//   ORDER_BUMP
-// }
+enum OrderItemType {
+  OFFER_ITEM
+  PRODUCT
+  ORDER_BUMP
+}
 
-// enum PaymentStatus {
-//   PENDING
-//   PAID
-//   FAILED
-//   CANCELED
-//   REFUNDED
-// }
+enum PaymentProvider {
+  STRIPE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELED
+  EXPIRED
+  REFUNDED
+}
+
+enum StripeWebhookEventStatus {
+  PROCESSING
+  PROCESSED
+  FAILED
+}
 
 model User {
   id            String    @id @unique @default(cuid())
@@ -98,6 +110,7 @@ model User {
   accounts        Account[]
   sessions        Session[]
   carts           Cart[]
+  orders          Order[]
 
   @@map("users")
 }
@@ -264,6 +277,7 @@ model Product {
   offerItems OfferItem[]
   orderBumps OrderBump[]
   cartItems  CartItem[]
+  orderItems OrderItem[]
 
   @@map("products")
 }
@@ -340,6 +354,7 @@ model Cart {
   user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   market Market     @relation(fields: [marketCode], references: [code])
   items  CartItem[]
+  orders Order[]
 
   @@index([userId])
   @@index([status])
@@ -368,74 +383,89 @@ model CartItem {
   @@map("cart_items")
 }
 
-// model Order {
-//   id         String       @id @default(cuid())
-//   userId     String       @map("user_id")
-//   cartId     String?      @map("cart_id")
-//   marketCode MarketCode   @map("market_code")
-//   currency   CurrencyCode
-//   status     OrderStatus  @default(PENDING_PAYMENT)
+model Order {
+  id              String       @id @default(cuid())
+  userId          String       @map("user_id")
+  cartId          String?      @map("cart_id")
+  marketCode      MarketCode   @map("market_code")
+  currency        CurrencyCode
+  status          OrderStatus  @default(PENDING_PAYMENT)
+  itemsAmount     Int          @map("items_amount")
+  orderBumpAmount Int          @default(0) @map("order_bump_amount")
+  subtotalAmount  Int          @map("subtotal_amount")
+  discountAmount  Int          @default(0) @map("discount_amount")
+  taxAmount       Int          @default(0) @map("tax_amount")
+  shippingAmount  Int          @default(0) @map("shipping_amount")
+  totalAmount     Int          @map("total_amount")
+  expiresAt       DateTime?    @map("expires_at")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime?    @updatedAt @map("updated_at")
 
-//   itemsAmount     Int @map("items_amount")
-//   orderBumpAmount Int @default(0) @map("order_bump_amount")
-//   subtotalAmount  Int @map("subtotal_amount")
-//   discountAmount  Int @default(0) @map("discount_amount")
-//   taxAmount       Int @default(0) @map("tax_amount")
-//   shippingAmount  Int @default(0) @map("shipping_amount")
-//   totalAmount     Int @map("total_amount")
+  user     User        @relation(fields: [userId], references: [id])
+  cart     Cart?       @relation(fields: [cartId], references: [id])
+  items    OrderItem[]
+  payments Payment[]
 
-//   createdAt DateTime @default(now()) @map("created_at")
-//   updatedAt DateTime @updatedAt @map("updated_at")
+  @@index([userId])
+  @@index([cartId])
+  @@index([status])
+  @@map("orders")
+}
 
-//   user User  @relation(fields: [userId], references: [id])
-//   cart Cart? @relation(fields: [cartId], references: [id])
+model OrderItem {
+  id          String        @id @default(cuid())
+  orderId     String        @map("order_id")
+  productId   String?       @map("product_id")
+  type        OrderItemType
+  name        String
+  sku         String
+  quantity    Int
+  unitAmount  Int           @map("unit_amount")
+  totalAmount Int           @map("total_amount")
+  metadata    Json?
+  createdAt   DateTime      @default(now()) @map("created_at")
 
-//   items    OrderItem[]
-//   payments Payment[]
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id])
 
-//   @@index([userId])
-//   @@index([status])
-//   @@map("orders")
-// }
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
 
-// model OrderItem {
-//   id          String        @id @default(cuid())
-//   orderId     String        @map("order_id")
-//   productId   String        @map("product_id")
-//   type        OrderItemType
-//   name        String
-//   sku         String
-//   quantity    Int
-//   unitAmount  Int           @map("unit_amount")
-//   totalAmount Int           @map("total_amount")
-//   metadata    Json?
+model Payment {
+  id                    String          @id @default(cuid())
+  orderId               String          @map("order_id")
+  provider              PaymentProvider
+  status                PaymentStatus   @default(PENDING)
+  amount                Int
+  currency              CurrencyCode
+  providerSessionId     String?         @unique @map("provider_session_id")
+  providerPaymentIntent String?         @map("provider_payment_intent")
+  providerCheckoutUrl   String?         @map("provider_checkout_url")
+  rawPayload            Json?           @map("raw_payload")
+  createdAt             DateTime        @default(now()) @map("created_at")
+  updatedAt             DateTime?       @updatedAt @map("updated_at")
 
-//   createdAt DateTime @default(now()) @map("created_at")
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
-//   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-//   product Product @relation(fields: [productId], references: [id])
+  @@index([orderId])
+  @@index([status])
+  @@map("payments")
+}
 
-//   @@index([orderId])
-//   @@index([productId])
-//   @@map("order_items")
-// }
+model StripeWebhookEvent {
+  id               String                   @id @default(cuid())
+  providerEventId  String                   @unique @map("provider_event_id")
+  providerObjectId String?                  @map("provider_object_id")
+  eventType        String                   @map("event_type")
+  status           StripeWebhookEventStatus @default(PROCESSING)
+  errorMessage     String?                  @map("error_message")
+  processedAt      DateTime?                @map("processed_at")
+  createdAt        DateTime                 @default(now()) @map("created_at")
+  updatedAt        DateTime?                @updatedAt @map("updated_at")
 
-// model Payment {
-//   id                    String        @id @default(cuid())
-//   orderId               String        @map("order_id")
-//   provider              String
-//   providerSessionId     String?       @unique @map("provider_session_id")
-//   providerPaymentIntent String?       @map("provider_payment_intent")
-//   status                PaymentStatus @default(PENDING)
-//   amount                Int
-//   currency              CurrencyCode
-//   rawPayload            Json?         @map("raw_payload")
-//   createdAt             DateTime      @default(now()) @map("created_at")
-//   updatedAt             DateTime      @updatedAt @map("updated_at")
-
-//   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-
-//   @@index([orderId])
-//   @@index([status])
-//   @@map("payments")
-// }
+  @@index([eventType])
+  @@index([providerObjectId])
+  @@map("stripe_webhook_events")
+}

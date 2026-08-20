@@ -6,7 +6,6 @@ import type { IUserConsentRepository } from '../repositories/user-consent-reposi
 import type { IConsentTermRepository } from '../../consent-terms/repositories/consent-term-repository';
 
 import { failure, Outcome, success } from '@/core/outcome';
-import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { UserConsent } from '@/domains/main/models/entities/user-consent';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
@@ -22,7 +21,7 @@ interface IRequest {
 	userAgent?: string | null;
 }
 
-type Response = Outcome<ResourceNotFoundError | BadRequestError, null>;
+type Response = Outcome<ResourceNotFoundError, null>;
 
 @injectable()
 export class AcceptConsentTermsUseCase {
@@ -39,7 +38,7 @@ export class AcceptConsentTermsUseCase {
 		const user = await this.usersRepository.findUnique({ email: userEmail });
 
 		if (!user) {
-			return failure(new ResourceNotFoundError('User not found', 'RESOURCE_NOT_FOUND_ERROR'));
+			return failure(new ResourceNotFoundError('User not found', 'USER_NOT_FOUND'));
 		}
 
 		const userConsentsToCreate: Array<UserConsent> = [];

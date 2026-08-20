@@ -10,6 +10,10 @@ export const envSchema = z.object({
 	BETTER_AUTH_SECRET: z.string(),
 	BETTER_AUTH_URL: z.url(),
 	WEB_APP_URL: z.url(),
+	STRIPE_SECRET_KEY: z.string(),
+	STRIPE_WEBHOOK_SECRET: z.string(),
+	STRIPE_SUCCESS_URL: z.string(),
+	STRIPE_CANCEL_URL: z.string(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

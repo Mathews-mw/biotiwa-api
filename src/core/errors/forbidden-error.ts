@@ -1,15 +1,13 @@
 import { z } from 'zod';
+import { createHttpErrorSchemaFactory } from './http-error-factory';
 
-export const code403Schema = z
-	.union([
-		z.literal('FORBIDDEN_ERROR'),
-		z.literal('SAME_EMAIL_ERROR'),
-		z.literal('INSUFFICIENT_PERMISSION_ERROR'),
-		z.literal('OLD_PASSWORD_NOT_MATCH_ERROR'),
-	])
-	.default('FORBIDDEN_ERROR');
+export const forbiddenErrors = createHttpErrorSchemaFactory({
+	status: 403,
+	codes: ['FORBIDDEN_ERROR', 'SAME_EMAIL_ERROR', 'INSUFFICIENT_PERMISSION_ERROR', 'OLD_PASSWORD_NOT_MATCH_ERROR'],
+	defaultCode: 'FORBIDDEN_ERROR',
+});
 
-type Code = z.infer<typeof code403Schema>;
+type Code = z.infer<typeof forbiddenErrors.codeSchema>;
 
 export class ForbiddenError extends Error {
 	readonly code: Code;

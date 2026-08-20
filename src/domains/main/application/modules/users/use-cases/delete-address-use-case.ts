@@ -23,7 +23,7 @@ export class DeleteAddressUseCase {
 		const address = await this.addressesRepository.findById(addressId);
 
 		if (!address) {
-			return failure(new ResourceNotFoundError('Address not found', 'RESOURCE_NOT_FOUND_ERROR'));
+			return failure(new ResourceNotFoundError('Address not found', 'ADDRESS_NOT_FOUND'));
 		}
 
 		await this.addressesRepository.delete(address);

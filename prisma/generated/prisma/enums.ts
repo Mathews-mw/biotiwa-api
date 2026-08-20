@@ -84,3 +84,55 @@ export const CartItemType = {
 } as const
 
 export type CartItemType = (typeof CartItemType)[keyof typeof CartItemType]
+
+
+export const OrderStatus = {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  PAID: 'PAID',
+  PROCESSING: 'PROCESSING',
+  SHIPPED: 'SHIPPED',
+  DELIVERED: 'DELIVERED',
+  CANCELED: 'CANCELED',
+  REFUNDED: 'REFUNDED',
+  PAYMENT_FAILED: 'PAYMENT_FAILED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
+export const OrderItemType = {
+  OFFER_ITEM: 'OFFER_ITEM',
+  PRODUCT: 'PRODUCT',
+  ORDER_BUMP: 'ORDER_BUMP'
+} as const
+
+export type OrderItemType = (typeof OrderItemType)[keyof typeof OrderItemType]
+
+
+export const PaymentProvider = {
+  STRIPE: 'STRIPE'
+} as const
+
+export type PaymentProvider = (typeof PaymentProvider)[keyof typeof PaymentProvider]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  FAILED: 'FAILED',
+  CANCELED: 'CANCELED',
+  EXPIRED: 'EXPIRED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const StripeWebhookEventStatus = {
+  PROCESSING: 'PROCESSING',
+  PROCESSED: 'PROCESSED',
+  FAILED: 'FAILED'
+} as const
+
+export type StripeWebhookEventStatus = (typeof StripeWebhookEventStatus)[keyof typeof StripeWebhookEventStatus]

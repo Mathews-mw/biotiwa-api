@@ -29,7 +29,7 @@ export class CreateCustomerProfileUseCase {
 		const customerProfileAlreadyExists = await this.customerProfilesRepository.findByUserId(userId);
 
 		if (customerProfileAlreadyExists) {
-			return failure(new BadRequestError('Customer Profile already exists', 'BAD_REQUEST_ERROR'));
+			return failure(new BadRequestError('Customer Profile already exists', 'PROFILE_ALREADY_EXISTS'));
 		}
 
 		const newCustomerProfile = CustomerProfile.create({

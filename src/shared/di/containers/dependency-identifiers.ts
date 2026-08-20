@@ -14,9 +14,15 @@ export const DEPENDENCY_IDENTIFIERS = {
 	MARKETS_REPOSITORY: Symbol('ProductsRepository'),
 	COMMERCE_CATALOG_REPOSITORY: Symbol('CommerceCatalogRepository'),
 	CARTS_REPOSITORY: Symbol('CartsRepository'),
+	ORDER_REPOSITORY: Symbol('OrderRepository'),
+	PAYMENT_REPOSITORY: Symbol('PaymentRepository'),
+	STRIPE_WEBHOOK_EVENT_REPOSITORY: Symbol('StripeWebhookEventRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),
+
+	// Services
+	PAYMENT_SERVICE: Symbol('PaymentService'),
 } as const;
 
 export type DependencyIdentifiers = (typeof DEPENDENCY_IDENTIFIERS)[keyof typeof DEPENDENCY_IDENTIFIERS];

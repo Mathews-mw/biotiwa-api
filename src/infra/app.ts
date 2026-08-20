@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import '@/shared/di/containers/index';
 
 import fastify from 'fastify';
+import rawBody from 'fastify-raw-body';
 import fastifyCors from '@fastify/cors';
 import fastifyCookie from '@fastify/cookie';
 import fastifySwagger from '@fastify/swagger';
@@ -38,6 +39,15 @@ app.register(fastifySwagger, {
 		},
 	},
 	transform: jsonSchemaTransform,
+});
+
+await app.register(rawBody, {
+	field: 'rawBody', // change the default request.rawBody property name
+	global: false, // Turn off global capturing to save memory
+	encoding: 'utf8', // set it to false to set rawBody as a Buffer
+	runFirst: true, // get the body before any preParsing hook change/uncompress it
+	routes: [], // array of routes, **`global`** will be ignored, wildcard routes not supported
+	jsonContentTypes: [], // array of content-types to handle as JSON. **Default ['application/json']**
 });
 
 app.setErrorHandler(errorHandler);
