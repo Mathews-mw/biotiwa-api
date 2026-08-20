@@ -14,6 +14,7 @@ export const notFoundErrors = createHttpErrorSchemaFactory({
 		'CART_ITEM_NOT_FOUND',
 		'ORDER_NOT_FOUND',
 		'PAYMENT_NOT_FOUND',
+		'CHECKOUT_SESSION_NOT_FOUND',
 	],
 	defaultCode: 'RESOURCE_NOT_FOUND_ERROR',
 });

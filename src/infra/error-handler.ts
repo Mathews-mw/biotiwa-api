@@ -25,7 +25,7 @@ export const errorHandler: FastifyErrorHandler = async (error, request, reply) =
 			return {
 				instancePath: err.instancePath,
 				message: err.message,
-				// params: err.params,
+				params: err.params,
 			};
 		});
 
@@ -76,23 +76,6 @@ export const errorHandler: FastifyErrorHandler = async (error, request, reply) =
 			message: error.body?.message ?? '',
 		});
 	}
-
-	// if (error instanceof HTTPError) {
-	// 	if (error.response.url.includes('googleapis')) {
-	// 		const errorJson = await error.response.json<{ error: string; error_description: string }>();
-
-	// 		return reply.status(error.response.status).send({
-	// 			code: errorJson.error,
-	// 			provider: 'GOOGLE',
-	// 			message: errorJson.error_description,
-	// 		});
-	// 	}
-
-	// 	return reply.status(error.response.status).send({
-	// 		code: error.response.statusText,
-	// 		message: `HTTP Request Error: ${error.message}`,
-	// 	});
-	// }
 
 	console.error('Unexpected error: ', error);
 

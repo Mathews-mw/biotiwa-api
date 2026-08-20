@@ -18,9 +18,9 @@ export const orderSchema = z.object({
 	tax_amount: z.number(),
 	shipping_amount: z.number(),
 	total_amount: z.number(),
-	expires_at: z.coerce.date().nullable(),
+	expires_at: z.coerce.date().nullable().optional(),
 	created_at: z.coerce.date(),
-	updated_at: z.coerce.date().nullable(),
+	updated_at: z.coerce.date().nullable().optional(),
 });
 
 export type IOrderResponseSchema = z.infer<typeof orderSchema>;
