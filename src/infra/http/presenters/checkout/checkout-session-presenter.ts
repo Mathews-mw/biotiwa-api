@@ -1,4 +1,4 @@
-import { OrderDetailsPresenter } from './order-details-presenter';
+import { OrderDetailsPresenter } from '../order/order-details-presenter';
 import { CheckoutSession } from '@/domains/main/models/value-objects/checkout-session';
 import { ICheckoutSessionResponseSchema } from '../../schemas/checkout/checkout-session-schema';
 

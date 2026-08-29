@@ -79,6 +79,14 @@ enum PaymentProvider {
   STRIPE
 }
 
+enum PaymentType {
+  BEING_DEFINED
+  PIX // Apenas BR
+  CREDIT
+  DEBIT
+  PAYMENT_SLIPS_OR_SIMILAR // Boleto
+}
+
 enum PaymentStatus {
   PENDING
   PAID
@@ -91,6 +99,20 @@ enum PaymentStatus {
 enum StripeWebhookEventStatus {
   PROCESSING
   PROCESSED
+  FAILED
+}
+
+enum BlingConnectionStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+  ERROR
+}
+
+enum BlingOrderSyncStatus {
+  PENDING
+  PROCESSING
+  SYNCED
   FAILED
 }
 
@@ -401,10 +423,11 @@ model Order {
   createdAt       DateTime     @default(now()) @map("created_at")
   updatedAt       DateTime?    @updatedAt @map("updated_at")
 
-  user     User        @relation(fields: [userId], references: [id])
-  cart     Cart?       @relation(fields: [cartId], references: [id])
-  items    OrderItem[]
-  payments Payment[]
+  user           User            @relation(fields: [userId], references: [id])
+  cart           Cart?           @relation(fields: [cartId], references: [id])
+  items          OrderItem[]
+  payments       Payment[]
+  blingOrderSync BlingOrderSync?
 
   @@index([userId])
   @@index([cartId])
@@ -440,6 +463,7 @@ model Payment {
   status                PaymentStatus   @default(PENDING)
   amount                Int
   currency              CurrencyCode
+  paymentType           PaymentType     @default(BEING_DEFINED) @map("payment_type")
   providerSessionId     String?         @unique @map("provider_session_id")
   providerPaymentIntent String?         @map("provider_payment_intent")
   providerCheckoutUrl   String?         @map("provider_checkout_url")
@@ -468,4 +492,36 @@ model StripeWebhookEvent {
   @@index([eventType])
   @@index([providerObjectId])
   @@map("stripe_webhook_events")
+}
+
+model BlingConnection {
+  id           String                @id @default(cuid())
+  status       BlingConnectionStatus @default(ACTIVE)
+  accessToken  String                @map("access_token") // REMINDER: criptografar esse dado em produção antes de salvar no banco
+  refreshToken String                @map("refresh_token") // REMINDER: criptografar esse dado em produção antes de salvar no banco
+  expiresAt    DateTime              @map("expires_at")
+  scope        String?
+  createdAt    DateTime              @default(now()) @map("created_at")
+  updatedAt    DateTime?             @updatedAt @map("updated_at")
+
+  @@map("bling_connections")
+}
+
+model BlingOrderSync {
+  id               String               @id @default(cuid())
+  orderId          String               @unique @map("order_id")
+  status           BlingOrderSyncStatus @default(PENDING)
+  blingOrderId     String?              @map("bling_order_id")
+  attempts         Int                  @default(0)
+  lastErrorMessage String?              @map("last_error_message")
+  requestPayload   Json?                @map("request_payload")
+  responsePayload  Json?                @map("response_payload")
+  syncedAt         DateTime?            @map("synced_at")
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime?            @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@map("bling_order_syncs")
 }

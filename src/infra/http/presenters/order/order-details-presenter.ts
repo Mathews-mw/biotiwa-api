@@ -1,6 +1,6 @@
 import { OrderItemDetailsPresenter } from './order-item-details-presenter';
 import { OrderDetails } from '@/domains/main/models/value-objects/order-details';
-import { IOrderDetailsResponseSchema } from '../../schemas/checkout/order-details-schema';
+import { IOrderDetailsResponseSchema } from '../../schemas/order/order-details-schema';
 
 export class OrderDetailsPresenter {
 	static toHTTP(data: OrderDetails): IOrderDetailsResponseSchema {

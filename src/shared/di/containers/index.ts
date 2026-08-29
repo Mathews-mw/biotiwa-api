@@ -5,10 +5,11 @@ import { DEPENDENCY_IDENTIFIERS, DependencyIdentifiers } from './dependency-iden
 import { BetterAuthIdentityProvider } from '@/infra/auth/better-auth-identity-provider';
 
 import { PaymentService } from '@/services/payments/payment-service';
+import { BlingGatewayService } from '@/services/bling/bling-gateway-service';
 
 import { PrismaUsersRepository } from '@/infra/database/repositories/users/prisma-users-repository';
 import { PrismaCartsRepository } from '@/infra/database/repositories/carts/prisma-carts-repository';
-import { PrismaOrderRepository } from '@/infra/database/repositories/checkout/prisma-order-repository';
+import { PrismaOrderRepository } from '@/infra/database/repositories/orders/prisma-order-repository';
 import { PrismaOffersRepository } from '@/infra/database/repositories/commerce/prisma-offers-repository';
 import { PrismaAccountsRepository } from '@/infra/database/repositories/users/prisma-accounts-repository';
 import { PrismaSessionsRepository } from '@/infra/database/repositories/users/prisma-sessions-repository';
@@ -22,6 +23,7 @@ import { PrismaUserConsentsRepository } from '@/infra/database/repositories/user
 import { PrismaCustomerProfilesRepository } from '@/infra/database/repositories/users/prisma-customer-profiles-repository';
 import { PrismaConsentTermsRepository } from '@/infra/database/repositories/consent-terms/prisma-consent-terms-repository';
 import { PrismaCommerceCatalogRepository } from '@/infra/database/repositories/commerce/prisma-commerce-catalog-repository';
+import { PrismaBlingConnectionRepository } from '@/infra/database/repositories/integrations/bling/prisma-bling-connection-repository';
 import { PrismaStripeWebhookEventRepository } from '@/infra/database/repositories/events/stripe/prisma-stripe-webhook-event-repository';
 
 function registerSingleton<T>(identifier: DependencyIdentifiers, implementation: new (...args: unknown[]) => T) {
@@ -46,9 +48,11 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.CARTS_REPOSITORY, PrismaCartsRepository
 registerSingleton(DEPENDENCY_IDENTIFIERS.ORDER_REPOSITORY, PrismaOrderRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.PAYMENT_REPOSITORY, PrismaPaymentRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.STRIPE_WEBHOOK_EVENT_REPOSITORY, PrismaStripeWebhookEventRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_CONNECTION_REPOSITORY, PrismaBlingConnectionRepository);
 
 // Providers
 registerSingleton(DEPENDENCY_IDENTIFIERS.IDENTITY_PROVIDER, BetterAuthIdentityProvider);
 
 // Services
 registerSingleton(DEPENDENCY_IDENTIFIERS.PAYMENT_SERVICE, PaymentService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_GATEWAY_SERVICE, BlingGatewayService);

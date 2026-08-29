@@ -17,12 +17,14 @@ export const DEPENDENCY_IDENTIFIERS = {
 	ORDER_REPOSITORY: Symbol('OrderRepository'),
 	PAYMENT_REPOSITORY: Symbol('PaymentRepository'),
 	STRIPE_WEBHOOK_EVENT_REPOSITORY: Symbol('StripeWebhookEventRepository'),
+	BLING_CONNECTION_REPOSITORY: Symbol('PrismaBlingConnectionRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),
 
 	// Services
 	PAYMENT_SERVICE: Symbol('PaymentService'),
+	BLING_GATEWAY_SERVICE: Symbol('BlingGatewayService'),
 } as const;
 
 export type DependencyIdentifiers = (typeof DEPENDENCY_IDENTIFIERS)[keyof typeof DEPENDENCY_IDENTIFIERS];

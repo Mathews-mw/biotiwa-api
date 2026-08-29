@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import type { IOrderRepository } from '../repositories/order-repository';
+import type { IOrderRepository } from '../../orders/repositories/order-repository';
 import type { ICartRepository } from '../../carts/repositories/cart-repository';
 import type { IPaymentService } from '@/services/payments/payment-service.interface';
 import type { IPaymentRepository } from '../../payments/repositories/payment-repository';

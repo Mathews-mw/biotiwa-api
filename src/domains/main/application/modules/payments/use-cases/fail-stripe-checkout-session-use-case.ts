@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import type { IPaymentRepository } from '../repositories/payment-repository';
-import type { IOrderRepository } from '../../checkout/repositories/order-repository';
+import type { IOrderRepository } from '../../orders/repositories/order-repository';
 
 import { failure, success, type Outcome } from '@/core/outcome';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';

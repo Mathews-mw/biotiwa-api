@@ -112,3 +112,13 @@ export type Payment = Prisma.PaymentModel
  * 
  */
 export type StripeWebhookEvent = Prisma.StripeWebhookEventModel
+/**
+ * Model BlingConnection
+ * 
+ */
+export type BlingConnection = Prisma.BlingConnectionModel
+/**
+ * Model BlingOrderSync
+ * 
+ */
+export type BlingOrderSync = Prisma.BlingOrderSyncModel

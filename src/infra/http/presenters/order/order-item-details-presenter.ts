@@ -1,5 +1,5 @@
 import { OrderItemDetails } from '@/domains/main/models/value-objects/order-item-details';
-import { IOrderItemDetailsResponseSchema } from '../../schemas/checkout/order-item-details-schema';
+import { IOrderItemDetailsResponseSchema } from '../../schemas/order/order-item-details-schema';
 import { ProductPresenter } from '../commerce/product-presenter';
 
 export class OrderItemDetailsPresenter {

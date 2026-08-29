@@ -7,9 +7,11 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 
 export const paymentProviderSchema = z.enum(['STRIPE']);
 export const paymentStatusSchema = z.enum(['PENDING', 'PAID', 'FAILED', 'CANCELED', 'EXPIRED', 'REFUNDED']);
+export const paymentTypeSchema = z.enum(['BEING_DEFINED', 'PIX', 'CREDIT', 'DEBIT', 'PAYMENT_SLIPS_OR_SIMILAR']);
 
 export type IPaymentProvider = z.infer<typeof paymentProviderSchema>;
 export type IPaymentStatus = z.infer<typeof paymentStatusSchema>;
+export type IPaymentType = z.infer<typeof paymentTypeSchema>;
 
 export interface IPaymentProps {
 	orderId: UniqueEntityId;
@@ -17,6 +19,7 @@ export interface IPaymentProps {
 	status: IPaymentStatus;
 	amount: number;
 	currency: ICurrencyCode;
+	paymentType: IPaymentType;
 	providerSessionId?: string | null;
 	providerPaymentIntent?: string | null;
 	providerCheckoutUrl?: string | null;
@@ -68,6 +71,15 @@ export class Payment extends Entity<IPaymentProps> {
 
 	set currency(currency: ICurrencyCode) {
 		this.props.currency = currency;
+		this._touch();
+	}
+
+	get paymentType() {
+		return this.props.paymentType;
+	}
+
+	set paymentType(paymentType: IPaymentType) {
+		this.props.paymentType = paymentType;
 		this._touch();
 	}
 
@@ -154,11 +166,12 @@ export class Payment extends Entity<IPaymentProps> {
 		this.props.updatedAt = new Date();
 	}
 
-	static create(props: Optional<IPaymentProps, 'status' | 'createdAt'>, id?: UniqueEntityId) {
+	static create(props: Optional<IPaymentProps, 'status' | 'paymentType' | 'createdAt'>, id?: UniqueEntityId) {
 		const payment = new Payment(
 			{
 				...props,
 				status: props.status ?? 'PENDING',
+				paymentType: props.paymentType ?? 'BEING_DEFINED',
 				createdAt: props.createdAt ?? new Date(),
 			},
 			id

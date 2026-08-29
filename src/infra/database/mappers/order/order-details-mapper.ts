@@ -2,7 +2,7 @@ import { OrderMapper } from './order-mapper';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import type { Order as PrismaOrder } from '@/generated/prisma/client';
 import { OrderDetails } from '@/domains/main/models/value-objects/order-details';
-import { IPrismaOrderItemDetails, OrderItemDetailsMapper } from './order-item-details-mapper';
+import { type IPrismaOrderItemDetails, OrderItemDetailsMapper } from './order-item-details-mapper';
 
 export type IPrismaOrderDetails = PrismaOrder & {
 	items: Array<IPrismaOrderItemDetails>;

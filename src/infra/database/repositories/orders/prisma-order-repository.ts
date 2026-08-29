@@ -2,9 +2,12 @@ import { prisma } from '../../prisma';
 import { Prisma } from '@/generated/prisma/client';
 import { Order } from '@/domains/main/models/entities/order';
 import { OrderItem } from '@/domains/main/models/entities/order-item';
-import { OrderDetailsMapper } from '../../mappers/checkout/order-details-mapper';
+import { OrderDetailsMapper } from '../../mappers/order/order-details-mapper';
 
-import type { IOrderRepository } from '@/domains/main/application/modules/checkout/repositories/order-repository';
+import type {
+	IFindOrdersByUserParams,
+	IOrderRepository,
+} from '@/domains/main/application/modules/orders/repositories/order-repository';
 
 const orderInclude = {
 	items: {
@@ -81,6 +84,56 @@ export class PrismaOrderRepository implements IOrderRepository {
 		});
 
 		return OrderDetailsMapper.toDomain(updatedOrder);
+	}
+
+	async findManyByUser({ page, perPage, userId, search }: IFindOrdersByUserParams) {
+		const query: Prisma.OrderFindManyArgs = {
+			where: {
+				userId,
+				items: {
+					some: {
+						name: {
+							contains: search,
+							mode: 'insensitive',
+						},
+					},
+				},
+			},
+		};
+
+		const isPerPageNumber = typeof perPage === 'number';
+
+		const [orders, count] = await prisma.$transaction([
+			prisma.order.findMany({
+				where: query.where,
+				include: orderInclude,
+				take: isPerPageNumber ? perPage : undefined,
+				skip: isPerPageNumber ? (page - 1) * perPage : undefined,
+			}),
+			prisma.order.count({
+				where: query.where,
+			}),
+		]);
+
+		let _perPage = isPerPageNumber ? perPage : 10;
+
+		if (perPage === 'all') {
+			_perPage = count;
+		}
+
+		const totalPages = Math.ceil(count / _perPage);
+
+		const pagination = {
+			page,
+			perPage: _perPage,
+			totalPages,
+			totalOccurrences: count,
+		};
+
+		return {
+			pagination,
+			orders: orders.map(OrderDetailsMapper.toDomain),
+		};
 	}
 
 	async findById(orderId: string) {

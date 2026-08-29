@@ -69,7 +69,9 @@ export const ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   Payment: 'Payment',
-  StripeWebhookEvent: 'StripeWebhookEvent'
+  StripeWebhookEvent: 'StripeWebhookEvent',
+  BlingConnection: 'BlingConnection',
+  BlingOrderSync: 'BlingOrderSync'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -362,6 +364,7 @@ export const PaymentScalarFieldEnum = {
   status: 'status',
   amount: 'amount',
   currency: 'currency',
+  paymentType: 'paymentType',
   providerSessionId: 'providerSessionId',
   providerPaymentIntent: 'providerPaymentIntent',
   providerCheckoutUrl: 'providerCheckoutUrl',
@@ -386,6 +389,37 @@ export const StripeWebhookEventScalarFieldEnum = {
 } as const
 
 export type StripeWebhookEventScalarFieldEnum = (typeof StripeWebhookEventScalarFieldEnum)[keyof typeof StripeWebhookEventScalarFieldEnum]
+
+
+export const BlingConnectionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  expiresAt: 'expiresAt',
+  scope: 'scope',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlingConnectionScalarFieldEnum = (typeof BlingConnectionScalarFieldEnum)[keyof typeof BlingConnectionScalarFieldEnum]
+
+
+export const BlingOrderSyncScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  status: 'status',
+  blingOrderId: 'blingOrderId',
+  attempts: 'attempts',
+  lastErrorMessage: 'lastErrorMessage',
+  requestPayload: 'requestPayload',
+  responsePayload: 'responsePayload',
+  syncedAt: 'syncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlingOrderSyncScalarFieldEnum = (typeof BlingOrderSyncScalarFieldEnum)[keyof typeof BlingOrderSyncScalarFieldEnum]
 
 
 export const SortOrder = {

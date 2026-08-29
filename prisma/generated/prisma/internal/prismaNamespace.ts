@@ -415,7 +415,9 @@ export const ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   Payment: 'Payment',
-  StripeWebhookEvent: 'StripeWebhookEvent'
+  StripeWebhookEvent: 'StripeWebhookEvent',
+  BlingConnection: 'BlingConnection',
+  BlingOrderSync: 'BlingOrderSync'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -431,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verification" | "customerProfile" | "address" | "userConsent" | "consentTerm" | "market" | "product" | "offer" | "offerItem" | "orderBump" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "stripeWebhookEvent"
+    modelProps: "user" | "account" | "session" | "verification" | "customerProfile" | "address" | "userConsent" | "consentTerm" | "market" | "product" | "offer" | "offerItem" | "orderBump" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "stripeWebhookEvent" | "blingConnection" | "blingOrderSync"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1841,6 +1843,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BlingConnection: {
+      payload: Prisma.$BlingConnectionPayload<ExtArgs>
+      fields: Prisma.BlingConnectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BlingConnectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BlingConnectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload>
+        }
+        findFirst: {
+          args: Prisma.BlingConnectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BlingConnectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload>
+        }
+        findMany: {
+          args: Prisma.BlingConnectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload>[]
+        }
+        create: {
+          args: Prisma.BlingConnectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload>
+        }
+        createMany: {
+          args: Prisma.BlingConnectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BlingConnectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload>[]
+        }
+        delete: {
+          args: Prisma.BlingConnectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload>
+        }
+        update: {
+          args: Prisma.BlingConnectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.BlingConnectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BlingConnectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BlingConnectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.BlingConnectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingConnectionPayload>
+        }
+        aggregate: {
+          args: Prisma.BlingConnectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlingConnection>
+        }
+        groupBy: {
+          args: Prisma.BlingConnectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlingConnectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BlingConnectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlingConnectionCountAggregateOutputType> | number
+        }
+      }
+    }
+    BlingOrderSync: {
+      payload: Prisma.$BlingOrderSyncPayload<ExtArgs>
+      fields: Prisma.BlingOrderSyncFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BlingOrderSyncFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BlingOrderSyncFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload>
+        }
+        findFirst: {
+          args: Prisma.BlingOrderSyncFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BlingOrderSyncFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload>
+        }
+        findMany: {
+          args: Prisma.BlingOrderSyncFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload>[]
+        }
+        create: {
+          args: Prisma.BlingOrderSyncCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload>
+        }
+        createMany: {
+          args: Prisma.BlingOrderSyncCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BlingOrderSyncCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload>[]
+        }
+        delete: {
+          args: Prisma.BlingOrderSyncDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload>
+        }
+        update: {
+          args: Prisma.BlingOrderSyncUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload>
+        }
+        deleteMany: {
+          args: Prisma.BlingOrderSyncDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BlingOrderSyncUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BlingOrderSyncUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload>[]
+        }
+        upsert: {
+          args: Prisma.BlingOrderSyncUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlingOrderSyncPayload>
+        }
+        aggregate: {
+          args: Prisma.BlingOrderSyncAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlingOrderSync>
+        }
+        groupBy: {
+          args: Prisma.BlingOrderSyncGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlingOrderSyncGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BlingOrderSyncCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlingOrderSyncCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2154,6 +2304,7 @@ export const PaymentScalarFieldEnum = {
   status: 'status',
   amount: 'amount',
   currency: 'currency',
+  paymentType: 'paymentType',
   providerSessionId: 'providerSessionId',
   providerPaymentIntent: 'providerPaymentIntent',
   providerCheckoutUrl: 'providerCheckoutUrl',
@@ -2178,6 +2329,37 @@ export const StripeWebhookEventScalarFieldEnum = {
 } as const
 
 export type StripeWebhookEventScalarFieldEnum = (typeof StripeWebhookEventScalarFieldEnum)[keyof typeof StripeWebhookEventScalarFieldEnum]
+
+
+export const BlingConnectionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  expiresAt: 'expiresAt',
+  scope: 'scope',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlingConnectionScalarFieldEnum = (typeof BlingConnectionScalarFieldEnum)[keyof typeof BlingConnectionScalarFieldEnum]
+
+
+export const BlingOrderSyncScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  status: 'status',
+  blingOrderId: 'blingOrderId',
+  attempts: 'attempts',
+  lastErrorMessage: 'lastErrorMessage',
+  requestPayload: 'requestPayload',
+  responsePayload: 'responsePayload',
+  syncedAt: 'syncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlingOrderSyncScalarFieldEnum = (typeof BlingOrderSyncScalarFieldEnum)[keyof typeof BlingOrderSyncScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2487,6 +2669,20 @@ export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'PaymentType'
+ */
+export type EnumPaymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentType'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentType[]'
+ */
+export type ListEnumPaymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentType[]'>
+    
+
+
+/**
  * Reference to a field of type 'StripeWebhookEventStatus'
  */
 export type EnumStripeWebhookEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StripeWebhookEventStatus'>
@@ -2497,6 +2693,34 @@ export type EnumStripeWebhookEventStatusFieldRefInput<$PrismaModel> = FieldRefIn
  * Reference to a field of type 'StripeWebhookEventStatus[]'
  */
 export type ListEnumStripeWebhookEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StripeWebhookEventStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BlingConnectionStatus'
+ */
+export type EnumBlingConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BlingConnectionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'BlingConnectionStatus[]'
+ */
+export type ListEnumBlingConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BlingConnectionStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BlingOrderSyncStatus'
+ */
+export type EnumBlingOrderSyncStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BlingOrderSyncStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'BlingOrderSyncStatus[]'
+ */
+export type ListEnumBlingOrderSyncStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BlingOrderSyncStatus[]'>
     
 
 
@@ -2683,6 +2907,8 @@ export type GlobalOmitConfig = {
   orderItem?: Prisma.OrderItemOmit
   payment?: Prisma.PaymentOmit
   stripeWebhookEvent?: Prisma.StripeWebhookEventOmit
+  blingConnection?: Prisma.BlingConnectionOmit
+  blingOrderSync?: Prisma.BlingOrderSyncOmit
 }
 
 /* Types for Logging */

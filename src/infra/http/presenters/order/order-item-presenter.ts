@@ -1,5 +1,5 @@
 import { OrderItem } from '@/domains/main/models/entities/order-item';
-import { IOrderItemResponseSchema } from '../../schemas/checkout/order-item-schema';
+import { IOrderItemResponseSchema } from '../../schemas/order/order-item-schema';
 
 export class OrderItemPresenter {
 	static toHTTP(data: OrderItem): IOrderItemResponseSchema {
