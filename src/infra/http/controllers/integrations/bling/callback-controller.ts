@@ -35,6 +35,7 @@ export async function handleBlingOAuthCallbackController(request: BlingCallbackR
 	);
 
 	if (error) {
+		console.log(`bling error: `, error);
 		request.log.warn(
 			{
 				error,

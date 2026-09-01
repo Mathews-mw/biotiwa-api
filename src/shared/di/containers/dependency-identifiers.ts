@@ -25,6 +25,7 @@ export const DEPENDENCY_IDENTIFIERS = {
 	// Services
 	PAYMENT_SERVICE: Symbol('PaymentService'),
 	BLING_GATEWAY_SERVICE: Symbol('BlingGatewayService'),
+	BLING_AUTHENTICATION: Symbol('BlingAuthenticationService'),
 } as const;
 
 export type DependencyIdentifiers = (typeof DEPENDENCY_IDENTIFIERS)[keyof typeof DEPENDENCY_IDENTIFIERS];

@@ -1,73 +1,159 @@
-import { env } from '@/env';
+import type {
+	IBlingGateway,
+	ICreateBlingSalesOrderInput,
+	ICreateBlingSalesOrderOutput,
+	ICreateBlingContactInput,
+	ICreateBlingContactOutput,
+	IFindBlingProductBySkuInput,
+	IFindBlingProductBySkuOutput,
+	IBlingProduct,
+} from './repositories/bling-gateway';
 
-import type { IBlingGateway } from './bling-gateway';
+import { BlingHelpers } from './bling-helpers';
+import { onlyDigits } from '@/utils/only-digits';
+import { formatDate } from '@/utils/format-date';
+import { centsToDecimal } from '@/utils/cents-to-decimal';
+import { removeEmptyValues } from '@/utils/remove-empty-values';
+import { BlingGatewayError } from './errors/bling-gateway-error';
 
-type BlingTokenResponse = {
-	access_token: string;
-	expires_in: number;
-	token_type: 'Bearer';
-	scope?: string;
-	refresh_token: string;
+type BlingCreateContactResponse = {
+	data?: {
+		id?: number;
+	};
 };
 
-export class BlingGatewayService implements IBlingGateway {
-	async exchangeCodeForTokens(code: string): Promise<BlingTokenResponse> {
-		const body = new URLSearchParams();
+export class BlingGatewayService extends BlingHelpers implements IBlingGateway {
+	async createContact(input: ICreateBlingContactInput): Promise<ICreateBlingContactOutput> {
+		const payload = this.mapCreateContactPayload(input);
 
-		body.set('grant_type', 'authorization_code');
-		body.set('code', code);
-
-		const response = await fetch(env.BLING_TOKEN_URL, {
+		const response = await this.request<BlingCreateContactResponse>({
+			accessToken: input.accessToken,
+			path: '/contatos',
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				Accept: '1.0',
-				Authorization: `Basic ${this.getBasicAuthorizationToken()}`,
-				'enable-jwt': '1', //Para obter JWT: Inclua o header enable-jwt: 1 ao obter um token por meio do endpoint POST /oauth/token. É fundamental manter este header em todas as requisições subsequentes para garantir que os tokens JWT continuem sendo emitidos após renovações (Bling docs)
-			},
-			body,
+			body: payload,
 		});
 
-		console.log('Bling exchange token response: ', response);
+		const contactId = response.data?.id;
 
-		if (!response.ok) {
-			const errorBody = await response.text();
-
-			throw new Error(`Bling token exchange failed: ${errorBody}`);
+		if (!contactId) {
+			throw new BlingGatewayError('Bling contact was created without returning an id.', 200, response);
 		}
 
-		return response.json() as Promise<BlingTokenResponse>;
+		return {
+			id: contactId,
+			rawPayload: response,
+		};
 	}
 
-	async refreshAccessToken(refreshToken: string): Promise<BlingTokenResponse> {
-		const body = new URLSearchParams();
+	async createSalesOrder(input: ICreateBlingSalesOrderInput): Promise<ICreateBlingSalesOrderOutput> {
+		const payload = this.mapCreateSalesOrderPayload(input);
 
-		body.set('grant_type', 'refresh_token');
-		body.set('refresh_token', refreshToken);
-
-		const response = await fetch(env.BLING_TOKEN_URL, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				Accept: '1.0',
-				Authorization: `Basic ${this.getBasicAuthorizationToken()}`,
-				'enable-jwt': '1',
+		console.dir(
+			{
+				blingSalesOrderPayload: payload,
 			},
-			body,
+			{
+				depth: null,
+			}
+		);
+
+		const response = await this.request<{
+			data?: {
+				id?: number;
+			};
+		}>({
+			accessToken: input.accessToken,
+			path: '/pedidos/vendas',
+			method: 'POST',
+			body: payload,
 		});
 
-		if (!response.ok) {
-			const errorBody = await response.text();
+		const salesOrderId = response.data?.id;
 
-			throw new Error(`Bling token refresh failed: ${errorBody}`);
+		if (!salesOrderId) {
+			throw new BlingGatewayError('Bling sales order was created without returning an id.', 200, response);
 		}
 
-		return response.json() as Promise<BlingTokenResponse>;
+		return {
+			id: salesOrderId,
+			rawPayload: response,
+		};
 	}
 
-	private getBasicAuthorizationToken() {
-		const credentials = `${env.BLING_CLIENT_ID}:${env.BLING_CLIENT_SECRET}`;
+	private mapCreateContactPayload(input: ICreateBlingContactInput) {
+		const document = onlyDigits(input.document);
+		const phone = onlyDigits(input.phone);
+		const zipCode = onlyDigits(input.address?.zipCode);
 
-		return Buffer.from(credentials).toString('base64');
+		return removeEmptyValues({
+			nome: input.name,
+			tipo: input.personType ?? 'F',
+			situacao: 'A',
+			numeroDocumento: document,
+			telefone: phone,
+			email: input.email ?? undefined,
+			endereco: removeEmptyValues({
+				geral: removeEmptyValues({
+					cep: zipCode,
+					endereco: input.address?.street ?? undefined,
+					numero: input.address?.number ?? undefined,
+					complemento: input.address?.complement ?? undefined,
+					bairro: input.address?.district ?? undefined,
+					municipio: input.address?.city ?? undefined,
+					uf: input.address?.state ?? undefined,
+				}),
+			}),
+		});
+	}
+
+	private mapCreateSalesOrderPayload(input: ICreateBlingSalesOrderInput) {
+		return removeEmptyValues({
+			data: formatDate(input.orderDate ?? new Date()),
+			contato: removeEmptyValues({
+				id: input.contact.id,
+				nome: input.contact.name,
+				tipoPessoa: input.contact.personType ?? 'F',
+				numeroDocumento: onlyDigits(input.contact.document),
+			}),
+			itens: input.items.map((item) =>
+				removeEmptyValues({
+					codigo: item.sku,
+					descricao: item.name,
+					unidade: 'UN',
+					quantidade: item.quantity,
+					valor: centsToDecimal(item.unitAmount),
+					desconto: item.discountAmount ? centsToDecimal(item.discountAmount) : undefined,
+					produto: item.blingProductId
+						? {
+								id: item.blingProductId,
+							}
+						: undefined,
+				})
+			),
+			desconto: input.discountAmount ? centsToDecimal(input.discountAmount) : undefined,
+			transporte: removeEmptyValues({
+				frete: input.shippingAmount ? centsToDecimal(input.shippingAmount) : undefined,
+			}),
+			observacoes: input.notes ?? undefined,
+			observacoesInternas: `Pedido origem Biotiwa: ${input.externalOrderId}`,
+		});
+	}
+
+	async findProductBySku(input: IFindBlingProductBySkuInput): Promise<IBlingProduct | null> {
+		const response = await this.request<IFindBlingProductBySkuOutput>({
+			accessToken: input.accessToken,
+			path: `/produtos?codigos[]=${encodeURIComponent(input.sku)}`,
+			method: 'GET',
+		});
+
+		const product = response.data?.find((item) => {
+			return item.codigo === input.sku;
+		});
+
+		if (!product) {
+			return null;
+		}
+
+		return product;
 	}
 }

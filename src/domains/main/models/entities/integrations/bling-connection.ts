@@ -1,5 +1,6 @@
 import z from 'zod';
 
+import blingConfig from '@/config/bling-config';
 import { Entity } from '@/core/entities/entity';
 import { Optional } from '@/core/types/optional';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
@@ -85,12 +86,17 @@ export class BlingConnection extends Entity<IBlingConnectionProps> {
 		return this.props.expiresAt.getTime() <= Date.now();
 	}
 
+	isExpiringSoon(safetyWindowInMs = blingConfig.BLING_TOKEN_EXPIRATION_SAFETY_WINDOW_IN_MS) {
+		return this.props.expiresAt.getTime() <= Date.now() + safetyWindowInMs;
+	}
+
 	updateTokens(input: { accessToken: string; refreshToken: string; expiresAt: Date; scope?: string | null }) {
 		this.props.accessToken = input.accessToken;
-		this.props.refreshToken = input.refreshToken;
+		this.props.refreshToken = input.refreshToken ?? this.props.refreshToken;
 		this.props.expiresAt = input.expiresAt;
 		this.props.scope = input.scope ?? this.props.scope;
 		this.props.status = 'ACTIVE';
+
 		this._touch();
 	}
 
