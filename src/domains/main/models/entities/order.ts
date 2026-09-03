@@ -201,6 +201,19 @@ export class Order extends Entity<IOrderProps> {
 		this._touch();
 	}
 
+	markAsProcessing() {
+		if (this.props.status === 'PROCESSING') {
+			return;
+		}
+
+		if (this.props.status !== 'PAID') {
+			return;
+		}
+
+		this.props.status = 'PROCESSING';
+		this._touch();
+	}
+
 	static create(props: Optional<IOrderProps, 'status' | 'createdAt' | 'expiresAt'>, id?: UniqueEntityId) {
 		const now = new Date();
 

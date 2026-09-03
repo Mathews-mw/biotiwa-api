@@ -10,7 +10,7 @@ import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 
 type FastifyErrorHandler = FastifyInstance['errorHandler'];
 
-export const errorHandler: FastifyErrorHandler = async (error, request, reply) => {
+export const errorHandler: FastifyErrorHandler = async (error, _request, reply) => {
 	if (error instanceof z.ZodError) {
 		return reply.status(400).send({
 			status: 400,
@@ -21,6 +21,7 @@ export const errorHandler: FastifyErrorHandler = async (error, request, reply) =
 	}
 
 	if (hasZodFastifySchemaValidationErrors(error)) {
+		console.log(`hasZodFastifySchemaValidationErrors: `, error.validation);
 		const errorsPayload = error.validation.map((err) => {
 			return {
 				instancePath: err.instancePath,

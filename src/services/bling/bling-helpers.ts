@@ -8,8 +8,17 @@ export class BlingHelpers {
 		path: string;
 		method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 		body?: unknown;
+		searchParams?: Record<string, string | number | boolean | undefined | null>;
 	}): Promise<TResponse> {
 		const url = new URL(`${env.BLING_API_BASE_URL}${input.path}`);
+
+		if (input.searchParams) {
+			for (const [key, value] of Object.entries(input.searchParams)) {
+				if (value !== undefined && value !== null && value !== '') {
+					url.searchParams.set(key, String(value));
+				}
+			}
+		}
 
 		const response = await fetch(url, {
 			method: input.method,
@@ -24,7 +33,7 @@ export class BlingHelpers {
 
 		if (!response.ok) {
 			throw new BlingGatewayError(
-				`Bling API request failed: ${input.method} || ${input.path}`,
+				`Bling API request failed: ${input.method} ${input.path}`,
 				response.status,
 				await readResponseBody(response)
 			);

@@ -3,11 +3,11 @@ import { container } from 'tsyringe';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { env } from '@/env';
-import { stripe } from '@/services/payments/gateways/stripe/stripe';
 import { getErrorMessage } from '@/utils/get-error-message';
-import { FailStripeCheckoutSessionUseCase } from '@/domains/main/application/modules/payments/use-cases/fail-stripe-checkout-session-use-case';
-import { ExpireStripeCheckoutSessionUseCase } from '@/domains/main/application/modules/payments/use-cases/expire-stripe-checkout-session-use-case';
-import { ConfirmStripeCheckoutSessionUseCase } from '@/domains/main/application/modules/payments/use-cases/confirm-stripe-checkout-session-use-case';
+import { stripe } from '@/services/payments/gateways/stripe/stripe';
+import { FailStripeCheckoutSessionUseCase } from '@/domains/main/application/modules/payments/use-cases/stripe/fail-stripe-checkout-session-use-case';
+import { ExpireStripeCheckoutSessionUseCase } from '@/domains/main/application/modules/payments/use-cases/stripe/expire-stripe-checkout-session-use-case';
+import { ConfirmStripeCheckoutSessionUseCase } from '@/domains/main/application/modules/payments/use-cases/stripe/confirm-stripe-checkout-session-use-case';
 import { MarkStripeWebhookEventAsFailedUseCase } from '@/domains/events/application/modules/stripe/use-cases/mark-stripe-webhook-event-as-failed-use-case';
 import { StartStripeWebhookEventProcessingUseCase } from '@/domains/events/application/modules/stripe/use-cases/start-stripe-webhook-event-processing-use-case';
 import { MarkStripeWebhookEventAsProcessedUseCase } from '@/domains/events/application/modules/stripe/use-cases/mark-stripe-webhook-event-as-processed-use-case';
@@ -50,6 +50,8 @@ export async function stripeWebhookController(request: FastifyRequest, reply: Fa
 		providerObjectId: session.id,
 		eventType: event.type,
 	});
+
+	console.log('startProcessingResult: ', startProcessingResult);
 
 	if (startProcessingResult.value.shouldProcess === false) {
 		return reply.status(200).send({
@@ -112,9 +114,8 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
 }
 
 async function handleCheckoutSessionPaid(event: Stripe.Event) {
-	console.log('');
-
 	const session = event.data.object as Stripe.Checkout.Session;
+	console.log('session: ', session);
 
 	const orderId = session.metadata?.order_id;
 

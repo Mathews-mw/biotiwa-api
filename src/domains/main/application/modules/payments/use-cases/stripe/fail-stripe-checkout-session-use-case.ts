@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
-import type { IPaymentRepository } from '../repositories/payment-repository';
-import type { IOrderRepository } from '../../orders/repositories/order-repository';
+import type { IPaymentRepository } from '../../repositories/payment-repository';
+import type { IOrderRepository } from '../../../orders/repositories/order-repository';
 
 import { failure, success, type Outcome } from '@/core/outcome';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
@@ -16,7 +16,7 @@ interface IRequest {
 type Response = Outcome<ResourceNotFoundError, null>;
 
 @injectable()
-export class ExpireStripeCheckoutSessionUseCase {
+export class FailStripeCheckoutSessionUseCase {
 	constructor(
 		@inject(DEPENDENCY_IDENTIFIERS.PAYMENT_REPOSITORY)
 		private paymentRepository: IPaymentRepository,
@@ -37,13 +37,13 @@ export class ExpireStripeCheckoutSessionUseCase {
 			return failure(new ResourceNotFoundError('Payment not found', 'PAYMENT_NOT_FOUND'));
 		}
 
-		payment.markAsExpired({
+		payment.markAsFailed({
 			rawPayload: input.rawPayload,
 		});
 
 		await this.paymentRepository.save(payment);
 
-		orderDetails.order.markAsExpired();
+		orderDetails.order.markAsPaymentFailed();
 
 		await this.orderRepository.save(orderDetails.order);
 

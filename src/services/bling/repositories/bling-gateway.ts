@@ -103,8 +103,28 @@ export type IFindBlingProductBySkuOutput = {
 	}>;
 };
 
+export type IFindBlingContactByDocumentInput = {
+	accessToken: string;
+	document: string;
+};
+
+export interface IBlingContato {
+	id: number;
+	nome: string;
+	codigo?: string;
+	situacao: string;
+	numeroDocumento?: string;
+	telefone?: string;
+	celular?: string;
+}
+
+export type IFindBlingContactByDocumentOutput = {
+	data: Array<IBlingContato>;
+};
+
 export interface IBlingGateway {
 	createContact(input: ICreateBlingContactInput): Promise<ICreateBlingContactOutput>;
 	createSalesOrder(input: ICreateBlingSalesOrderInput): Promise<ICreateBlingSalesOrderOutput>;
 	findProductBySku(input: IFindBlingProductBySkuInput): Promise<IBlingProduct | null>;
+	findContactByDocument(input: IFindBlingContactByDocumentInput): Promise<IBlingContato | null>;
 }

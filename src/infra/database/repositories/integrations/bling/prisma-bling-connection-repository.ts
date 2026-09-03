@@ -7,7 +7,7 @@ import type { BlingConnection as PrismaBlingConnection } from '@/generated/prism
 
 import { prisma } from '@/infra/database/prisma';
 import { BlingConnection } from '@/domains/main/models/entities/integrations/bling-connection';
-import { BlingConnectionMapper } from '@/infra/database/mappers/integrations/bling-connection-mapper';
+import { BlingConnectionMapper } from '@/infra/database/mappers/integrations/bling/bling-connection-mapper';
 
 export class PrismaBlingConnectionRepository implements IBlingConnectionRepository {
 	async save(connection: BlingConnection): Promise<BlingConnection> {

@@ -68,6 +68,8 @@ export const ModelName = {
   CartItem: 'CartItem',
   Order: 'Order',
   OrderItem: 'OrderItem',
+  OrderCustomer: 'OrderCustomer',
+  OrderShippingAddress: 'OrderShippingAddress',
   Payment: 'Payment',
   StripeWebhookEvent: 'StripeWebhookEvent',
   BlingConnection: 'BlingConnection',
@@ -357,6 +359,39 @@ export const OrderItemScalarFieldEnum = {
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
 
 
+export const OrderCustomerScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  document: 'document',
+  birthDate: 'birthDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderCustomerScalarFieldEnum = (typeof OrderCustomerScalarFieldEnum)[keyof typeof OrderCustomerScalarFieldEnum]
+
+
+export const OrderShippingAddressScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  zipCode: 'zipCode',
+  street: 'street',
+  number: 'number',
+  complement: 'complement',
+  district: 'district',
+  city: 'city',
+  state: 'state',
+  countryCode: 'countryCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderShippingAddressScalarFieldEnum = (typeof OrderShippingAddressScalarFieldEnum)[keyof typeof OrderShippingAddressScalarFieldEnum]
+
+
 export const PaymentScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
@@ -409,6 +444,7 @@ export const BlingOrderSyncScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
   status: 'status',
+  blingContactId: 'blingContactId',
   blingOrderId: 'blingOrderId',
   attempts: 'attempts',
   lastErrorMessage: 'lastErrorMessage',

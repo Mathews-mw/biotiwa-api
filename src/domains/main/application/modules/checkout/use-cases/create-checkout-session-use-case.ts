@@ -10,14 +10,33 @@ import { failure, success, type Outcome } from '@/core/outcome';
 import { Payment } from '@/domains/main/models/entities/payment';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { BadRequestError } from '@/core/errors/bad-request-errors';
+import { OrderCustomer } from '@/domains/main/models/entities/order-customer';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { createOrderItemsFromCart } from '../helpers/create-order-items-from-cart';
 import { calculateCartSummary } from '../../carts/calculators/calculate-cart-summary';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
 import { CheckoutSession } from '@/domains/main/models/value-objects/checkout-session';
+import { OrderShippingAddress } from '@/domains/main/models/entities/order-shipping-address';
 
 interface IRequest {
 	userId: string;
+	customer: {
+		name: string;
+		email: string;
+		phone?: string | null;
+		document?: string | null;
+		birthDate?: string | null;
+	};
+	shippingAddress: {
+		zipCode: string;
+		street: string;
+		number?: string | null;
+		complement?: string | null;
+		district?: string | null;
+		city: string;
+		state: string;
+		countryCode: string;
+	};
 }
 
 type Response = Outcome<
@@ -40,8 +59,8 @@ export class CreateCheckoutSessionUseCase {
 		private paymentService: IPaymentService
 	) {}
 
-	async execute({ userId }: IRequest): Promise<Response> {
-		const cart = await this.cartRepository.findActiveByUserId(userId);
+	async execute(input: IRequest): Promise<Response> {
+		const cart = await this.cartRepository.findActiveByUserId(input.userId);
 
 		if (!cart) {
 			return failure(new ResourceNotFoundError('Active cart not found', 'ACTIVE_CART_NOT_FOUND'));
@@ -61,7 +80,7 @@ export class CreateCheckoutSessionUseCase {
 
 		if (!orderDetails) {
 			const order = Order.create({
-				userId: new UniqueEntityId(userId),
+				userId: new UniqueEntityId(input.userId),
 				cartId: cart.id,
 				marketCode: cart.marketCode,
 				currency: summary.currency,
@@ -81,7 +100,33 @@ export class CreateCheckoutSessionUseCase {
 				return failure(new BadRequestError('Cart has no checkout items', 'EMPTY_CART'));
 			}
 
-			orderDetails = await this.orderRepository.createWithItems({ order, items: orderItems });
+			const orderCustomer = OrderCustomer.create({
+				orderId: order.id,
+				name: input.customer.name,
+				email: input.customer.email,
+				phone: input.customer.phone,
+				document: input.customer.document,
+				birthDate: input.customer.birthDate,
+			});
+
+			const orderShippingAddress = OrderShippingAddress.create({
+				orderId: order.id,
+				zipCode: input.shippingAddress.zipCode,
+				street: input.shippingAddress.street,
+				number: input.shippingAddress.number,
+				complement: input.shippingAddress.complement,
+				district: input.shippingAddress.district,
+				city: input.shippingAddress.city,
+				state: input.shippingAddress.state,
+				countryCode: input.shippingAddress.countryCode,
+			});
+
+			orderDetails = await this.orderRepository.createWithItems({
+				order,
+				orderCustomer: orderCustomer,
+				shippingAddress: orderShippingAddress,
+				items: orderItems,
+			});
 		}
 
 		const existingPendingPayment = await this.paymentsRepository.findPendingByOrderId(orderDetails.id.toString());
@@ -102,8 +147,8 @@ export class CreateCheckoutSessionUseCase {
 
 		const gatewaySession = await stripePaymentService.createCheckoutSession({
 			orderId: orderDetails.id.toString(),
-			userId: userId,
-			customerEmail: cart.user.email,
+			userId: input.userId,
+			customerEmail: orderDetails.orderCustomer?.email ?? cart.user.email,
 			amount: orderDetails.totalAmount,
 			currency: orderDetails.currency,
 			items: orderDetails.items.map((item) => ({

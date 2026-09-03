@@ -8,5 +8,5 @@ export type IStartStripeWebhookEventProcessingResult = {
 export interface IStripeWebhookEventRepository {
 	startProcessing(event: StripeWebhookEvent): Promise<IStartStripeWebhookEventProcessingResult>;
 	findByProviderEventId(providerEventId: string): Promise<StripeWebhookEvent | null>;
-	save(event: StripeWebhookEvent): Promise<void>;
+	save(event: StripeWebhookEvent): Promise<StripeWebhookEvent>;
 }

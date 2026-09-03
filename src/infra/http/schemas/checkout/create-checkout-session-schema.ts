@@ -3,8 +3,27 @@ import { FastifySchema } from 'fastify/types/schema';
 
 import { checkoutSessionSchema } from './checkout-session-schema';
 import { getBadRequestErrorSchema, getNotFoundErrorSchema } from '../erros/erros-schemas';
+import { countryCodeSchema } from '@/core/types/country-code';
 
-const bodySchema = z.null();
+const bodySchema = z.object({
+	customer: z.object({
+		name: z.string().min(1),
+		email: z.email(),
+		phone: z.string().optional().nullable(),
+		document: z.string().optional().nullable(),
+		birth_date: z.string().optional().nullable(),
+	}),
+	shipping_address: z.object({
+		zip_code: z.string().min(1),
+		street: z.string().min(1),
+		number: z.string().optional().nullable(),
+		complement: z.string().optional().nullable(),
+		district: z.string().optional().nullable(),
+		city: z.string().min(1),
+		state: z.string().min(1),
+		country_code: countryCodeSchema,
+	}),
+});
 
 const responseSchema = checkoutSessionSchema;
 

@@ -127,6 +127,16 @@ export type Order = Prisma.OrderModel
  */
 export type OrderItem = Prisma.OrderItemModel
 /**
+ * Model OrderCustomer
+ * 
+ */
+export type OrderCustomer = Prisma.OrderCustomerModel
+/**
+ * Model OrderShippingAddress
+ * 
+ */
+export type OrderShippingAddress = Prisma.OrderShippingAddressModel
+/**
  * Model Payment
  * 
  */

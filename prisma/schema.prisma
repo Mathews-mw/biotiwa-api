@@ -60,7 +60,7 @@ enum CartItemType {
 enum OrderStatus {
   PENDING_PAYMENT
   PAID
-  PROCESSING
+  PROCESSING // Esse status será após o pagamento, quando o pedido estiver sendo processado para envio
   SHIPPED
   DELIVERED
   CANCELED
@@ -423,11 +423,13 @@ model Order {
   createdAt       DateTime     @default(now()) @map("created_at")
   updatedAt       DateTime?    @updatedAt @map("updated_at")
 
-  user           User            @relation(fields: [userId], references: [id])
-  cart           Cart?           @relation(fields: [cartId], references: [id])
-  items          OrderItem[]
-  payments       Payment[]
-  blingOrderSync BlingOrderSync?
+  user                 User                  @relation(fields: [userId], references: [id])
+  cart                 Cart?                 @relation(fields: [cartId], references: [id])
+  items                OrderItem[]
+  payments             Payment[]
+  orderCustomer        OrderCustomer?
+  orderShippingAddress OrderShippingAddress?
+  blingOrderSync       BlingOrderSync?
 
   @@index([userId])
   @@index([cartId])
@@ -454,6 +456,41 @@ model OrderItem {
   @@index([orderId])
   @@index([productId])
   @@map("order_items")
+}
+
+model OrderCustomer {
+  id        String    @id @default(cuid())
+  orderId   String    @unique @map("order_id")
+  name      String
+  email     String
+  phone     String?
+  document  String? // CPF/CNPJ, se coletar
+  birthDate String?   @map("birth_date")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_customers")
+}
+
+model OrderShippingAddress {
+  id          String    @id @default(cuid())
+  orderId     String    @unique @map("order_id")
+  zipCode     String    @map("zip_code")
+  street      String
+  number      String?
+  complement  String?
+  district    String?
+  city        String
+  state       String
+  countryCode String    @map("country_code")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_shipping_addresses")
 }
 
 model Payment {
@@ -511,6 +548,7 @@ model BlingOrderSync {
   id               String               @id @default(cuid())
   orderId          String               @unique @map("order_id")
   status           BlingOrderSyncStatus @default(PENDING)
+  blingContactId   String?              @map("bling_contact_id")
   blingOrderId     String?              @map("bling_order_id")
   attempts         Int                  @default(0)
   lastErrorMessage String?              @map("last_error_message")

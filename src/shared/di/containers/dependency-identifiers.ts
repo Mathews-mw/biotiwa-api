@@ -17,7 +17,8 @@ export const DEPENDENCY_IDENTIFIERS = {
 	ORDER_REPOSITORY: Symbol('OrderRepository'),
 	PAYMENT_REPOSITORY: Symbol('PaymentRepository'),
 	STRIPE_WEBHOOK_EVENT_REPOSITORY: Symbol('StripeWebhookEventRepository'),
-	BLING_CONNECTION_REPOSITORY: Symbol('PrismaBlingConnectionRepository'),
+	BLING_CONNECTION_REPOSITORY: Symbol('BlingConnectionRepository'),
+	BLING_ORDER_SYNC_REPOSITORY: Symbol('BlingOrderSyncRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),
@@ -25,7 +26,12 @@ export const DEPENDENCY_IDENTIFIERS = {
 	// Services
 	PAYMENT_SERVICE: Symbol('PaymentService'),
 	BLING_GATEWAY_SERVICE: Symbol('BlingGatewayService'),
-	BLING_AUTHENTICATION: Symbol('BlingAuthenticationService'),
+	BLING_AUTHENTICATION: Symbol.for('BlingAuthenticationService'),
+
+	// use cases
+	ENQUEUE_BLING_ORDER_SYNC_USE_CASE: Symbol.for('EnqueueBlingOrderSyncUseCase'),
+	PROCESS_NEXT_BLING_ORDER_SYNC_USE_CASE: Symbol.for('ProcessNextBlingOrderSyncUseCase'),
+	PROCESS_BLING_ORDER_SYNC_BATCH_USE_CASE: Symbol.for('ProcessBlingOrderSyncBatchUseCase'),
 } as const;
 
 export type DependencyIdentifiers = (typeof DEPENDENCY_IDENTIFIERS)[keyof typeof DEPENDENCY_IDENTIFIERS];

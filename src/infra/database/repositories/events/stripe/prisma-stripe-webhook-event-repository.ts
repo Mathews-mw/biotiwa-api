@@ -7,6 +7,7 @@ import type {
 	IStartStripeWebhookEventProcessingResult,
 	IStripeWebhookEventRepository,
 } from '@/domains/events/application/modules/stripe/repositories/stripe-webhook-event-repository';
+import paymentConfig from '@/config/payment-config';
 
 type PrismaStripeWebhookEvent = {
 	id: string;
@@ -29,7 +30,7 @@ export class PrismaStripeWebhookEventRepository implements IStripeWebhookEventRe
 					providerEventId: event.providerEventId,
 					providerObjectId: event.providerObjectId ?? null,
 					eventType: event.eventType,
-					status: event.status,
+					status: 'PROCESSING',
 					errorMessage: event.errorMessage,
 					processedAt: event.processedAt,
 					createdAt: event.createdAt,
@@ -42,26 +43,70 @@ export class PrismaStripeWebhookEventRepository implements IStripeWebhookEventRe
 				shouldProcess: true,
 			};
 		} catch (error) {
-			if (!(error instanceof Prisma.PrismaClientKnownRequestError) || error.code !== 'P2002') {
+			if (!isUniqueConstraintError(error)) {
 				throw error;
 			}
 
 			const existingEvent = await this.findByProviderEventId(event.providerEventId);
+			console.log('existingEvent: ', existingEvent);
 
 			if (!existingEvent) {
 				throw error;
 			}
 
-			if (existingEvent.isProcessed || existingEvent.isProcessing) {
+			if (existingEvent.isProcessed) {
 				return {
 					event: existingEvent,
 					shouldProcess: false,
 				};
 			}
 
-			existingEvent.markAsProcessing();
+			if (existingEvent.isProcessing && !existingEvent.isProcessingStale()) {
+				return {
+					event: existingEvent,
+					shouldProcess: false,
+				};
+			}
 
-			await this.save(existingEvent);
+			if (existingEvent.isProcessing && existingEvent.isProcessingStale()) {
+				const staleCutoff = new Date(Date.now() - paymentConfig.PROCESSING_STALE_AFTER_IN_MS);
+
+				const claimed = await prisma.stripeWebhookEvent.updateMany({
+					where: {
+						providerEventId: event.providerEventId,
+						status: 'PROCESSING',
+						updatedAt: {
+							lte: staleCutoff,
+						},
+					},
+					data: {
+						errorMessage: null,
+						updatedAt: new Date(),
+					},
+				});
+
+				const refreshedEvent = await this.findByProviderEventId(event.providerEventId);
+
+				if (!refreshedEvent) {
+					throw error;
+				}
+
+				return {
+					event: refreshedEvent,
+					shouldProcess: claimed.count === 1,
+				};
+			}
+
+			if (existingEvent.hasFailed) {
+				existingEvent.markAsProcessing();
+
+				const updatedEvent = await this.save(existingEvent);
+
+				return {
+					event: updatedEvent,
+					shouldProcess: true,
+				};
+			}
 
 			return {
 				event: existingEvent,
@@ -80,8 +125,8 @@ export class PrismaStripeWebhookEventRepository implements IStripeWebhookEventRe
 		return event ? mapPrismaStripeWebhookEventToDomain(event) : null;
 	}
 
-	async save(event: StripeWebhookEvent): Promise<void> {
-		await prisma.stripeWebhookEvent.update({
+	async save(event: StripeWebhookEvent): Promise<StripeWebhookEvent> {
+		const result = await prisma.stripeWebhookEvent.update({
 			where: {
 				providerEventId: event.providerEventId,
 			},
@@ -94,6 +139,8 @@ export class PrismaStripeWebhookEventRepository implements IStripeWebhookEventRe
 				updatedAt: event.updatedAt,
 			},
 		});
+
+		return mapPrismaStripeWebhookEventToDomain(result);
 	}
 }
 
@@ -111,4 +158,8 @@ function mapPrismaStripeWebhookEventToDomain(event: PrismaStripeWebhookEvent) {
 		},
 		new UniqueEntityId(event.id)
 	);
+}
+
+function isUniqueConstraintError(error: unknown) {
+	return error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
 }

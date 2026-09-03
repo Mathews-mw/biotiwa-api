@@ -1,6 +1,8 @@
+import { OrderCustomerPresenter } from './order-customer-presenter';
 import { OrderItemDetailsPresenter } from './order-item-details-presenter';
 import { OrderDetails } from '@/domains/main/models/value-objects/order-details';
-import { IOrderDetailsResponseSchema } from '../../schemas/order/order-details-schema';
+import { OrderShippingAddressPresenter } from './order-shipping-address-presenter';
+import type { IOrderDetailsResponseSchema } from '../../schemas/order/order-details-schema';
 
 export class OrderDetailsPresenter {
 	static toHTTP(data: OrderDetails): IOrderDetailsResponseSchema {
@@ -21,6 +23,10 @@ export class OrderDetailsPresenter {
 			expires_at: data.expiresAt ?? null,
 			created_at: data.createdAt,
 			updated_at: data.updatedAt ?? null,
+			order_customer: data.orderCustomer ? OrderCustomerPresenter.toHTTP(data.orderCustomer) : null,
+			order_shipping_address: data.orderShippingAddress
+				? OrderShippingAddressPresenter.toHTTP(data.orderShippingAddress)
+				: null,
 			items: data.items.map(OrderItemDetailsPresenter.toHTTP),
 		};
 	}

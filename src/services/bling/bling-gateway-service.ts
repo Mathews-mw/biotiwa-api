@@ -7,6 +7,9 @@ import type {
 	IFindBlingProductBySkuInput,
 	IFindBlingProductBySkuOutput,
 	IBlingProduct,
+	IFindBlingContactByDocumentInput,
+	IFindBlingContactByDocumentOutput,
+	IBlingContato,
 } from './repositories/bling-gateway';
 
 import { BlingHelpers } from './bling-helpers';
@@ -26,12 +29,16 @@ export class BlingGatewayService extends BlingHelpers implements IBlingGateway {
 	async createContact(input: ICreateBlingContactInput): Promise<ICreateBlingContactOutput> {
 		const payload = this.mapCreateContactPayload(input);
 
+		console.log('blingCreateContactPayload: ', payload);
+
 		const response = await this.request<BlingCreateContactResponse>({
 			accessToken: input.accessToken,
 			path: '/contatos',
 			method: 'POST',
 			body: payload,
 		});
+
+		console.log('create contact response: ', response);
 
 		const contactId = response.data?.id;
 
@@ -47,6 +54,8 @@ export class BlingGatewayService extends BlingHelpers implements IBlingGateway {
 
 	async createSalesOrder(input: ICreateBlingSalesOrderInput): Promise<ICreateBlingSalesOrderOutput> {
 		const payload = this.mapCreateSalesOrderPayload(input);
+
+		console.log('blingSalesOrderPayload: ', payload);
 
 		console.dir(
 			{
@@ -68,6 +77,8 @@ export class BlingGatewayService extends BlingHelpers implements IBlingGateway {
 			body: payload,
 		});
 
+		console.log('create sales order response: ', response);
+
 		const salesOrderId = response.data?.id;
 
 		if (!salesOrderId) {
@@ -78,6 +89,51 @@ export class BlingGatewayService extends BlingHelpers implements IBlingGateway {
 			id: salesOrderId,
 			rawPayload: response,
 		};
+	}
+
+	async findProductBySku(input: IFindBlingProductBySkuInput): Promise<IBlingProduct | null> {
+		const response = await this.request<IFindBlingProductBySkuOutput>({
+			accessToken: input.accessToken,
+			path: `/produtos?codigos[]=${encodeURIComponent(input.sku)}`,
+			method: 'GET',
+		});
+
+		const product = response.data?.find((item) => {
+			return item.codigo === input.sku;
+		});
+
+		if (!product) {
+			return null;
+		}
+
+		return product;
+	}
+
+	async findContactByDocument(input: IFindBlingContactByDocumentInput): Promise<IBlingContato | null> {
+		const document = onlyDigits(input.document);
+
+		if (!document) {
+			return null;
+		}
+
+		const response = await this.request<IFindBlingContactByDocumentOutput>({
+			accessToken: input.accessToken,
+			path: '/contatos',
+			method: 'GET',
+			searchParams: {
+				numeroDocumento: document,
+			},
+		});
+
+		const contact = response.data?.find((item) => {
+			return onlyDigits(item.numeroDocumento) === document;
+		});
+
+		if (!contact) {
+			return null;
+		}
+
+		return contact;
 	}
 
 	private mapCreateContactPayload(input: ICreateBlingContactInput) {
@@ -137,23 +193,5 @@ export class BlingGatewayService extends BlingHelpers implements IBlingGateway {
 			observacoes: input.notes ?? undefined,
 			observacoesInternas: `Pedido origem Biotiwa: ${input.externalOrderId}`,
 		});
-	}
-
-	async findProductBySku(input: IFindBlingProductBySkuInput): Promise<IBlingProduct | null> {
-		const response = await this.request<IFindBlingProductBySkuOutput>({
-			accessToken: input.accessToken,
-			path: `/produtos?codigos[]=${encodeURIComponent(input.sku)}`,
-			method: 'GET',
-		});
-
-		const product = response.data?.find((item) => {
-			return item.codigo === input.sku;
-		});
-
-		if (!product) {
-			return null;
-		}
-
-		return product;
 	}
 }

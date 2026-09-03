@@ -1,15 +1,17 @@
 import { prisma } from '../../prisma';
 import { Prisma } from '@/generated/prisma/client';
 import { Order } from '@/domains/main/models/entities/order';
-import { OrderItem } from '@/domains/main/models/entities/order-item';
 import { OrderDetailsMapper } from '../../mappers/order/order-details-mapper';
 
 import type {
+	ICreateOrderWithItemsInput,
 	IFindOrdersByUserParams,
 	IOrderRepository,
 } from '@/domains/main/application/modules/orders/repositories/order-repository';
 
 const orderInclude = {
+	orderCustomer: true,
+	orderShippingAddress: true,
 	items: {
 		include: {
 			product: true,
@@ -21,7 +23,7 @@ const orderInclude = {
 } satisfies Prisma.OrderInclude;
 
 export class PrismaOrderRepository implements IOrderRepository {
-	async createWithItems(input: { order: Order; items: Array<OrderItem> }) {
+	async createWithItems(input: ICreateOrderWithItemsInput) {
 		const order = await prisma.$transaction(async (tx) => {
 			const createdOrder = await tx.order.create({
 				data: {
@@ -59,6 +61,41 @@ export class PrismaOrderRepository implements IOrderRepository {
 					createdAt: item.createdAt,
 				})),
 			});
+
+			if (input.orderCustomer) {
+				await tx.orderCustomer.create({
+					data: {
+						id: input.orderCustomer.id.toString(),
+						orderId: createdOrder.id,
+						name: input.orderCustomer.name,
+						email: input.orderCustomer.email,
+						phone: input.orderCustomer.phone ?? null,
+						document: input.orderCustomer.document ?? null,
+						birthDate: input.orderCustomer.birthDate ?? null,
+						createdAt: input.orderCustomer.createdAt,
+						updatedAt: input.orderCustomer.updatedAt,
+					},
+				});
+			}
+
+			if (input.shippingAddress) {
+				await tx.orderShippingAddress.create({
+					data: {
+						id: input.shippingAddress.id.toString(),
+						orderId: createdOrder.id,
+						zipCode: input.shippingAddress.zipCode,
+						street: input.shippingAddress.street,
+						number: input.shippingAddress.number ?? null,
+						complement: input.shippingAddress.complement ?? null,
+						district: input.shippingAddress.district ?? null,
+						city: input.shippingAddress.city,
+						state: input.shippingAddress.state,
+						countryCode: input.shippingAddress.countryCode,
+						createdAt: input.shippingAddress.createdAt,
+						updatedAt: input.shippingAddress.updatedAt,
+					},
+				});
+			}
 
 			return tx.order.findUniqueOrThrow({
 				where: {
