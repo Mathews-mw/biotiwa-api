@@ -12,6 +12,8 @@ export const unauthorizedErrors = createHttpErrorSchemaFactory({
 		'CREDENTIALS_TYPE_ERROR',
 		'AUTH_MIDDLEWARE_NOT_EXECUTED',
 		'AUTH_INVALID_CREDENTIALS_ERROR',
+		'MISSING_INTERNAL_JOB_SECRET',
+		'INVALID_INTERNAL_JOB_SECRET',
 	],
 	defaultCode: 'UNAUTHORIZED_ERROR',
 });

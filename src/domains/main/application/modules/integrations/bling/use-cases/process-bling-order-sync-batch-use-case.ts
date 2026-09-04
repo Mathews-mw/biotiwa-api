@@ -1,5 +1,3 @@
-// src/domains/main/application/modules/integrations/bling/use-cases/process-bling-order-sync-batch-use-case.ts
-
 import { inject, injectable } from 'tsyringe';
 
 import { success, type Outcome } from '@/core/outcome';
@@ -16,7 +14,9 @@ interface ProcessedSyncResult {
 	syncId?: string;
 	orderId?: string;
 	status?: string;
+	blingContactId?: string | null;
 	blingOrderId?: string | null;
+	reason?: string;
 	error?: string;
 }
 
@@ -55,6 +55,11 @@ export class ProcessBlingOrderSyncBatchUseCase {
 			}
 
 			if (!result.value.processed) {
+				results.push({
+					processed: false,
+					reason: result.value.reason ?? 'NO_PENDING_BLING_ORDER_SYNC',
+				});
+
 				break;
 			}
 
@@ -63,15 +68,17 @@ export class ProcessBlingOrderSyncBatchUseCase {
 				syncId: result.value.syncId,
 				orderId: result.value.orderId,
 				status: result.value.status,
+				blingContactId: result.value.blingContactId,
 				blingOrderId: result.value.blingOrderId,
 			});
 		}
 
+		const processedItems = results.filter((item) => item.processed);
 		const successCount = results.filter((item) => item.status === 'SYNCED').length;
 		const failedCount = results.filter((item) => item.error).length;
 
 		return success({
-			processedCount: results.length,
+			processedCount: processedItems.length,
 			successCount,
 			failedCount,
 			results,

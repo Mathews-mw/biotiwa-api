@@ -9,10 +9,6 @@ import { createBlingContactController } from '../controllers/integrations/bling/
 import { createBlingSalesOrderController } from '../controllers/integrations/bling/create-bling-sales-order-controller';
 import { processNextBlingOrderSyncController } from '../controllers/integrations/bling/process-next-bling-order-sync-controller';
 import { validateBlingConnectionStatusController } from '../controllers/integrations/bling/validate-bling-connection-status-controller';
-import {
-	processBlingOrderSyncBatchBodySchema,
-	processBlingOrderSyncBatchController,
-} from '../controllers/integrations/bling/process-bling-order-sync-batch-controller';
 
 export async function integrationsRoutes(app: FastifyInstance) {
 	app.post('/admin/bling/contacts', { preHandler: [authMiddleware] }, createBlingContactController);
@@ -46,39 +42,6 @@ export async function integrationsRoutes(app: FastifyInstance) {
 			},
 		},
 		processNextBlingOrderSyncController
-	);
-
-	app.withTypeProvider<ZodTypeProvider>().post(
-		'/admin/bling/order-syncs/process-batch',
-		{
-			preHandler: [
-				authMiddleware,
-				// adminOnlyMiddleware,
-			],
-			schema: {
-				tags: ['Bling'],
-				summary: 'Process pending Bling order syncs in batch',
-				body: processBlingOrderSyncBatchBodySchema,
-				response: {
-					200: z.object({
-						processed_count: z.number(),
-						success_count: z.number(),
-						failed_count: z.number(),
-						results: z.array(
-							z.object({
-								processed: z.boolean(),
-								sync_id: z.string().nullable(),
-								order_id: z.string().nullable(),
-								status: z.string().nullable(),
-								bling_order_id: z.string().nullable(),
-								error: z.string().nullable(),
-							})
-						),
-					}),
-				},
-			},
-		},
-		processBlingOrderSyncBatchController
 	);
 
 	app.get('/bling/callback', handleBlingOAuthCallbackController);

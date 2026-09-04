@@ -13,6 +13,7 @@
     "start": "node build/server.js",
     "db:migrate:deploy": "prisma migrate deploy",
     "lint": "eslint --ext .ts --fix src",
+		"jobs:bling-sync": "tsx src/scripts/process-bling-order-syncs.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",

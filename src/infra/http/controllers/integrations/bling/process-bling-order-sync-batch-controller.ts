@@ -31,7 +31,9 @@ export async function processBlingOrderSyncBatchController(
 			sync_id: item.syncId ?? null,
 			order_id: item.orderId ?? null,
 			status: item.status ?? null,
+			bling_contact_id: item.blingContactId ?? null,
 			bling_order_id: item.blingOrderId ?? null,
+			reason: item.reason ?? null,
 			error: item.error ?? null,
 		})),
 	});
