@@ -586,6 +586,23 @@ export type EnumBlingOrderSyncStatusWithAggregatesFilter<$PrismaModel = never> =
   _max?: Prisma.NestedEnumBlingOrderSyncStatusFilter<$PrismaModel>
 }
 
+export type EnumMelhorEnvioConnectionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MelhorEnvioConnectionStatus | Prisma.EnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MelhorEnvioConnectionStatus[] | Prisma.ListEnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MelhorEnvioConnectionStatus[] | Prisma.ListEnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMelhorEnvioConnectionStatusFilter<$PrismaModel> | $Enums.MelhorEnvioConnectionStatus
+}
+
+export type EnumMelhorEnvioConnectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MelhorEnvioConnectionStatus | Prisma.EnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MelhorEnvioConnectionStatus[] | Prisma.ListEnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MelhorEnvioConnectionStatus[] | Prisma.ListEnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMelhorEnvioConnectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.MelhorEnvioConnectionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMelhorEnvioConnectionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMelhorEnvioConnectionStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1142,6 +1159,23 @@ export type NestedEnumBlingOrderSyncStatusWithAggregatesFilter<$PrismaModel = ne
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumBlingOrderSyncStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumBlingOrderSyncStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumMelhorEnvioConnectionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MelhorEnvioConnectionStatus | Prisma.EnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MelhorEnvioConnectionStatus[] | Prisma.ListEnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MelhorEnvioConnectionStatus[] | Prisma.ListEnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMelhorEnvioConnectionStatusFilter<$PrismaModel> | $Enums.MelhorEnvioConnectionStatus
+}
+
+export type NestedEnumMelhorEnvioConnectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MelhorEnvioConnectionStatus | Prisma.EnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MelhorEnvioConnectionStatus[] | Prisma.ListEnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MelhorEnvioConnectionStatus[] | Prisma.ListEnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMelhorEnvioConnectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.MelhorEnvioConnectionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMelhorEnvioConnectionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMelhorEnvioConnectionStatusFilter<$PrismaModel>
 }
 
 

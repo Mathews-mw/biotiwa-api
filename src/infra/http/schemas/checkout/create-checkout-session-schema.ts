@@ -1,9 +1,9 @@
 import z from 'zod';
 import { FastifySchema } from 'fastify/types/schema';
 
+import { countryCodeSchema } from '@/core/types/country-code';
 import { checkoutSessionSchema } from './checkout-session-schema';
 import { getBadRequestErrorSchema, getNotFoundErrorSchema } from '../erros/erros-schemas';
-import { countryCodeSchema } from '@/core/types/country-code';
 
 const bodySchema = z.object({
 	customer: z.object({

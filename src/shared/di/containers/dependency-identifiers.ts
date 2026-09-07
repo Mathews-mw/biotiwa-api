@@ -19,6 +19,8 @@ export const DEPENDENCY_IDENTIFIERS = {
 	STRIPE_WEBHOOK_EVENT_REPOSITORY: Symbol('StripeWebhookEventRepository'),
 	BLING_CONNECTION_REPOSITORY: Symbol('BlingConnectionRepository'),
 	BLING_ORDER_SYNC_REPOSITORY: Symbol('BlingOrderSyncRepository'),
+	MELHOR_ENVIO_CONNECTION_REPOSITORY: Symbol('MelhorEnvioConnectionRepository'),
+	MELHOR_ENVIO_OAUTH_STATE_REPOSITORY: Symbol('MelhorEnvioOAuthStateRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),
@@ -27,6 +29,7 @@ export const DEPENDENCY_IDENTIFIERS = {
 	PAYMENT_SERVICE: Symbol('PaymentService'),
 	BLING_GATEWAY_SERVICE: Symbol('BlingGatewayService'),
 	BLING_AUTHENTICATION: Symbol.for('BlingAuthenticationService'),
+	MELHOR_ENVIO_AUTHENTICATION: Symbol.for('MelhorEnvioAuthenticationService'),
 
 	// use cases
 	ENQUEUE_BLING_ORDER_SYNC_USE_CASE: Symbol.for('EnqueueBlingOrderSyncUseCase'),

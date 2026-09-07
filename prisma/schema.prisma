@@ -116,6 +116,13 @@ enum BlingOrderSyncStatus {
   FAILED
 }
 
+enum MelhorEnvioConnectionStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+  ERROR
+}
+
 model User {
   id            String    @id @unique @default(cuid())
   name          String
@@ -562,4 +569,29 @@ model BlingOrderSync {
 
   @@index([status])
   @@map("bling_order_syncs")
+}
+
+model MelhorEnvioConnection {
+  id           String                      @id @default(cuid())
+  status       MelhorEnvioConnectionStatus @default(ACTIVE)
+  accessToken  String                      @map("access_token")
+  refreshToken String                      @map("refresh_token")
+  expiresAt    DateTime                    @map("expires_at")
+  scope        String?
+  createdAt    DateTime                    @default(now()) @map("created_at")
+  updatedAt    DateTime?                   @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@map("melhor_envio_connections")
+}
+
+model MelhorEnvioOAuthState {
+  id        String    @id @default(cuid())
+  state     String    @unique
+  usedAt    DateTime? @map("used_at")
+  expiresAt DateTime  @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([expiresAt])
+  @@map("melhor_envio_oauth_states")
 }

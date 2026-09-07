@@ -25,6 +25,15 @@ export const envSchema = z.object({
 	BLING_AUTHORIZE_URL: z.url(),
 	BLING_TOKEN_URL: z.url(),
 
+	MELHOR_ENVIO_API_BASE_URL: z.string(),
+	MELHOR_ENVIO_CLIENT_ID: z.string(),
+	MELHOR_ENVIO_CLIENT_SECRET: z.string(),
+	MELHOR_ENVIO_REDIRECT_URL: z.url(),
+	MELHOR_ENVIO_SCOPES: z.string(),
+	MELHOR_ENVIO_USER_AGENT: z.string(),
+	SHIPPING_ORIGIN_POSTAL_CODE: z.string().min(8),
+	MELHOR_ENVIO_SERVICES: z.string().optional(),
+
 	CRON_SECRET: z.string(),
 });
 

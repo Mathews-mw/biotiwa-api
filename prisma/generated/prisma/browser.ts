@@ -132,3 +132,13 @@ export type BlingConnection = Prisma.BlingConnectionModel
  * 
  */
 export type BlingOrderSync = Prisma.BlingOrderSyncModel
+/**
+ * Model MelhorEnvioConnection
+ * 
+ */
+export type MelhorEnvioConnection = Prisma.MelhorEnvioConnectionModel
+/**
+ * Model MelhorEnvioOAuthState
+ * 
+ */
+export type MelhorEnvioOAuthState = Prisma.MelhorEnvioOAuthStateModel

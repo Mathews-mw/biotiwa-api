@@ -16,6 +16,7 @@ export const notFoundErrors = createHttpErrorSchemaFactory({
 		'PAYMENT_NOT_FOUND',
 		'CHECKOUT_SESSION_NOT_FOUND',
 		'BLING_CONNECTION_NOT_FOUND',
+		'MELHOR_ENVIO_CONNECTION_NOT_FOUND',
 	],
 	defaultCode: 'RESOURCE_NOT_FOUND_ERROR',
 });

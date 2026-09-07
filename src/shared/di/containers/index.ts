@@ -8,6 +8,7 @@ import { BetterAuthIdentityProvider } from '@/infra/auth/better-auth-identity-pr
 import { PaymentService } from '@/services/payments/payment-service';
 import { BlingGatewayService } from '@/services/bling/bling-gateway-service';
 import { BlingAuthenticationService } from '@/services/bling/bling-authentication-service';
+import { MelhorEnvioAuthenticationService } from '@/services/melhor-envio/melhor-envio-authentication-service';
 
 import { EnqueueBlingOrderSyncUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/enqueue-bling-order-sync-use-case';
 import { ProcessNextBlingOrderSyncUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/process-next-bling-order-sync-use-case';
@@ -32,6 +33,8 @@ import { PrismaCommerceCatalogRepository } from '@/infra/database/repositories/c
 import { PrismaBlingOrderSyncRepository } from '@/infra/database/repositories/integrations/bling/prisma-bling-order-sync-repository';
 import { PrismaBlingConnectionRepository } from '@/infra/database/repositories/integrations/bling/prisma-bling-connection-repository';
 import { PrismaStripeWebhookEventRepository } from '@/infra/database/repositories/events/stripe/prisma-stripe-webhook-event-repository';
+import { PrismaMelhorEnvioConnectionRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-connection-repository';
+import { PrismaMelhorEnvioOAuthStateRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-oauth-state-repository';
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -59,6 +62,8 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.PAYMENT_REPOSITORY, PrismaPaymentReposi
 registerSingleton(DEPENDENCY_IDENTIFIERS.STRIPE_WEBHOOK_EVENT_REPOSITORY, PrismaStripeWebhookEventRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_CONNECTION_REPOSITORY, PrismaBlingConnectionRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_ORDER_SYNC_REPOSITORY, PrismaBlingOrderSyncRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_CONNECTION_REPOSITORY, PrismaMelhorEnvioConnectionRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_OAUTH_STATE_REPOSITORY, PrismaMelhorEnvioOAuthStateRepository);
 
 // Providers
 registerSingleton(DEPENDENCY_IDENTIFIERS.IDENTITY_PROVIDER, BetterAuthIdentityProvider);
@@ -67,6 +72,7 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.IDENTITY_PROVIDER, BetterAuthIdentityPr
 registerSingleton(DEPENDENCY_IDENTIFIERS.PAYMENT_SERVICE, PaymentService);
 registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_GATEWAY_SERVICE, BlingGatewayService);
 registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_AUTHENTICATION, BlingAuthenticationService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_AUTHENTICATION, MelhorEnvioAuthenticationService);
 
 // Use cases
 registerSingleton(DEPENDENCY_IDENTIFIERS.ENQUEUE_BLING_ORDER_SYNC_USE_CASE, EnqueueBlingOrderSyncUseCase);

@@ -419,7 +419,9 @@ export const ModelName = {
   Payment: 'Payment',
   StripeWebhookEvent: 'StripeWebhookEvent',
   BlingConnection: 'BlingConnection',
-  BlingOrderSync: 'BlingOrderSync'
+  BlingOrderSync: 'BlingOrderSync',
+  MelhorEnvioConnection: 'MelhorEnvioConnection',
+  MelhorEnvioOAuthState: 'MelhorEnvioOAuthState'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -435,7 +437,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verification" | "customerProfile" | "address" | "userConsent" | "consentTerm" | "market" | "product" | "offer" | "offerItem" | "orderBump" | "cart" | "cartItem" | "order" | "orderItem" | "orderCustomer" | "orderShippingAddress" | "payment" | "stripeWebhookEvent" | "blingConnection" | "blingOrderSync"
+    modelProps: "user" | "account" | "session" | "verification" | "customerProfile" | "address" | "userConsent" | "consentTerm" | "market" | "product" | "offer" | "offerItem" | "orderBump" | "cart" | "cartItem" | "order" | "orderItem" | "orderCustomer" | "orderShippingAddress" | "payment" | "stripeWebhookEvent" | "blingConnection" | "blingOrderSync" | "melhorEnvioConnection" | "melhorEnvioOAuthState"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2141,6 +2143,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MelhorEnvioConnection: {
+      payload: Prisma.$MelhorEnvioConnectionPayload<ExtArgs>
+      fields: Prisma.MelhorEnvioConnectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MelhorEnvioConnectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MelhorEnvioConnectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload>
+        }
+        findFirst: {
+          args: Prisma.MelhorEnvioConnectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MelhorEnvioConnectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload>
+        }
+        findMany: {
+          args: Prisma.MelhorEnvioConnectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload>[]
+        }
+        create: {
+          args: Prisma.MelhorEnvioConnectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload>
+        }
+        createMany: {
+          args: Prisma.MelhorEnvioConnectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MelhorEnvioConnectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload>[]
+        }
+        delete: {
+          args: Prisma.MelhorEnvioConnectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload>
+        }
+        update: {
+          args: Prisma.MelhorEnvioConnectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.MelhorEnvioConnectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MelhorEnvioConnectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MelhorEnvioConnectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.MelhorEnvioConnectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioConnectionPayload>
+        }
+        aggregate: {
+          args: Prisma.MelhorEnvioConnectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMelhorEnvioConnection>
+        }
+        groupBy: {
+          args: Prisma.MelhorEnvioConnectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MelhorEnvioConnectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MelhorEnvioConnectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MelhorEnvioConnectionCountAggregateOutputType> | number
+        }
+      }
+    }
+    MelhorEnvioOAuthState: {
+      payload: Prisma.$MelhorEnvioOAuthStatePayload<ExtArgs>
+      fields: Prisma.MelhorEnvioOAuthStateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MelhorEnvioOAuthStateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MelhorEnvioOAuthStateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload>
+        }
+        findFirst: {
+          args: Prisma.MelhorEnvioOAuthStateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MelhorEnvioOAuthStateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload>
+        }
+        findMany: {
+          args: Prisma.MelhorEnvioOAuthStateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload>[]
+        }
+        create: {
+          args: Prisma.MelhorEnvioOAuthStateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload>
+        }
+        createMany: {
+          args: Prisma.MelhorEnvioOAuthStateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MelhorEnvioOAuthStateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload>[]
+        }
+        delete: {
+          args: Prisma.MelhorEnvioOAuthStateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload>
+        }
+        update: {
+          args: Prisma.MelhorEnvioOAuthStateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload>
+        }
+        deleteMany: {
+          args: Prisma.MelhorEnvioOAuthStateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MelhorEnvioOAuthStateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MelhorEnvioOAuthStateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload>[]
+        }
+        upsert: {
+          args: Prisma.MelhorEnvioOAuthStateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MelhorEnvioOAuthStatePayload>
+        }
+        aggregate: {
+          args: Prisma.MelhorEnvioOAuthStateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMelhorEnvioOAuthState>
+        }
+        groupBy: {
+          args: Prisma.MelhorEnvioOAuthStateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MelhorEnvioOAuthStateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MelhorEnvioOAuthStateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MelhorEnvioOAuthStateCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2546,6 +2696,31 @@ export const BlingOrderSyncScalarFieldEnum = {
 export type BlingOrderSyncScalarFieldEnum = (typeof BlingOrderSyncScalarFieldEnum)[keyof typeof BlingOrderSyncScalarFieldEnum]
 
 
+export const MelhorEnvioConnectionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  expiresAt: 'expiresAt',
+  scope: 'scope',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MelhorEnvioConnectionScalarFieldEnum = (typeof MelhorEnvioConnectionScalarFieldEnum)[keyof typeof MelhorEnvioConnectionScalarFieldEnum]
+
+
+export const MelhorEnvioOAuthStateScalarFieldEnum = {
+  id: 'id',
+  state: 'state',
+  usedAt: 'usedAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type MelhorEnvioOAuthStateScalarFieldEnum = (typeof MelhorEnvioOAuthStateScalarFieldEnum)[keyof typeof MelhorEnvioOAuthStateScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2909,6 +3084,20 @@ export type ListEnumBlingOrderSyncStatusFieldRefInput<$PrismaModel> = FieldRefIn
 
 
 /**
+ * Reference to a field of type 'MelhorEnvioConnectionStatus'
+ */
+export type EnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MelhorEnvioConnectionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'MelhorEnvioConnectionStatus[]'
+ */
+export type ListEnumMelhorEnvioConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MelhorEnvioConnectionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -3095,6 +3284,8 @@ export type GlobalOmitConfig = {
   stripeWebhookEvent?: Prisma.StripeWebhookEventOmit
   blingConnection?: Prisma.BlingConnectionOmit
   blingOrderSync?: Prisma.BlingOrderSyncOmit
+  melhorEnvioConnection?: Prisma.MelhorEnvioConnectionOmit
+  melhorEnvioOAuthState?: Prisma.MelhorEnvioOAuthStateOmit
 }
 
 /* Types for Logging */

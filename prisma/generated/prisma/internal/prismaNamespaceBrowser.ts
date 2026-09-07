@@ -73,7 +73,9 @@ export const ModelName = {
   Payment: 'Payment',
   StripeWebhookEvent: 'StripeWebhookEvent',
   BlingConnection: 'BlingConnection',
-  BlingOrderSync: 'BlingOrderSync'
+  BlingOrderSync: 'BlingOrderSync',
+  MelhorEnvioConnection: 'MelhorEnvioConnection',
+  MelhorEnvioOAuthState: 'MelhorEnvioOAuthState'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -456,6 +458,31 @@ export const BlingOrderSyncScalarFieldEnum = {
 } as const
 
 export type BlingOrderSyncScalarFieldEnum = (typeof BlingOrderSyncScalarFieldEnum)[keyof typeof BlingOrderSyncScalarFieldEnum]
+
+
+export const MelhorEnvioConnectionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  expiresAt: 'expiresAt',
+  scope: 'scope',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MelhorEnvioConnectionScalarFieldEnum = (typeof MelhorEnvioConnectionScalarFieldEnum)[keyof typeof MelhorEnvioConnectionScalarFieldEnum]
+
+
+export const MelhorEnvioOAuthStateScalarFieldEnum = {
+  id: 'id',
+  state: 'state',
+  usedAt: 'usedAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type MelhorEnvioOAuthStateScalarFieldEnum = (typeof MelhorEnvioOAuthStateScalarFieldEnum)[keyof typeof MelhorEnvioOAuthStateScalarFieldEnum]
 
 
 export const SortOrder = {

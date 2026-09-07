@@ -167,3 +167,13 @@ export const BlingOrderSyncStatus = {
 } as const
 
 export type BlingOrderSyncStatus = (typeof BlingOrderSyncStatus)[keyof typeof BlingOrderSyncStatus]
+
+
+export const MelhorEnvioConnectionStatus = {
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  REVOKED: 'REVOKED',
+  ERROR: 'ERROR'
+} as const
+
+export type MelhorEnvioConnectionStatus = (typeof MelhorEnvioConnectionStatus)[keyof typeof MelhorEnvioConnectionStatus]

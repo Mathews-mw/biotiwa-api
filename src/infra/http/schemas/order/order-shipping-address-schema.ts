@@ -1,3 +1,4 @@
+import { countryCodeSchema } from '@/core/types/country-code';
 import { z } from 'zod';
 
 export const orderShippingAddressSchema = z.object({
@@ -10,7 +11,7 @@ export const orderShippingAddressSchema = z.object({
 	district: z.string().nullable().optional(),
 	city: z.string(),
 	state: z.string(),
-	country_code: z.string(),
+	country_code: countryCodeSchema,
 	created_at: z.coerce.date(),
 	updated_at: z.coerce.date().nullable().optional(),
 });
