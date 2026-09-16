@@ -92,6 +92,11 @@ export type Market = Prisma.MarketModel
  */
 export type Product = Prisma.ProductModel
 /**
+ * Model ProductShippingProfile
+ * 
+ */
+export type ProductShippingProfile = Prisma.ProductShippingProfileModel
+/**
  * Model Offer
  * 
  */
@@ -141,6 +146,21 @@ export type OrderShippingAddress = Prisma.OrderShippingAddressModel
  * 
  */
 export type Payment = Prisma.PaymentModel
+/**
+ * Model ShippingQuote
+ * 
+ */
+export type ShippingQuote = Prisma.ShippingQuoteModel
+/**
+ * Model ShippingQuoteRate
+ * 
+ */
+export type ShippingQuoteRate = Prisma.ShippingQuoteRateModel
+/**
+ * Model OrderShippingRate
+ * 
+ */
+export type OrderShippingRate = Prisma.OrderShippingRateModel
 /**
  * Model StripeWebhookEvent
  * 

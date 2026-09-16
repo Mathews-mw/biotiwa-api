@@ -140,6 +140,22 @@ export const PaymentStatus = {
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
+export const ShippingQuoteStatus = {
+  ACTIVE: 'ACTIVE',
+  SELECTED: 'SELECTED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type ShippingQuoteStatus = (typeof ShippingQuoteStatus)[keyof typeof ShippingQuoteStatus]
+
+
+export const ShippingProvider = {
+  MELHOR_ENVIO: 'MELHOR_ENVIO'
+} as const
+
+export type ShippingProvider = (typeof ShippingProvider)[keyof typeof ShippingProvider]
+
+
 export const StripeWebhookEventStatus = {
   PROCESSING: 'PROCESSING',
   PROCESSED: 'PROCESSED',

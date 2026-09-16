@@ -61,6 +61,7 @@ export const ModelName = {
   ConsentTerm: 'ConsentTerm',
   Market: 'Market',
   Product: 'Product',
+  ProductShippingProfile: 'ProductShippingProfile',
   Offer: 'Offer',
   OfferItem: 'OfferItem',
   OrderBump: 'OrderBump',
@@ -71,6 +72,9 @@ export const ModelName = {
   OrderCustomer: 'OrderCustomer',
   OrderShippingAddress: 'OrderShippingAddress',
   Payment: 'Payment',
+  ShippingQuote: 'ShippingQuote',
+  ShippingQuoteRate: 'ShippingQuoteRate',
+  OrderShippingRate: 'OrderShippingRate',
   StripeWebhookEvent: 'StripeWebhookEvent',
   BlingConnection: 'BlingConnection',
   BlingOrderSync: 'BlingOrderSync',
@@ -249,6 +253,22 @@ export const ProductScalarFieldEnum = {
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
 
 
+export const ProductShippingProfileScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  isShippable: 'isShippable',
+  weightInGrams: 'weightInGrams',
+  widthInMillimeters: 'widthInMillimeters',
+  heightInMillimeters: 'heightInMillimeters',
+  lengthInMillimeters: 'lengthInMillimeters',
+  insuranceAmount: 'insuranceAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductShippingProfileScalarFieldEnum = (typeof ProductShippingProfileScalarFieldEnum)[keyof typeof ProductShippingProfileScalarFieldEnum]
+
+
 export const OfferScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
@@ -411,6 +431,61 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const ShippingQuoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  cartId: 'cartId',
+  marketCode: 'marketCode',
+  destinationPostalCode: 'destinationPostalCode',
+  cartFingerprint: 'cartFingerprint',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  requestPayload: 'requestPayload',
+  responsePayload: 'responsePayload',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ShippingQuoteScalarFieldEnum = (typeof ShippingQuoteScalarFieldEnum)[keyof typeof ShippingQuoteScalarFieldEnum]
+
+
+export const ShippingQuoteRateScalarFieldEnum = {
+  id: 'id',
+  shippingQuoteId: 'shippingQuoteId',
+  provider: 'provider',
+  serviceId: 'serviceId',
+  serviceName: 'serviceName',
+  carrierName: 'carrierName',
+  amount: 'amount',
+  currency: 'currency',
+  estimatedDays: 'estimatedDays',
+  rawPayload: 'rawPayload',
+  createdAt: 'createdAt'
+} as const
+
+export type ShippingQuoteRateScalarFieldEnum = (typeof ShippingQuoteRateScalarFieldEnum)[keyof typeof ShippingQuoteRateScalarFieldEnum]
+
+
+export const OrderShippingRateScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  shippingQuoteId: 'shippingQuoteId',
+  shippingQuoteRateId: 'shippingQuoteRateId',
+  provider: 'provider',
+  serviceId: 'serviceId',
+  serviceName: 'serviceName',
+  carrierName: 'carrierName',
+  amount: 'amount',
+  currency: 'currency',
+  estimatedDays: 'estimatedDays',
+  rawPayload: 'rawPayload',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderShippingRateScalarFieldEnum = (typeof OrderShippingRateScalarFieldEnum)[keyof typeof OrderShippingRateScalarFieldEnum]
 
 
 export const StripeWebhookEventScalarFieldEnum = {

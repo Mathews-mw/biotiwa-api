@@ -3,17 +3,20 @@ import { OrderCustomerMapper } from './order-customer-mapper';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { OrderShippingAddressMapper } from './order-shipping-address-mapper';
 import { OrderDetails } from '@/domains/main/models/value-objects/order-details';
+import { OrderShippingRateMapper } from '../shipping/order-shipping-rate-mapper';
 
 import { type IPrismaOrderItemDetails, OrderItemDetailsMapper } from './order-item-details-mapper';
 import type {
-	OrderCustomer as PrismaOrderCustomer,
-	OrderShippingAddress as PrismaOrderShippingAddress,
 	Order as PrismaOrder,
+	OrderCustomer as PrismaOrderCustomer,
+	OrderShippingRate as PrismaOrderShippingRate,
+	OrderShippingAddress as PrismaOrderShippingAddress,
 } from '@/generated/prisma/client';
 
 export type IPrismaOrderDetails = PrismaOrder & {
 	orderCustomer?: PrismaOrderCustomer | null;
 	orderShippingAddress?: PrismaOrderShippingAddress | null;
+	orderShippingRate?: PrismaOrderShippingRate | null;
 	items: Array<IPrismaOrderItemDetails>;
 };
 
@@ -38,6 +41,7 @@ export class OrderDetailsMapper {
 			updatedAt: data.updatedAt,
 			order: OrderMapper.toDomain(data),
 			orderCustomer: data.orderCustomer ? OrderCustomerMapper.toDomain(data.orderCustomer) : null,
+			orderShippingRate: data.orderShippingRate ? OrderShippingRateMapper.toDomain(data.orderShippingRate) : null,
 			orderShippingAddress: data.orderShippingAddress
 				? OrderShippingAddressMapper.toDomain(data.orderShippingAddress)
 				: null,

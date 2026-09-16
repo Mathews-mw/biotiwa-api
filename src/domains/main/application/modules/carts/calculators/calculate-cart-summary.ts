@@ -1,6 +1,12 @@
-import { ICurrencyCode } from '@/core/types/currency-code';
-import { ICartItemType } from '@/domains/main/models/entities/cart-item';
+import type { ICurrencyCode } from '@/core/types/currency-code';
+import type { ICartItemType } from '@/domains/main/models/entities/cart-item';
+
 import { CartDetails } from '@/domains/main/models/value-objects/cart-details';
+
+export interface ICalculateCartSummaryOptions {
+	cartDetails: CartDetails;
+	shippingAmount?: number;
+}
 
 export type ICartSummaryItem = {
 	cartItemId: string;
@@ -23,7 +29,7 @@ export type ICartSummary = {
 	items: Array<ICartSummaryItem>;
 };
 
-export function calculateCartSummary(cartDetails: CartDetails): ICartSummary {
+export function calculateCartSummary({ cartDetails, shippingAmount = 0 }: ICalculateCartSummaryOptions): ICartSummary {
 	const summaryItems: Array<ICartSummaryItem> = [];
 
 	let itemsAmount = 0;
@@ -72,11 +78,10 @@ export function calculateCartSummary(cartDetails: CartDetails): ICartSummary {
 	}
 
 	const subtotalAmount = itemsAmount + orderBumpAmount;
-	const taxableAmount = subtotalAmount - discountAmount;
 
-	const taxAmount = Math.round(taxableAmount * cartDetails.market.taxRate);
+	const taxAmount = Math.round((subtotalAmount - discountAmount) * cartDetails.market.taxRate);
 
-	const totalAmount = taxableAmount + taxAmount + cartDetails.market.shippingAmount;
+	const totalAmount = subtotalAmount - discountAmount + taxAmount + shippingAmount;
 
 	return {
 		itemsAmount,

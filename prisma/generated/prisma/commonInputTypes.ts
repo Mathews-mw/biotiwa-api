@@ -535,6 +535,40 @@ export type EnumPaymentTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumPaymentTypeFilter<$PrismaModel>
 }
 
+export type EnumShippingQuoteStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ShippingQuoteStatus | Prisma.EnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ShippingQuoteStatus[] | Prisma.ListEnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ShippingQuoteStatus[] | Prisma.ListEnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumShippingQuoteStatusFilter<$PrismaModel> | $Enums.ShippingQuoteStatus
+}
+
+export type EnumShippingQuoteStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ShippingQuoteStatus | Prisma.EnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ShippingQuoteStatus[] | Prisma.ListEnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ShippingQuoteStatus[] | Prisma.ListEnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumShippingQuoteStatusWithAggregatesFilter<$PrismaModel> | $Enums.ShippingQuoteStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumShippingQuoteStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumShippingQuoteStatusFilter<$PrismaModel>
+}
+
+export type EnumShippingProviderFilter<$PrismaModel = never> = {
+  equals?: $Enums.ShippingProvider | Prisma.EnumShippingProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.ShippingProvider[] | Prisma.ListEnumShippingProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ShippingProvider[] | Prisma.ListEnumShippingProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumShippingProviderFilter<$PrismaModel> | $Enums.ShippingProvider
+}
+
+export type EnumShippingProviderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ShippingProvider | Prisma.EnumShippingProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.ShippingProvider[] | Prisma.ListEnumShippingProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ShippingProvider[] | Prisma.ListEnumShippingProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumShippingProviderWithAggregatesFilter<$PrismaModel> | $Enums.ShippingProvider
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumShippingProviderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumShippingProviderFilter<$PrismaModel>
+}
+
 export type EnumStripeWebhookEventStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.StripeWebhookEventStatus | Prisma.EnumStripeWebhookEventStatusFieldRefInput<$PrismaModel>
   in?: $Enums.StripeWebhookEventStatus[] | Prisma.ListEnumStripeWebhookEventStatusFieldRefInput<$PrismaModel>
@@ -1108,6 +1142,40 @@ export type NestedEnumPaymentTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPaymentTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPaymentTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumShippingQuoteStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ShippingQuoteStatus | Prisma.EnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ShippingQuoteStatus[] | Prisma.ListEnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ShippingQuoteStatus[] | Prisma.ListEnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumShippingQuoteStatusFilter<$PrismaModel> | $Enums.ShippingQuoteStatus
+}
+
+export type NestedEnumShippingQuoteStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ShippingQuoteStatus | Prisma.EnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ShippingQuoteStatus[] | Prisma.ListEnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ShippingQuoteStatus[] | Prisma.ListEnumShippingQuoteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumShippingQuoteStatusWithAggregatesFilter<$PrismaModel> | $Enums.ShippingQuoteStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumShippingQuoteStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumShippingQuoteStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumShippingProviderFilter<$PrismaModel = never> = {
+  equals?: $Enums.ShippingProvider | Prisma.EnumShippingProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.ShippingProvider[] | Prisma.ListEnumShippingProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ShippingProvider[] | Prisma.ListEnumShippingProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumShippingProviderFilter<$PrismaModel> | $Enums.ShippingProvider
+}
+
+export type NestedEnumShippingProviderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ShippingProvider | Prisma.EnumShippingProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.ShippingProvider[] | Prisma.ListEnumShippingProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ShippingProvider[] | Prisma.ListEnumShippingProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumShippingProviderWithAggregatesFilter<$PrismaModel> | $Enums.ShippingProvider
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumShippingProviderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumShippingProviderFilter<$PrismaModel>
 }
 
 export type NestedEnumStripeWebhookEventStatusFilter<$PrismaModel = never> = {

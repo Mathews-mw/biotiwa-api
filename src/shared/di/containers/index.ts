@@ -8,11 +8,14 @@ import { BetterAuthIdentityProvider } from '@/infra/auth/better-auth-identity-pr
 import { PaymentService } from '@/services/payments/payment-service';
 import { BlingGatewayService } from '@/services/bling/bling-gateway-service';
 import { BlingAuthenticationService } from '@/services/bling/bling-authentication-service';
+import { MelhorEnvioShippingService } from '@/services/melhor-envio/melhor-envio-shipping-service';
 import { MelhorEnvioAuthenticationService } from '@/services/melhor-envio/melhor-envio-authentication-service';
 
 import { EnqueueBlingOrderSyncUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/enqueue-bling-order-sync-use-case';
 import { ProcessNextBlingOrderSyncUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/process-next-bling-order-sync-use-case';
 import { ProcessBlingOrderSyncBatchUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/process-bling-order-sync-batch-use-case';
+import { ResolveShippingRateForCheckoutUseCase } from '@/domains/main/application/modules/shipping/use-cases/resolve-shipping-rate-for-checkout-use-case';
+import { GetValidMelhorEnvioAccessTokenUseCase } from '@/domains/main/application/modules/integrations/melhor-envio/use-cases/get-valid-melhor-envio-access-token-use-case';
 
 import { PrismaUsersRepository } from '@/infra/database/repositories/users/prisma-users-repository';
 import { PrismaCartsRepository } from '@/infra/database/repositories/carts/prisma-carts-repository';
@@ -35,6 +38,7 @@ import { PrismaBlingConnectionRepository } from '@/infra/database/repositories/i
 import { PrismaStripeWebhookEventRepository } from '@/infra/database/repositories/events/stripe/prisma-stripe-webhook-event-repository';
 import { PrismaMelhorEnvioConnectionRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-connection-repository';
 import { PrismaMelhorEnvioOAuthStateRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-oauth-state-repository';
+import { PrismaShippingQuoteRepository } from '@/infra/database/repositories/shipping/prisma-shipping-quote-repository';
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -64,6 +68,7 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_CONNECTION_REPOSITORY, PrismaBlin
 registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_ORDER_SYNC_REPOSITORY, PrismaBlingOrderSyncRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_CONNECTION_REPOSITORY, PrismaMelhorEnvioConnectionRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_OAUTH_STATE_REPOSITORY, PrismaMelhorEnvioOAuthStateRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_QUOTE_REPOSITORY, PrismaShippingQuoteRepository);
 
 // Providers
 registerSingleton(DEPENDENCY_IDENTIFIERS.IDENTITY_PROVIDER, BetterAuthIdentityProvider);
@@ -73,8 +78,17 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.PAYMENT_SERVICE, PaymentService);
 registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_GATEWAY_SERVICE, BlingGatewayService);
 registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_AUTHENTICATION, BlingAuthenticationService);
 registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_AUTHENTICATION, MelhorEnvioAuthenticationService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_SERVICE, MelhorEnvioShippingService);
 
 // Use cases
 registerSingleton(DEPENDENCY_IDENTIFIERS.ENQUEUE_BLING_ORDER_SYNC_USE_CASE, EnqueueBlingOrderSyncUseCase);
 registerSingleton(DEPENDENCY_IDENTIFIERS.PROCESS_NEXT_BLING_ORDER_SYNC_USE_CASE, ProcessNextBlingOrderSyncUseCase);
 registerSingleton(DEPENDENCY_IDENTIFIERS.PROCESS_BLING_ORDER_SYNC_BATCH_USE_CASE, ProcessBlingOrderSyncBatchUseCase);
+registerSingleton(
+	DEPENDENCY_IDENTIFIERS.RESOLVE_SHIPPING_RATE_FOR_CHECKOUT_USE_CASE,
+	ResolveShippingRateForCheckoutUseCase
+);
+registerSingleton(
+	DEPENDENCY_IDENTIFIERS.GET_VALID_MELHOR_ENVIO_ACCESS_TOKEN_USE_CASE,
+	GetValidMelhorEnvioAccessTokenUseCase
+);

@@ -97,6 +97,29 @@ export class PrismaOrderRepository implements IOrderRepository {
 				});
 			}
 
+			if (input.shippingRate) {
+				await tx.orderShippingRate.create({
+					data: {
+						id: input.shippingRate.id.toString(),
+						orderId: createdOrder.id,
+						sourceQuoteId: input.shippingRate.shippingQuoteId,
+						sourceRateId: input.shippingRate.shippingQuoteRateId,
+						provider: input.shippingRate.provider,
+						serviceId: input.shippingRate.serviceId,
+						serviceName: input.shippingRate.serviceName,
+						carrierName: input.shippingRate.carrierName,
+						amount: input.shippingRate.amount,
+						currency: input.shippingRate.currency,
+						estimatedDays: input.shippingRate.estimatedDays,
+						rawPayload: input.shippingRate.rawPayload
+							? (input.shippingRate.rawPayload as Prisma.InputJsonValue)
+							: Prisma.JsonNull,
+						createdAt: input.shippingRate.createdAt,
+						updatedAt: input.shippingRate.updatedAt,
+					},
+				});
+			}
+
 			return tx.order.findUniqueOrThrow({
 				where: {
 					id: createdOrder.id,

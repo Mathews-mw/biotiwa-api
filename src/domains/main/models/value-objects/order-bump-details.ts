@@ -1,11 +1,11 @@
-import { Product } from '../entities/product';
+import { ProductDetails } from './product-details';
 import { IOrderBumpProps } from '../entities/order-bump';
 import { ValueObject } from '@/core/entities/value-object';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 
 export interface IOrderBumpDetailsProps extends IOrderBumpProps {
 	id: UniqueEntityId;
-	product: Product;
+	product: ProductDetails;
 }
 
 export class OrderBumpDetails extends ValueObject<IOrderBumpDetailsProps> {

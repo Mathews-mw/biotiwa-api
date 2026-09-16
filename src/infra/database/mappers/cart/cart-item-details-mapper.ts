@@ -1,14 +1,14 @@
-import { ProductMapper } from '../commerce/product-mapper';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
+import { CartItem as PrismaCartItem } from '@/generated/prisma/client';
 import { CartItemDetails } from '@/domains/main/models/value-objects/cart-item-details';
 import { IPrismaOfferDetails, OfferDetailsMapper } from '../commerce/offer-details-mapper';
-import { CartItem as PrismaCartItem, Product as PrismaProduct } from '@/generated/prisma/client';
+import { IPrismaProductDetails, ProductDetailsMapper } from '../commerce/product-details-mapper';
 import { IPrismaOrderBumpDetails, OrderBumpDetailsMapper } from '../commerce/order-bump-details-mapper';
 
 export type IPrismaCartItemDetails = PrismaCartItem & {
 	offer?: IPrismaOfferDetails | null;
 	orderBump?: IPrismaOrderBumpDetails | null;
-	product?: PrismaProduct | null;
+	product?: IPrismaProductDetails | null;
 };
 
 export class CartItemDetailsMapper {
@@ -25,7 +25,7 @@ export class CartItemDetailsMapper {
 			updatedAt: data.updatedAt,
 			offer: data.offer ? OfferDetailsMapper.toDomain(data.offer) : null,
 			orderBump: data.orderBump ? OrderBumpDetailsMapper.toDomain(data.orderBump) : null,
-			product: data.product ? ProductMapper.toDomain(data.product) : null,
+			product: data.product ? ProductDetailsMapper.toDomain(data.product) : null,
 		});
 	}
 }

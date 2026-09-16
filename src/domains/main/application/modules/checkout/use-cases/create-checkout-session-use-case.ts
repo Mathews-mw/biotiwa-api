@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
-import type { IOrderRepository } from '../../orders/repositories/order-repository';
 import type { ICartRepository } from '../../carts/repositories/cart-repository';
+import type { IOrderRepository } from '../../orders/repositories/order-repository';
 import type { IPaymentService } from '@/services/payments/payment-service.interface';
 import type { IPaymentRepository } from '../../payments/repositories/payment-repository';
 
@@ -16,10 +16,13 @@ import { createOrderItemsFromCart } from '../helpers/create-order-items-from-car
 import { calculateCartSummary } from '../../carts/calculators/calculate-cart-summary';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
 import { CheckoutSession } from '@/domains/main/models/value-objects/checkout-session';
+import { OrderShippingRate } from '@/domains/main/models/entities/order-shipping-rate';
 import { OrderShippingAddress } from '@/domains/main/models/entities/order-shipping-address';
+import { ResolveShippingRateForCheckoutUseCase } from '../../shipping/use-cases/resolve-shipping-rate-for-checkout-use-case';
 
 interface IRequest {
 	userId: string;
+	shippingRateId: string;
 	customer: {
 		name: string;
 		email: string;
@@ -56,7 +59,9 @@ export class CreateCheckoutSessionUseCase {
 		@inject(DEPENDENCY_IDENTIFIERS.PAYMENT_REPOSITORY)
 		private paymentsRepository: IPaymentRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.PAYMENT_SERVICE)
-		private paymentService: IPaymentService
+		private paymentService: IPaymentService,
+		@inject(DEPENDENCY_IDENTIFIERS.RESOLVE_SHIPPING_RATE_FOR_CHECKOUT_USE_CASE)
+		private resolveShippingRateForCheckoutUseCase: ResolveShippingRateForCheckoutUseCase
 	) {}
 
 	async execute(input: IRequest): Promise<Response> {
@@ -70,13 +75,34 @@ export class CreateCheckoutSessionUseCase {
 			return failure(new BadRequestError('Cart is empty', 'EMPTY_CART'));
 		}
 
-		const summary = calculateCartSummary(cart);
+		const shippingResult = await this.resolveShippingRateForCheckoutUseCase.execute({
+			userId: input.userId,
+			shippingRateId: input.shippingRateId,
+			cart,
+			destinationPostalCode: input.shippingAddress.zipCode,
+		});
+
+		if (shippingResult.isFalse()) {
+			return failure(shippingResult.value);
+		}
+
+		const { quote, rate } = shippingResult.value.shippingRate;
+
+		const summary = calculateCartSummary({ cartDetails: cart, shippingAmount: rate.amount });
 
 		if (summary.itemsAmount <= 0) {
 			return failure(new BadRequestError('Invalid checkout amount', 'INVALID_CHECKOUT_AMOUNT'));
 		}
 
 		let orderDetails = await this.orderRepository.findPendingByCartId(cart.id.toString());
+
+		// Depois que começou o pagamento, não podemos trocar frete embaixo daquela Order
+		// Ou seja, Se a Order existente foi criada usando: shipping_rate_id A e uma nova requisição chega com: shipping_rate_id B não reutilize silenciosamente a Order.
+		if (orderDetails && orderDetails.orderShippingRate?.shippingQuoteRateId !== input.shippingRateId) {
+			return failure(
+				new BadRequestError('Checkout already started with another shipping rate', 'CHECKOUT_SHIPPING_RATE_CHANGED')
+			);
+		}
 
 		if (!orderDetails) {
 			const order = Order.create({
@@ -90,7 +116,7 @@ export class CreateCheckoutSessionUseCase {
 				subtotalAmount: summary.subtotalAmount,
 				discountAmount: summary.discountAmount,
 				taxAmount: summary.taxAmount,
-				shippingAmount: summary.shippingAmount,
+				shippingAmount: rate.amount,
 				totalAmount: summary.totalAmount,
 			});
 
@@ -121,10 +147,25 @@ export class CreateCheckoutSessionUseCase {
 				countryCode: input.shippingAddress.countryCode,
 			});
 
+			const orderShippingRate = OrderShippingRate.create({
+				orderId: order.id,
+				shippingQuoteId: quote.id.toString(),
+				shippingQuoteRateId: rate.id.toString(),
+				provider: rate.provider,
+				serviceId: rate.serviceId,
+				serviceName: rate.serviceName,
+				carrierName: rate.carrierName,
+				amount: rate.amount,
+				currency: rate.currency,
+				estimatedDays: rate.estimatedDays,
+				rawPayload: rate.rawPayload,
+			});
+
 			orderDetails = await this.orderRepository.createWithItems({
 				order,
 				orderCustomer: orderCustomer,
 				shippingAddress: orderShippingAddress,
+				shippingRate: orderShippingRate,
 				items: orderItems,
 			});
 		}

@@ -8,10 +8,15 @@ import { CreateCheckoutQuoteUseCase } from '@/domains/main/application/modules/c
 export async function createCheckoutQuoteController(request: FastifyRequest, reply: FastifyReply) {
 	const session = getAuthenticatedSession(request);
 
+	//TODO: refatorar a rota, controller e use case para que sejam destinados a fornecer uma prévia dos valores do checkout;
+	// Não necessariamente precisa ter valores de cotação de frete
+	// Pode ser somente previa dos valores dos itens do carrinho
 	const service = container.resolve(CreateCheckoutQuoteUseCase);
 
 	const result = await service.execute({
 		userId: session.userId,
+		destinationPostalCode: '',
+		shippingRateId: '',
 	});
 
 	if (result.isFalse()) {

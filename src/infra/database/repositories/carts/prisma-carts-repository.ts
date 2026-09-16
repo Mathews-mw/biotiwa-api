@@ -21,17 +21,29 @@ const includesCartDetails: Prisma.CartInclude = {
 				include: {
 					items: {
 						include: {
-							product: true,
+							product: {
+								include: {
+									productShippingProfile: true,
+								},
+							},
 						},
 					},
 				},
 			},
 			orderBump: {
 				include: {
-					product: true,
+					product: {
+						include: {
+							productShippingProfile: true,
+						},
+					},
 				},
 			},
-			product: true,
+			product: {
+				include: {
+					productShippingProfile: true,
+				},
+			},
 		},
 	},
 };
@@ -192,7 +204,11 @@ export class PrismaCartsRepository implements ICartRepository {
 			include: {
 				items: {
 					include: {
-						product: true,
+						product: {
+							include: {
+								productShippingProfile: true,
+							},
+						},
 					},
 				},
 			},
@@ -212,7 +228,11 @@ export class PrismaCartsRepository implements ICartRepository {
 				isActive: true,
 			},
 			include: {
-				product: true,
+				product: {
+					include: {
+						productShippingProfile: true,
+					},
+				},
 			},
 		});
 

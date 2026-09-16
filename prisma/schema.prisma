@@ -96,6 +96,16 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum ShippingQuoteStatus {
+  ACTIVE
+  SELECTED
+  EXPIRED
+}
+
+enum ShippingProvider {
+  MELHOR_ENVIO
+}
+
 enum StripeWebhookEventStatus {
   PROCESSING
   PROCESSED
@@ -140,6 +150,7 @@ model User {
   sessions        Session[]
   carts           Cart[]
   orders          Order[]
+  shippingQuotes  ShippingQuote[]
 
   @@map("users")
 }
@@ -303,12 +314,30 @@ model Product {
   createdAt        DateTime      @default(now()) @map("created_at")
   updatedAt        DateTime?     @updatedAt @map("updated_at")
 
-  offerItems OfferItem[]
-  orderBumps OrderBump[]
-  cartItems  CartItem[]
-  orderItems OrderItem[]
+  offerItems             OfferItem[]
+  orderBumps             OrderBump[]
+  cartItems              CartItem[]
+  orderItems             OrderItem[]
+  productShippingProfile ProductShippingProfile?
 
   @@map("products")
+}
+
+model ProductShippingProfile {
+  id                  String    @id @default(cuid())
+  productId           String    @unique @map("product_id")
+  isShippable         Boolean   @default(true) @map("is_shippable")
+  weightInGrams       Int       @map("weight_in_grams")
+  widthInMillimeters  Int       @map("width_in_millimeters")
+  heightInMillimeters Int       @map("height_in_millimeters")
+  lengthInMillimeters Int       @map("length_in_millimeters")
+  insuranceAmount     Int?      @map("insurance_amount")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime? @updatedAt @map("updated_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_shipping_profiles")
 }
 
 model Offer {
@@ -380,10 +409,11 @@ model Cart {
   createdAt  DateTime   @default(now()) @map("created_at")
   updatedAt  DateTime?  @updatedAt @map("updated_at")
 
-  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  market Market     @relation(fields: [marketCode], references: [code])
-  items  CartItem[]
-  orders Order[]
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  market         Market          @relation(fields: [marketCode], references: [code])
+  items          CartItem[]
+  orders         Order[]
+  shippingQuotes ShippingQuote[]
 
   @@index([userId])
   @@index([status])
@@ -437,6 +467,7 @@ model Order {
   orderCustomer        OrderCustomer?
   orderShippingAddress OrderShippingAddress?
   blingOrderSync       BlingOrderSync?
+  orderShippingRate    OrderShippingRate?
 
   @@index([userId])
   @@index([cartId])
@@ -520,6 +551,73 @@ model Payment {
   @@index([orderId])
   @@index([status])
   @@map("payments")
+}
+
+model ShippingQuote {
+  id                    String              @id @default(cuid())
+  userId                String              @map("user_id")
+  cartId                String              @map("cart_id")
+  marketCode            MarketCode          @map("market_code")
+  destinationPostalCode String              @map("destination_postal_code")
+  cartFingerprint       String              @map("cart_fingerprint")
+  status                ShippingQuoteStatus @default(ACTIVE)
+  expiresAt             DateTime            @map("expires_at")
+  requestPayload        Json?               @map("request_payload")
+  responsePayload       Json?               @map("response_payload")
+  createdAt             DateTime            @default(now()) @map("created_at")
+  updatedAt             DateTime?           @updatedAt @map("updated_at")
+
+  user  User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cart  Cart                @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  rates ShippingQuoteRate[]
+
+  @@index([userId])
+  @@index([cartId])
+  @@index([status])
+  @@index([expiresAt])
+  @@map("shipping_quotes")
+}
+
+model ShippingQuoteRate {
+  id              String           @id @default(cuid())
+  shippingQuoteId String           @map("shipping_quote_id")
+  provider        ShippingProvider
+  serviceId       String           @map("service_id")
+  serviceName     String           @map("service_name")
+  carrierName     String?          @map("carrier_name")
+  amount          Int
+  currency        CurrencyCode
+  estimatedDays   Int?             @map("estimated_days")
+  rawPayload      Json?            @map("raw_payload")
+  createdAt       DateTime         @default(now()) @map("created_at")
+
+  shippingQuote ShippingQuote @relation(fields: [shippingQuoteId], references: [id], onDelete: Cascade)
+
+  @@index([shippingQuoteId])
+  @@index([provider])
+  @@map("shipping_quote_rates")
+}
+
+// Tabela para servir como um snapshot histórico
+model OrderShippingRate {
+  id                  String           @id @default(cuid())
+  orderId             String           @unique @map("order_id")
+  shippingQuoteId     String?          @map("shipping_quote_id")
+  shippingQuoteRateId String?          @map("shipping_quote_rate_id")
+  provider            ShippingProvider
+  serviceId           String           @map("service_id")
+  serviceName         String           @map("service_name")
+  carrierName         String?          @map("carrier_name")
+  amount              Int
+  currency            CurrencyCode
+  estimatedDays       Int?             @map("estimated_days")
+  rawPayload          Json?            @map("raw_payload")
+  createdAt           DateTime         @default(now()) @map("created_at")
+  updatedAt           DateTime?        @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_shipping_rates")
 }
 
 model StripeWebhookEvent {

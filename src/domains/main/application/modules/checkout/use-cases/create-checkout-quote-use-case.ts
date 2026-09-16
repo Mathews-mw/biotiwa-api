@@ -8,9 +8,12 @@ import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { CheckoutQuote } from '@/domains/main/models/value-objects/checkout-quote';
 import { calculateCartSummary } from '../../carts/calculators/calculate-cart-summary';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
+import { ResolveShippingRateForCheckoutUseCase } from '../../shipping/use-cases/resolve-shipping-rate-for-checkout-use-case';
 
 interface IRequest {
 	userId: string;
+	shippingRateId: string;
+	destinationPostalCode: string;
 }
 
 type Response = Outcome<
@@ -24,10 +27,12 @@ type Response = Outcome<
 export class CreateCheckoutQuoteUseCase {
 	constructor(
 		@inject(DEPENDENCY_IDENTIFIERS.CARTS_REPOSITORY)
-		private cartRepository: ICartRepository
+		private cartRepository: ICartRepository,
+		@inject(DEPENDENCY_IDENTIFIERS.RESOLVE_SHIPPING_RATE_FOR_CHECKOUT_USE_CASE)
+		private resolveShippingRateForCheckoutUseCase: ResolveShippingRateForCheckoutUseCase
 	) {}
 
-	async execute({ userId }: IRequest): Promise<Response> {
+	async execute({ userId, shippingRateId, destinationPostalCode }: IRequest): Promise<Response> {
 		const cart = await this.cartRepository.findActiveByUserId(userId);
 
 		if (!cart) {
@@ -38,9 +43,22 @@ export class CreateCheckoutQuoteUseCase {
 			return failure(new BadRequestError('Cart is empty', 'EMPTY_CART'));
 		}
 
-		const summary = calculateCartSummary(cart);
+		const shippingResult = await this.resolveShippingRateForCheckoutUseCase.execute({
+			userId,
+			shippingRateId,
+			cart,
+			destinationPostalCode,
+		});
 
-		if (summary.totalAmount <= 0) {
+		if (shippingResult.isFalse()) {
+			return failure(shippingResult.value);
+		}
+
+		const { rate } = shippingResult.value.shippingRate;
+
+		const summary = calculateCartSummary({ cartDetails: cart, shippingAmount: rate.amount });
+
+		if (summary.itemsAmount <= 0) {
 			return failure(new BadRequestError('Invalid checkout amount', 'INVALID_CHECKOUT_AMOUNT'));
 		}
 

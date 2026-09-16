@@ -1,5 +1,5 @@
-import { Product } from '../entities/product';
 import { OfferDetails } from './offer-details';
+import { ProductDetails } from './product-details';
 import { ICartItemProps } from '../entities/cart-item';
 import { OrderBumpDetails } from './order-bump-details';
 import { ValueObject } from '@/core/entities/value-object';
@@ -7,7 +7,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 
 export interface ICartItemDetailsProps extends ICartItemProps {
 	id: UniqueEntityId;
-	product?: Product | null;
+	product?: ProductDetails | null;
 	offer?: OfferDetails | null;
 	orderBump?: OrderBumpDetails | null;
 }

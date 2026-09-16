@@ -15,10 +15,11 @@ export async function createCheckoutSessionController(
 
 	const service = container.resolve(CreateCheckoutSessionUseCase);
 
-	const { customer, shipping_address } = request.body;
+	const { shipping_rate_id, customer, shipping_address } = request.body;
 
 	const result = await service.execute({
 		userId: session.userId,
+		shippingRateId: shipping_rate_id,
 		customer: {
 			name: customer.name,
 			email: customer.email,
