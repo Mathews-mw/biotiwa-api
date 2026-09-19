@@ -12,8 +12,8 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { OrderCustomer } from '@/domains/main/models/entities/order-customer';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
+import { calculateCheckoutSummary } from '../services/calculate-checkout-summary';
 import { createOrderItemsFromCart } from '../helpers/create-order-items-from-cart';
-import { calculateCartSummary } from '../../carts/calculators/calculate-cart-summary';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
 import { CheckoutSession } from '@/domains/main/models/value-objects/checkout-session';
 import { OrderShippingRate } from '@/domains/main/models/entities/order-shipping-rate';
@@ -88,7 +88,7 @@ export class CreateCheckoutSessionUseCase {
 
 		const { quote, rate } = shippingResult.value.shippingRate;
 
-		const summary = calculateCartSummary({ cartDetails: cart, shippingAmount: rate.amount });
+		const summary = calculateCheckoutSummary({ cart, shippingAmount: rate.amount });
 
 		if (summary.itemsAmount <= 0) {
 			return failure(new BadRequestError('Invalid checkout amount', 'INVALID_CHECKOUT_AMOUNT'));

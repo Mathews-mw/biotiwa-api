@@ -32,6 +32,7 @@ export const DEPENDENCY_IDENTIFIERS = {
 	BLING_AUTHENTICATION: Symbol.for('BlingAuthenticationService'),
 	MELHOR_ENVIO_AUTHENTICATION: Symbol.for('MelhorEnvioAuthenticationService'),
 	SHIPPING_SERVICE: Symbol.for('ShippingService'),
+	SHIPPING_RATE_RESOLVER: Symbol.for('ShippingRateResolver'),
 
 	// use cases
 	ENQUEUE_BLING_ORDER_SYNC_USE_CASE: Symbol.for('EnqueueBlingOrderSyncUseCase'),

@@ -2,7 +2,7 @@ import { CartDetails } from './cart-details';
 import { ValueObject } from '@/core/entities/value-object';
 import checkoutConfig from '@/domains/main/application/modules/checkout/config/checkout-config';
 
-import type { ICartSummary } from '../../application/modules/carts/calculators/calculate-cart-summary';
+import type { ICartSummary } from '../../application/modules/carts/services/calculate-cart-summary';
 
 export interface ICheckoutQuoteProps {
 	cart: CartDetails;

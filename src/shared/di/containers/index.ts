@@ -10,6 +10,7 @@ import { BlingGatewayService } from '@/services/bling/bling-gateway-service';
 import { BlingAuthenticationService } from '@/services/bling/bling-authentication-service';
 import { MelhorEnvioShippingService } from '@/services/melhor-envio/melhor-envio-shipping-service';
 import { MelhorEnvioAuthenticationService } from '@/services/melhor-envio/melhor-envio-authentication-service';
+import { ShippingRateResolver } from '@/domains/main/application/modules/shipping/services/shipping-rate-resolver';
 
 import { EnqueueBlingOrderSyncUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/enqueue-bling-order-sync-use-case';
 import { ProcessNextBlingOrderSyncUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/process-next-bling-order-sync-use-case';
@@ -79,6 +80,7 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_GATEWAY_SERVICE, BlingGatewayServ
 registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_AUTHENTICATION, BlingAuthenticationService);
 registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_AUTHENTICATION, MelhorEnvioAuthenticationService);
 registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_SERVICE, MelhorEnvioShippingService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_RATE_RESOLVER, ShippingRateResolver);
 
 // Use cases
 registerSingleton(DEPENDENCY_IDENTIFIERS.ENQUEUE_BLING_ORDER_SYNC_USE_CASE, EnqueueBlingOrderSyncUseCase);

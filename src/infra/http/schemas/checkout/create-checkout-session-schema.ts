@@ -34,7 +34,8 @@ export type ICreateCheckoutSessionResponse = z.infer<typeof responseSchema>;
 export const createCheckoutSessionSchema: FastifySchema = {
 	tags: ['Checkout'],
 	summary: 'Create checkout session from active cart',
-	description: 'Create checkout session from active cart',
+	description:
+		'Validates the current cart, shipping rate and customer information, persists the order and payment state, and creates the external payment checkout session.',
 	security: [{ cookieAuth: [] }],
 	body: bodySchema,
 	response: {

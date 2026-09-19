@@ -5,7 +5,6 @@ import { CartDetails } from '@/domains/main/models/value-objects/cart-details';
 
 export interface ICalculateCartSummaryOptions {
 	cartDetails: CartDetails;
-	shippingAmount?: number;
 }
 
 export type ICartSummaryItem = {
@@ -29,7 +28,7 @@ export type ICartSummary = {
 	items: Array<ICartSummaryItem>;
 };
 
-export function calculateCartSummary({ cartDetails, shippingAmount = 0 }: ICalculateCartSummaryOptions): ICartSummary {
+export function calculateCartSummary({ cartDetails }: ICalculateCartSummaryOptions): ICartSummary {
 	const summaryItems: Array<ICartSummaryItem> = [];
 
 	let itemsAmount = 0;
@@ -81,7 +80,7 @@ export function calculateCartSummary({ cartDetails, shippingAmount = 0 }: ICalcu
 
 	const taxAmount = Math.round((subtotalAmount - discountAmount) * cartDetails.market.taxRate);
 
-	const totalAmount = subtotalAmount - discountAmount + taxAmount + shippingAmount;
+	const totalAmount = subtotalAmount - discountAmount + taxAmount;
 
 	return {
 		itemsAmount,

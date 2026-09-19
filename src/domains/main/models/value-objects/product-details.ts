@@ -15,6 +15,10 @@ export class ProductDetails extends ValueObject<IProductDetailsProps> {
 		return this.props.product;
 	}
 
+	get id() {
+		return this.props.id;
+	}
+
 	get sku() {
 		return this.props.sku;
 	}

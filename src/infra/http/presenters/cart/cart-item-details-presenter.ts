@@ -14,7 +14,7 @@ export class CartItemDetailsPresenter {
 			order_bump_id: data.orderBumpId ? data.orderBumpId.toString() : null,
 			type: data.type,
 			quantity: data.quantity,
-			product: data.product ? ProductPresenter.toHTTP(data.product) : null,
+			product: data.product ? ProductPresenter.toHTTP(data.product.product) : null,
 			offer: data.offer ? OfferDetailsPresenter.toHTTP(data.offer) : null,
 			order_bump: data.orderBump ? OderBumpDetailsPresenter.toHTTP(data.orderBump) : null,
 			created_at: data.createdAt,
