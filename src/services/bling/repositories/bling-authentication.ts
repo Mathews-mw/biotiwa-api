@@ -16,8 +16,8 @@ export type IBlingTokenResponse = {
 	refresh_token: string;
 };
 
-export interface IBlingAuthentication {
-	exchangeCodeForTokens(code: string): Promise<IBlingTokenResponse>;
-	refreshAccessToken(refreshToken: string): Promise<IBlingTokenResponse>;
-	getValidBlingAccessToken(input: IValidationAccessTokenRequest): Promise<IValidationAccessTokenResponse>;
+export abstract class IBlingAuthentication {
+	abstract exchangeCodeForTokens(code: string): Promise<IBlingTokenResponse>;
+	abstract refreshAccessToken(refreshToken: string): Promise<IBlingTokenResponse>;
+	abstract getValidBlingAccessToken(input: IValidationAccessTokenRequest): Promise<IValidationAccessTokenResponse>;
 }
