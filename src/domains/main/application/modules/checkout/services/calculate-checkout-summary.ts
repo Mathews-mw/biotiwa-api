@@ -2,7 +2,7 @@ import type { ICurrencyCode } from '@/core/types/currency-code';
 import type { CartDetails } from '@/domains/main/models/value-objects/cart-details';
 import type { IShippingProvider } from '@/domains/main/models/entities/shipping-quote-rate';
 
-import { calculateCartSummary } from '../../carts/services/calculate-cart-summary';
+import { calculateCartSummary, type ICartSummaryItem } from '../../carts/services/calculate-cart-summary';
 
 export interface ICheckoutShippingSummary {
 	rateId: string;
@@ -37,6 +37,7 @@ export interface ICheckoutSummary {
 	 */
 	totalAmount: number;
 	currency: ICurrencyCode;
+	items: Array<ICartSummaryItem>;
 }
 
 interface ICalculateCheckoutSummaryInput {
@@ -62,5 +63,6 @@ export function calculateCheckoutSummary({
 		shippingAmount,
 		totalAmount,
 		currency: cartSummary.currency,
+		items: cartSummary.items,
 	};
 }

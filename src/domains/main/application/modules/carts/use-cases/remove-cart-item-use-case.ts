@@ -42,7 +42,7 @@ export class RemoveCartItemUseCase {
 
 		return success({
 			cart,
-			summary: calculateCartSummary(cart),
+			summary: calculateCartSummary({ cartDetails: cart }),
 		});
 	}
 }

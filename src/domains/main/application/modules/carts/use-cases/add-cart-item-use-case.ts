@@ -83,7 +83,7 @@ export class AddCartItemUseCase {
 
 		return success({
 			cart: updatedCart,
-			summary: calculateCartSummary(updatedCart),
+			summary: calculateCartSummary({ cartDetails: updatedCart }),
 		});
 	}
 

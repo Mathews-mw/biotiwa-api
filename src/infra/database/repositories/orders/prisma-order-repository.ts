@@ -102,8 +102,8 @@ export class PrismaOrderRepository implements IOrderRepository {
 					data: {
 						id: input.shippingRate.id.toString(),
 						orderId: createdOrder.id,
-						sourceQuoteId: input.shippingRate.shippingQuoteId,
-						sourceRateId: input.shippingRate.shippingQuoteRateId,
+						shippingQuoteId: input.shippingRate.shippingQuoteId,
+						shippingQuoteRateId: input.shippingRate.shippingQuoteRateId,
 						provider: input.shippingRate.provider,
 						serviceId: input.shippingRate.serviceId,
 						serviceName: input.shippingRate.serviceName,

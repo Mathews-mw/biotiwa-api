@@ -50,7 +50,7 @@ export class UpdateCartItemQuantityUseCase {
 
 		return success({
 			cart,
-			summary: calculateCartSummary(cart),
+			summary: calculateCartSummary({ cartDetails: cart }),
 		});
 	}
 }
