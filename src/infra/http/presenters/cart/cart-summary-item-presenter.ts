@@ -1,5 +1,5 @@
 import type { ICartSummaryItemResponseSchema } from '../../schemas/cart/cart-summary-item-schema';
-import type { ICartSummaryItem } from '@/domains/main/application/modules/carts/calculators/calculate-cart-summary';
+import type { ICartSummaryItem } from '@/domains/main/application/modules/carts/services/calculate-cart-summary';
 
 export class CartSummaryItemPresenter {
 	static toHTTP(data: ICartSummaryItem): ICartSummaryItemResponseSchema {

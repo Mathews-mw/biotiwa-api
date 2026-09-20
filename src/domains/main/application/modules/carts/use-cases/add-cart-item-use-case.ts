@@ -8,7 +8,7 @@ import { CartItem } from '@/domains/main/models/entities/cart-item';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { CartDetails } from '@/domains/main/models/value-objects/cart-details';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
-import { calculateCartSummary, type ICartSummary } from '../calculators/calculate-cart-summary';
+import { calculateCartSummary, type ICartSummary } from '../services/calculate-cart-summary';
 
 import type { IMarketCode } from '@/core/types/market-code';
 import type { ICartRepository } from '../repositories/cart-repository';
@@ -83,7 +83,7 @@ export class AddCartItemUseCase {
 
 		return success({
 			cart: updatedCart,
-			summary: calculateCartSummary(updatedCart),
+			summary: calculateCartSummary({ cartDetails: updatedCart }),
 		});
 	}
 

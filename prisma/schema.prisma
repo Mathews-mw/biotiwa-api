@@ -60,7 +60,7 @@ enum CartItemType {
 enum OrderStatus {
   PENDING_PAYMENT
   PAID
-  PROCESSING
+  PROCESSING // Esse status será após o pagamento, quando o pedido estiver sendo processado para envio
   SHIPPED
   DELIVERED
   CANCELED
@@ -79,6 +79,14 @@ enum PaymentProvider {
   STRIPE
 }
 
+enum PaymentType {
+  BEING_DEFINED
+  PIX // Apenas BR
+  CREDIT
+  DEBIT
+  PAYMENT_SLIPS_OR_SIMILAR // Boleto
+}
+
 enum PaymentStatus {
   PENDING
   PAID
@@ -88,10 +96,41 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum ShippingQuoteStatus {
+  ACTIVE
+  SELECTED
+  EXPIRED
+}
+
+enum ShippingProvider {
+  MELHOR_ENVIO
+}
+
 enum StripeWebhookEventStatus {
   PROCESSING
   PROCESSED
   FAILED
+}
+
+enum BlingConnectionStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+  ERROR
+}
+
+enum BlingOrderSyncStatus {
+  PENDING
+  PROCESSING
+  SYNCED
+  FAILED
+}
+
+enum MelhorEnvioConnectionStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+  ERROR
 }
 
 model User {
@@ -111,6 +150,7 @@ model User {
   sessions        Session[]
   carts           Cart[]
   orders          Order[]
+  shippingQuotes  ShippingQuote[]
 
   @@map("users")
 }
@@ -274,12 +314,30 @@ model Product {
   createdAt        DateTime      @default(now()) @map("created_at")
   updatedAt        DateTime?     @updatedAt @map("updated_at")
 
-  offerItems OfferItem[]
-  orderBumps OrderBump[]
-  cartItems  CartItem[]
-  orderItems OrderItem[]
+  offerItems             OfferItem[]
+  orderBumps             OrderBump[]
+  cartItems              CartItem[]
+  orderItems             OrderItem[]
+  productShippingProfile ProductShippingProfile?
 
   @@map("products")
+}
+
+model ProductShippingProfile {
+  id                  String    @id @default(cuid())
+  productId           String    @unique @map("product_id")
+  isShippable         Boolean   @default(true) @map("is_shippable")
+  weightInGrams       Int       @map("weight_in_grams")
+  widthInMillimeters  Int       @map("width_in_millimeters")
+  heightInMillimeters Int       @map("height_in_millimeters")
+  lengthInMillimeters Int       @map("length_in_millimeters")
+  insuranceAmount     Int?      @map("insurance_amount")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime? @updatedAt @map("updated_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_shipping_profiles")
 }
 
 model Offer {
@@ -351,10 +409,11 @@ model Cart {
   createdAt  DateTime   @default(now()) @map("created_at")
   updatedAt  DateTime?  @updatedAt @map("updated_at")
 
-  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  market Market     @relation(fields: [marketCode], references: [code])
-  items  CartItem[]
-  orders Order[]
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  market         Market          @relation(fields: [marketCode], references: [code])
+  items          CartItem[]
+  orders         Order[]
+  shippingQuotes ShippingQuote[]
 
   @@index([userId])
   @@index([status])
@@ -401,10 +460,14 @@ model Order {
   createdAt       DateTime     @default(now()) @map("created_at")
   updatedAt       DateTime?    @updatedAt @map("updated_at")
 
-  user     User        @relation(fields: [userId], references: [id])
-  cart     Cart?       @relation(fields: [cartId], references: [id])
-  items    OrderItem[]
-  payments Payment[]
+  user                 User                  @relation(fields: [userId], references: [id])
+  cart                 Cart?                 @relation(fields: [cartId], references: [id])
+  items                OrderItem[]
+  payments             Payment[]
+  orderCustomer        OrderCustomer?
+  orderShippingAddress OrderShippingAddress?
+  blingOrderSync       BlingOrderSync?
+  orderShippingRate    OrderShippingRate?
 
   @@index([userId])
   @@index([cartId])
@@ -433,6 +496,41 @@ model OrderItem {
   @@map("order_items")
 }
 
+model OrderCustomer {
+  id        String    @id @default(cuid())
+  orderId   String    @unique @map("order_id")
+  name      String
+  email     String
+  phone     String?
+  document  String? // CPF/CNPJ, se coletar
+  birthDate String?   @map("birth_date")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_customers")
+}
+
+model OrderShippingAddress {
+  id          String    @id @default(cuid())
+  orderId     String    @unique @map("order_id")
+  zipCode     String    @map("zip_code")
+  street      String
+  number      String?
+  complement  String?
+  district    String?
+  city        String
+  state       String
+  countryCode String    @map("country_code")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_shipping_addresses")
+}
+
 model Payment {
   id                    String          @id @default(cuid())
   orderId               String          @map("order_id")
@@ -440,6 +538,7 @@ model Payment {
   status                PaymentStatus   @default(PENDING)
   amount                Int
   currency              CurrencyCode
+  paymentType           PaymentType     @default(BEING_DEFINED) @map("payment_type")
   providerSessionId     String?         @unique @map("provider_session_id")
   providerPaymentIntent String?         @map("provider_payment_intent")
   providerCheckoutUrl   String?         @map("provider_checkout_url")
@@ -452,6 +551,73 @@ model Payment {
   @@index([orderId])
   @@index([status])
   @@map("payments")
+}
+
+model ShippingQuote {
+  id                    String              @id @default(cuid())
+  userId                String              @map("user_id")
+  cartId                String              @map("cart_id")
+  marketCode            MarketCode          @map("market_code")
+  destinationPostalCode String              @map("destination_postal_code")
+  cartFingerprint       String              @map("cart_fingerprint")
+  status                ShippingQuoteStatus @default(ACTIVE)
+  expiresAt             DateTime            @map("expires_at")
+  requestPayload        Json?               @map("request_payload")
+  responsePayload       Json?               @map("response_payload")
+  createdAt             DateTime            @default(now()) @map("created_at")
+  updatedAt             DateTime?           @updatedAt @map("updated_at")
+
+  user  User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cart  Cart                @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  rates ShippingQuoteRate[]
+
+  @@index([userId])
+  @@index([cartId])
+  @@index([status])
+  @@index([expiresAt])
+  @@map("shipping_quotes")
+}
+
+model ShippingQuoteRate {
+  id              String           @id @default(cuid())
+  shippingQuoteId String           @map("shipping_quote_id")
+  provider        ShippingProvider
+  serviceId       String           @map("service_id")
+  serviceName     String           @map("service_name")
+  carrierName     String?          @map("carrier_name")
+  amount          Int
+  currency        CurrencyCode
+  estimatedDays   Int?             @map("estimated_days")
+  rawPayload      Json?            @map("raw_payload")
+  createdAt       DateTime         @default(now()) @map("created_at")
+
+  shippingQuote ShippingQuote @relation(fields: [shippingQuoteId], references: [id], onDelete: Cascade)
+
+  @@index([shippingQuoteId])
+  @@index([provider])
+  @@map("shipping_quote_rates")
+}
+
+// Tabela para servir como um snapshot histórico
+model OrderShippingRate {
+  id                  String           @id @default(cuid())
+  orderId             String           @unique @map("order_id")
+  shippingQuoteId     String?          @map("shipping_quote_id")
+  shippingQuoteRateId String?          @map("shipping_quote_rate_id")
+  provider            ShippingProvider
+  serviceId           String           @map("service_id")
+  serviceName         String           @map("service_name")
+  carrierName         String?          @map("carrier_name")
+  amount              Int
+  currency            CurrencyCode
+  estimatedDays       Int?             @map("estimated_days")
+  rawPayload          Json?            @map("raw_payload")
+  createdAt           DateTime         @default(now()) @map("created_at")
+  updatedAt           DateTime?        @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_shipping_rates")
 }
 
 model StripeWebhookEvent {
@@ -468,4 +634,62 @@ model StripeWebhookEvent {
   @@index([eventType])
   @@index([providerObjectId])
   @@map("stripe_webhook_events")
+}
+
+model BlingConnection {
+  id           String                @id @default(cuid())
+  status       BlingConnectionStatus @default(ACTIVE)
+  accessToken  String                @map("access_token") // REMINDER: criptografar esse dado em produção antes de salvar no banco
+  refreshToken String                @map("refresh_token") // REMINDER: criptografar esse dado em produção antes de salvar no banco
+  expiresAt    DateTime              @map("expires_at")
+  scope        String?
+  createdAt    DateTime              @default(now()) @map("created_at")
+  updatedAt    DateTime?             @updatedAt @map("updated_at")
+
+  @@map("bling_connections")
+}
+
+model BlingOrderSync {
+  id               String               @id @default(cuid())
+  orderId          String               @unique @map("order_id")
+  status           BlingOrderSyncStatus @default(PENDING)
+  blingContactId   String?              @map("bling_contact_id")
+  blingOrderId     String?              @map("bling_order_id")
+  attempts         Int                  @default(0)
+  lastErrorMessage String?              @map("last_error_message")
+  requestPayload   Json?                @map("request_payload")
+  responsePayload  Json?                @map("response_payload")
+  syncedAt         DateTime?            @map("synced_at")
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime?            @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@map("bling_order_syncs")
+}
+
+model MelhorEnvioConnection {
+  id           String                      @id @default(cuid())
+  status       MelhorEnvioConnectionStatus @default(ACTIVE)
+  accessToken  String                      @map("access_token")
+  refreshToken String                      @map("refresh_token")
+  expiresAt    DateTime                    @map("expires_at")
+  scope        String?
+  createdAt    DateTime                    @default(now()) @map("created_at")
+  updatedAt    DateTime?                   @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@map("melhor_envio_connections")
+}
+
+model MelhorEnvioOAuthState {
+  id        String    @id @default(cuid())
+  state     String    @unique
+  usedAt    DateTime? @map("used_at")
+  expiresAt DateTime  @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([expiresAt])
+  @@map("melhor_envio_oauth_states")
 }

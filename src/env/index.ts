@@ -5,15 +5,36 @@ export const envSchema = z.object({
 	NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 	PORT: z.coerce.number().default(3734),
 	HOST: z.string().default('0.0.0.0'),
+
 	DATABASE_URL: z.string(),
 	DIRECT_URL: z.string(),
+
 	BETTER_AUTH_SECRET: z.string(),
 	BETTER_AUTH_URL: z.url(),
 	WEB_APP_URL: z.url(),
+
 	STRIPE_SECRET_KEY: z.string(),
 	STRIPE_WEBHOOK_SECRET: z.string(),
-	STRIPE_SUCCESS_URL: z.string(),
-	STRIPE_CANCEL_URL: z.string(),
+	STRIPE_SUCCESS_URL: z.url(),
+	STRIPE_CANCEL_URL: z.url(),
+
+	BLING_CLIENT_ID: z.string(),
+	BLING_CLIENT_SECRET: z.string(),
+	BLING_REDIRECT_URL: z.url(),
+	BLING_API_BASE_URL: z.url(),
+	BLING_AUTHORIZE_URL: z.url(),
+	BLING_TOKEN_URL: z.url(),
+
+	MELHOR_ENVIO_API_BASE_URL: z.string(),
+	MELHOR_ENVIO_CLIENT_ID: z.string(),
+	MELHOR_ENVIO_CLIENT_SECRET: z.string(),
+	MELHOR_ENVIO_REDIRECT_URL: z.url(),
+	MELHOR_ENVIO_SCOPES: z.string(),
+	MELHOR_ENVIO_USER_AGENT: z.string(),
+	SHIPPING_ORIGIN_POSTAL_CODE: z.string().min(8),
+	MELHOR_ENVIO_SERVICES: z.string().optional(),
+
+	CRON_SECRET: z.string(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

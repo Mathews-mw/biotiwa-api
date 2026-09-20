@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { container } from 'tsyringe';
 
 import { DEPENDENCY_IDENTIFIERS, DependencyIdentifiers } from './dependency-identifiers';
@@ -5,10 +6,21 @@ import { DEPENDENCY_IDENTIFIERS, DependencyIdentifiers } from './dependency-iden
 import { BetterAuthIdentityProvider } from '@/infra/auth/better-auth-identity-provider';
 
 import { PaymentService } from '@/services/payments/payment-service';
+import { BlingGatewayService } from '@/services/bling/bling-gateway-service';
+import { BlingAuthenticationService } from '@/services/bling/bling-authentication-service';
+import { MelhorEnvioShippingService } from '@/services/melhor-envio/melhor-envio-shipping-service';
+import { MelhorEnvioAuthenticationService } from '@/services/melhor-envio/melhor-envio-authentication-service';
+import { ShippingRateResolver } from '@/domains/main/application/modules/shipping/services/shipping-rate-resolver';
+
+import { EnqueueBlingOrderSyncUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/enqueue-bling-order-sync-use-case';
+import { ProcessNextBlingOrderSyncUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/process-next-bling-order-sync-use-case';
+import { ProcessBlingOrderSyncBatchUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/process-bling-order-sync-batch-use-case';
+import { ResolveShippingRateForCheckoutUseCase } from '@/domains/main/application/modules/shipping/use-cases/resolve-shipping-rate-for-checkout-use-case';
+import { GetValidMelhorEnvioAccessTokenUseCase } from '@/domains/main/application/modules/integrations/melhor-envio/use-cases/get-valid-melhor-envio-access-token-use-case';
 
 import { PrismaUsersRepository } from '@/infra/database/repositories/users/prisma-users-repository';
 import { PrismaCartsRepository } from '@/infra/database/repositories/carts/prisma-carts-repository';
-import { PrismaOrderRepository } from '@/infra/database/repositories/checkout/prisma-order-repository';
+import { PrismaOrderRepository } from '@/infra/database/repositories/orders/prisma-order-repository';
 import { PrismaOffersRepository } from '@/infra/database/repositories/commerce/prisma-offers-repository';
 import { PrismaAccountsRepository } from '@/infra/database/repositories/users/prisma-accounts-repository';
 import { PrismaSessionsRepository } from '@/infra/database/repositories/users/prisma-sessions-repository';
@@ -22,9 +34,16 @@ import { PrismaUserConsentsRepository } from '@/infra/database/repositories/user
 import { PrismaCustomerProfilesRepository } from '@/infra/database/repositories/users/prisma-customer-profiles-repository';
 import { PrismaConsentTermsRepository } from '@/infra/database/repositories/consent-terms/prisma-consent-terms-repository';
 import { PrismaCommerceCatalogRepository } from '@/infra/database/repositories/commerce/prisma-commerce-catalog-repository';
+import { PrismaBlingOrderSyncRepository } from '@/infra/database/repositories/integrations/bling/prisma-bling-order-sync-repository';
+import { PrismaBlingConnectionRepository } from '@/infra/database/repositories/integrations/bling/prisma-bling-connection-repository';
 import { PrismaStripeWebhookEventRepository } from '@/infra/database/repositories/events/stripe/prisma-stripe-webhook-event-repository';
+import { PrismaMelhorEnvioConnectionRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-connection-repository';
+import { PrismaMelhorEnvioOAuthStateRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-oauth-state-repository';
+import { PrismaShippingQuoteRepository } from '@/infra/database/repositories/shipping/prisma-shipping-quote-repository';
 
-function registerSingleton<T>(identifier: DependencyIdentifiers, implementation: new (...args: unknown[]) => T) {
+type Constructor<T> = new (...args: any[]) => T;
+
+function registerSingleton<T>(identifier: DependencyIdentifiers, implementation: Constructor<T>) {
 	container.registerSingleton(identifier, implementation);
 }
 
@@ -46,9 +65,32 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.CARTS_REPOSITORY, PrismaCartsRepository
 registerSingleton(DEPENDENCY_IDENTIFIERS.ORDER_REPOSITORY, PrismaOrderRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.PAYMENT_REPOSITORY, PrismaPaymentRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.STRIPE_WEBHOOK_EVENT_REPOSITORY, PrismaStripeWebhookEventRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_CONNECTION_REPOSITORY, PrismaBlingConnectionRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_ORDER_SYNC_REPOSITORY, PrismaBlingOrderSyncRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_CONNECTION_REPOSITORY, PrismaMelhorEnvioConnectionRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_OAUTH_STATE_REPOSITORY, PrismaMelhorEnvioOAuthStateRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_QUOTE_REPOSITORY, PrismaShippingQuoteRepository);
 
 // Providers
 registerSingleton(DEPENDENCY_IDENTIFIERS.IDENTITY_PROVIDER, BetterAuthIdentityProvider);
 
 // Services
 registerSingleton(DEPENDENCY_IDENTIFIERS.PAYMENT_SERVICE, PaymentService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_GATEWAY_SERVICE, BlingGatewayService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_AUTHENTICATION, BlingAuthenticationService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_AUTHENTICATION, MelhorEnvioAuthenticationService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_SERVICE, MelhorEnvioShippingService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_RATE_RESOLVER, ShippingRateResolver);
+
+// Use cases
+registerSingleton(DEPENDENCY_IDENTIFIERS.ENQUEUE_BLING_ORDER_SYNC_USE_CASE, EnqueueBlingOrderSyncUseCase);
+registerSingleton(DEPENDENCY_IDENTIFIERS.PROCESS_NEXT_BLING_ORDER_SYNC_USE_CASE, ProcessNextBlingOrderSyncUseCase);
+registerSingleton(DEPENDENCY_IDENTIFIERS.PROCESS_BLING_ORDER_SYNC_BATCH_USE_CASE, ProcessBlingOrderSyncBatchUseCase);
+registerSingleton(
+	DEPENDENCY_IDENTIFIERS.RESOLVE_SHIPPING_RATE_FOR_CHECKOUT_USE_CASE,
+	ResolveShippingRateForCheckoutUseCase
+);
+registerSingleton(
+	DEPENDENCY_IDENTIFIERS.GET_VALID_MELHOR_ENVIO_ACCESS_TOKEN_USE_CASE,
+	GetValidMelhorEnvioAccessTokenUseCase
+);

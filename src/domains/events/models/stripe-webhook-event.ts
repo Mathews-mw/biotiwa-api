@@ -2,6 +2,7 @@ import z from 'zod';
 
 import { Entity } from '@/core/entities/entity';
 import { Optional } from '@/core/types/optional';
+import paymentConfig from '@/config/payment-config';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 
 export const stripeWebhookEventStatusSchema = z.enum(['PROCESSING', 'PROCESSED', 'FAILED']);
@@ -84,21 +85,28 @@ export class StripeWebhookEvent extends Entity<IStripeWebhookEventProps> {
 
 	get isProcessed() {
 		return this.props.status === 'PROCESSED';
-		this._touch();
 	}
 
 	get isProcessing() {
 		return this.props.status === 'PROCESSING';
-		this._touch();
 	}
 
 	get hasFailed() {
 		return this.props.status === 'FAILED';
-		this._touch();
 	}
 
 	private _touch() {
-		this._touch();
+		this.props.updatedAt = new Date();
+	}
+
+	isProcessingStale(staleAfterInMs = paymentConfig.STRIPE_WEBHOOK_PROCESSING_STALE_AFTER_IN_MS) {
+		if (!this.isProcessing) {
+			return false;
+		}
+
+		const referenceDate = this.updatedAt ?? this.createdAt;
+
+		return referenceDate.getTime() <= Date.now() - staleAfterInMs;
 	}
 
 	markAsProcessing() {

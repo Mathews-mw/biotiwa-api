@@ -17,12 +17,29 @@ export const DEPENDENCY_IDENTIFIERS = {
 	ORDER_REPOSITORY: Symbol('OrderRepository'),
 	PAYMENT_REPOSITORY: Symbol('PaymentRepository'),
 	STRIPE_WEBHOOK_EVENT_REPOSITORY: Symbol('StripeWebhookEventRepository'),
+	BLING_CONNECTION_REPOSITORY: Symbol('BlingConnectionRepository'),
+	BLING_ORDER_SYNC_REPOSITORY: Symbol('BlingOrderSyncRepository'),
+	MELHOR_ENVIO_CONNECTION_REPOSITORY: Symbol('MelhorEnvioConnectionRepository'),
+	MELHOR_ENVIO_OAUTH_STATE_REPOSITORY: Symbol('MelhorEnvioOAuthStateRepository'),
+	SHIPPING_QUOTE_REPOSITORY: Symbol('ShippingQuoteRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),
 
 	// Services
 	PAYMENT_SERVICE: Symbol('PaymentService'),
+	BLING_GATEWAY_SERVICE: Symbol('BlingGatewayService'),
+	BLING_AUTHENTICATION: Symbol.for('BlingAuthenticationService'),
+	MELHOR_ENVIO_AUTHENTICATION: Symbol.for('MelhorEnvioAuthenticationService'),
+	SHIPPING_SERVICE: Symbol.for('ShippingService'),
+	SHIPPING_RATE_RESOLVER: Symbol.for('ShippingRateResolver'),
+
+	// use cases
+	ENQUEUE_BLING_ORDER_SYNC_USE_CASE: Symbol.for('EnqueueBlingOrderSyncUseCase'),
+	PROCESS_NEXT_BLING_ORDER_SYNC_USE_CASE: Symbol.for('ProcessNextBlingOrderSyncUseCase'),
+	PROCESS_BLING_ORDER_SYNC_BATCH_USE_CASE: Symbol.for('ProcessBlingOrderSyncBatchUseCase'),
+	GET_VALID_MELHOR_ENVIO_ACCESS_TOKEN_USE_CASE: Symbol.for('GetValidMelhorEnvioAccessTokenUseCase'),
+	RESOLVE_SHIPPING_RATE_FOR_CHECKOUT_USE_CASE: Symbol.for('ResolveShippingRateForCheckoutUseCase'),
 } as const;
 
 export type DependencyIdentifiers = (typeof DEPENDENCY_IDENTIFIERS)[keyof typeof DEPENDENCY_IDENTIFIERS];

@@ -2,11 +2,17 @@ import type { IOrderProps, Order } from '../entities/order';
 
 import { OrderItemDetails } from './order-item-details';
 import { ValueObject } from '@/core/entities/value-object';
+import { OrderCustomer } from '../entities/order-customer';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
+import { OrderShippingRate } from '../entities/order-shipping-rate';
+import { OrderShippingAddress } from '../entities/order-shipping-address';
 
 export interface IOrderDetailsProps extends IOrderProps {
 	order: Order;
 	id: UniqueEntityId;
+	orderCustomer?: OrderCustomer | null;
+	orderShippingAddress?: OrderShippingAddress | null;
+	orderShippingRate?: OrderShippingRate | null;
 	items: Array<OrderItemDetails>;
 }
 
@@ -77,6 +83,18 @@ export class OrderDetails extends ValueObject<IOrderDetailsProps> {
 
 	get updatedAt() {
 		return this.props.updatedAt;
+	}
+
+	get orderCustomer() {
+		return this.props.orderCustomer;
+	}
+
+	get orderShippingAddress() {
+		return this.props.orderShippingAddress;
+	}
+
+	get orderShippingRate() {
+		return this.props.orderShippingRate;
 	}
 
 	get items() {

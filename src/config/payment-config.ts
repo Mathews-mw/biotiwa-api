@@ -1,0 +1,4 @@
+export default {
+	PROCESSING_STALE_AFTER_IN_MS: 1000 * 60 * 5, // 5 minutes
+	STRIPE_WEBHOOK_PROCESSING_STALE_AFTER_IN_MS: 1000 * 60 * 5, // 5 minutes
+};

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { orderDetailsSchema } from './order-details-schema';
+import { orderDetailsSchema } from '../order/order-details-schema';
 import { currencyCodeSchema } from '@/core/types/currency-code';
 import { orderStatusSchema } from '@/domains/main/models/entities/order';
 import { paymentProviderSchema, paymentStatusSchema } from '@/domains/main/models/entities/payment';

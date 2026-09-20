@@ -35,6 +35,11 @@ app.register(fastifySwagger, {
 					in: 'cookie',
 					name: 'better-auth.session_token',
 				},
+				apiKeyAuth: {
+					type: 'apiKey',
+					name: 'x-cron-secret', // Name of the header, query, or cookie
+					in: 'header', // Can be 'header', 'query', or 'cookie'
+				},
 			},
 		},
 	},

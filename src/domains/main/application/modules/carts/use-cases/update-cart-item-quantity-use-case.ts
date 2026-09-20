@@ -5,7 +5,7 @@ import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { CartDetails } from '@/domains/main/models/value-objects/cart-details';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
-import { calculateCartSummary, type ICartSummary } from '../calculators/calculate-cart-summary';
+import { calculateCartSummary, type ICartSummary } from '../services/calculate-cart-summary';
 
 import type { ICartRepository } from '../repositories/cart-repository';
 
@@ -50,7 +50,7 @@ export class UpdateCartItemQuantityUseCase {
 
 		return success({
 			cart,
-			summary: calculateCartSummary(cart),
+			summary: calculateCartSummary({ cartDetails: cart }),
 		});
 	}
 }

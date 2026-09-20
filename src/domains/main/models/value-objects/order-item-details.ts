@@ -1,4 +1,4 @@
-import { Product } from '../entities/product';
+import { ProductDetails } from './product-details';
 import { ValueObject } from '@/core/entities/value-object';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { IOrderItemProps, OrderItem } from '../entities/order-item';
@@ -6,7 +6,7 @@ import { IOrderItemProps, OrderItem } from '../entities/order-item';
 export interface IOrderItemDetailsProps extends IOrderItemProps {
 	orderItem: OrderItem;
 	id: UniqueEntityId;
-	product?: Product | null;
+	product?: ProductDetails | null;
 }
 
 export class OrderItemDetails extends ValueObject<IOrderItemDetailsProps> {

@@ -1,10 +1,30 @@
 import z from 'zod';
 import { FastifySchema } from 'fastify/types/schema';
 
+import { countryCodeSchema } from '@/core/types/country-code';
 import { checkoutSessionSchema } from './checkout-session-schema';
 import { getBadRequestErrorSchema, getNotFoundErrorSchema } from '../erros/erros-schemas';
 
-const bodySchema = z.null();
+const bodySchema = z.object({
+	shipping_rate_id: z.string().min(1),
+	customer: z.object({
+		name: z.string().min(1),
+		email: z.email(),
+		phone: z.string().optional().nullable(),
+		document: z.string().optional().nullable(),
+		birth_date: z.string().optional().nullable(),
+	}),
+	shipping_address: z.object({
+		zip_code: z.string().min(1),
+		street: z.string().min(1),
+		number: z.string().optional().nullable(),
+		complement: z.string().optional().nullable(),
+		district: z.string().optional().nullable(),
+		city: z.string().min(1),
+		state: z.string().min(1),
+		country_code: countryCodeSchema,
+	}),
+});
 
 const responseSchema = checkoutSessionSchema;
 
@@ -14,7 +34,8 @@ export type ICreateCheckoutSessionResponse = z.infer<typeof responseSchema>;
 export const createCheckoutSessionSchema: FastifySchema = {
 	tags: ['Checkout'],
 	summary: 'Create checkout session from active cart',
-	description: 'Create checkout session from active cart',
+	description:
+		'Validates the current cart, shipping rate and customer information, persists the order and payment state, and creates the external payment checkout session.',
 	security: [{ cookieAuth: [] }],
 	body: bodySchema,
 	response: {

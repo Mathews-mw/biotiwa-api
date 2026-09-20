@@ -58,6 +58,20 @@ export class PrismaPaymentRepository implements IPaymentRepository {
 		return PaymentMapper.toDomain(payment);
 	}
 
+	async findByOrderId(orderId: string): Promise<Payment | null> {
+		const payment = await prisma.payment.findFirst({
+			where: {
+				orderId: orderId.toString(),
+			},
+		});
+
+		if (!payment) {
+			return null;
+		}
+
+		return PaymentMapper.toDomain(payment);
+	}
+
 	async findPendingByOrderId(orderId: string) {
 		const payment = await prisma.payment.findFirst({
 			where: {

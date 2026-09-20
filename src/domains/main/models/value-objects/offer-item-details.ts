@@ -1,11 +1,11 @@
-import { Product } from '../entities/product';
+import { ProductDetails } from './product-details';
 import { IOfferItemProps } from '../entities/offer-item';
 import { ValueObject } from '@/core/entities/value-object';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 
 export interface IOfferItemDetailsProps extends IOfferItemProps {
 	id: UniqueEntityId;
-	product: Product;
+	product: ProductDetails;
 }
 
 export class OfferItemDetails extends ValueObject<IOfferItemDetailsProps> {

@@ -1,5 +1,5 @@
-import { ICursorResponse, IPaginationResponse } from '@/core/interfaces/paginating-interfaces';
-import { PaginationSchemaResponse, CursorSchemaResponse } from '../schemas/pagination-schema';
+import type { CursorSchemaResponse, PaginationSchemaResponse } from '../schemas/pagination-schema';
+import type { ICursorResponse, IPaginationResponse } from '@/core/interfaces/paginating-interfaces';
 
 export class PaginationPresenter {
 	static paginationModeToHTTP(pagination: IPaginationResponse): PaginationSchemaResponse {

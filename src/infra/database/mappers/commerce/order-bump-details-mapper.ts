@@ -1,10 +1,10 @@
-import { ProductMapper } from './product-mapper';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
+import { OrderBump as PrismaOrderBump } from '@/generated/prisma/client';
+import { IPrismaProductDetails, ProductDetailsMapper } from './product-details-mapper';
 import { OrderBumpDetails } from '@/domains/main/models/value-objects/order-bump-details';
-import { OrderBump as PrismaOrderBump, Product as PrismaProduct } from '@/generated/prisma/client';
 
 export type IPrismaOrderBumpDetails = PrismaOrderBump & {
-	product: PrismaProduct;
+	product: IPrismaProductDetails;
 };
 
 export class OrderBumpDetailsMapper {
@@ -21,7 +21,7 @@ export class OrderBumpDetailsMapper {
 			sortOrder: data.sortOrder,
 			createdAt: data.createdAt,
 			updatedAt: data.updatedAt,
-			product: ProductMapper.toDomain(data.product),
+			product: ProductDetailsMapper.toDomain(data.product),
 		});
 	}
 }

@@ -68,6 +68,11 @@ export type Market = Prisma.MarketModel
  */
 export type Product = Prisma.ProductModel
 /**
+ * Model ProductShippingProfile
+ * 
+ */
+export type ProductShippingProfile = Prisma.ProductShippingProfileModel
+/**
  * Model Offer
  * 
  */
@@ -103,12 +108,57 @@ export type Order = Prisma.OrderModel
  */
 export type OrderItem = Prisma.OrderItemModel
 /**
+ * Model OrderCustomer
+ * 
+ */
+export type OrderCustomer = Prisma.OrderCustomerModel
+/**
+ * Model OrderShippingAddress
+ * 
+ */
+export type OrderShippingAddress = Prisma.OrderShippingAddressModel
+/**
  * Model Payment
  * 
  */
 export type Payment = Prisma.PaymentModel
 /**
+ * Model ShippingQuote
+ * 
+ */
+export type ShippingQuote = Prisma.ShippingQuoteModel
+/**
+ * Model ShippingQuoteRate
+ * 
+ */
+export type ShippingQuoteRate = Prisma.ShippingQuoteRateModel
+/**
+ * Model OrderShippingRate
+ * 
+ */
+export type OrderShippingRate = Prisma.OrderShippingRateModel
+/**
  * Model StripeWebhookEvent
  * 
  */
 export type StripeWebhookEvent = Prisma.StripeWebhookEventModel
+/**
+ * Model BlingConnection
+ * 
+ */
+export type BlingConnection = Prisma.BlingConnectionModel
+/**
+ * Model BlingOrderSync
+ * 
+ */
+export type BlingOrderSync = Prisma.BlingOrderSyncModel
+/**
+ * Model MelhorEnvioConnection
+ * 
+ */
+export type MelhorEnvioConnection = Prisma.MelhorEnvioConnectionModel
+/**
+ * Model MelhorEnvioOAuthState
+ * 
+ */
+export type MelhorEnvioOAuthState = Prisma.MelhorEnvioOAuthStateModel

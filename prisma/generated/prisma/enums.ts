@@ -117,6 +117,17 @@ export const PaymentProvider = {
 export type PaymentProvider = (typeof PaymentProvider)[keyof typeof PaymentProvider]
 
 
+export const PaymentType = {
+  BEING_DEFINED: 'BEING_DEFINED',
+  PIX: 'PIX',
+  CREDIT: 'CREDIT',
+  DEBIT: 'DEBIT',
+  PAYMENT_SLIPS_OR_SIMILAR: 'PAYMENT_SLIPS_OR_SIMILAR'
+} as const
+
+export type PaymentType = (typeof PaymentType)[keyof typeof PaymentType]
+
+
 export const PaymentStatus = {
   PENDING: 'PENDING',
   PAID: 'PAID',
@@ -129,6 +140,22 @@ export const PaymentStatus = {
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
+export const ShippingQuoteStatus = {
+  ACTIVE: 'ACTIVE',
+  SELECTED: 'SELECTED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type ShippingQuoteStatus = (typeof ShippingQuoteStatus)[keyof typeof ShippingQuoteStatus]
+
+
+export const ShippingProvider = {
+  MELHOR_ENVIO: 'MELHOR_ENVIO'
+} as const
+
+export type ShippingProvider = (typeof ShippingProvider)[keyof typeof ShippingProvider]
+
+
 export const StripeWebhookEventStatus = {
   PROCESSING: 'PROCESSING',
   PROCESSED: 'PROCESSED',
@@ -136,3 +163,33 @@ export const StripeWebhookEventStatus = {
 } as const
 
 export type StripeWebhookEventStatus = (typeof StripeWebhookEventStatus)[keyof typeof StripeWebhookEventStatus]
+
+
+export const BlingConnectionStatus = {
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  REVOKED: 'REVOKED',
+  ERROR: 'ERROR'
+} as const
+
+export type BlingConnectionStatus = (typeof BlingConnectionStatus)[keyof typeof BlingConnectionStatus]
+
+
+export const BlingOrderSyncStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SYNCED: 'SYNCED',
+  FAILED: 'FAILED'
+} as const
+
+export type BlingOrderSyncStatus = (typeof BlingOrderSyncStatus)[keyof typeof BlingOrderSyncStatus]
+
+
+export const MelhorEnvioConnectionStatus = {
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  REVOKED: 'REVOKED',
+  ERROR: 'ERROR'
+} as const
+
+export type MelhorEnvioConnectionStatus = (typeof MelhorEnvioConnectionStatus)[keyof typeof MelhorEnvioConnectionStatus]

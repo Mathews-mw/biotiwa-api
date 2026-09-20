@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import { success, type Outcome } from '@/core/outcome';
 import { CartDetails } from '@/domains/main/models/value-objects/cart-details';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
-import { calculateCartSummary, type ICartSummary } from '../calculators/calculate-cart-summary';
+import { calculateCartSummary, type ICartSummary } from '../services/calculate-cart-summary';
 
 import type { ICartRepository } from '../repositories/cart-repository';
 
@@ -36,11 +36,11 @@ export class GetActiveCartUseCase {
 			});
 		}
 
-		const summary = calculateCartSummary(cart);
+		const cartSummary = calculateCartSummary({ cartDetails: cart });
 
 		return success({
 			cart,
-			summary,
+			summary: cartSummary,
 		});
 	}
 }

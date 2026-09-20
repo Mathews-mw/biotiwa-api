@@ -1,10 +1,10 @@
-import { ProductMapper } from './product-mapper';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
+import { OfferItem as PrismaOfferItem } from '@/generated/prisma/client';
+import { IPrismaProductDetails, ProductDetailsMapper } from './product-details-mapper';
 import { OfferItemDetails } from '@/domains/main/models/value-objects/offer-item-details';
-import { Product as PrismaProduct, OfferItem as PrismaOfferItem } from '@/generated/prisma/client';
 
 export type IPrismaOfferItemDetails = PrismaOfferItem & {
-	product: PrismaProduct;
+	product: IPrismaProductDetails;
 };
 
 export class OfferItemDetailsMapper {
@@ -15,7 +15,7 @@ export class OfferItemDetailsMapper {
 			productId: new UniqueEntityId(data.productId),
 			quantity: data.quantity,
 			createdAt: data.createdAt,
-			product: ProductMapper.toDomain(data.product),
+			product: ProductDetailsMapper.toDomain(data.product),
 		});
 	}
 }
