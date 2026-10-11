@@ -7,6 +7,7 @@ import { getBadRequestErrorSchema, getNotFoundErrorSchema } from '../erros/erros
 
 const bodySchema = z.object({
 	shipping_rate_id: z.string().min(1),
+	promotion_code: z.string().trim().nullable().optional(),
 	customer: z.object({
 		name: z.string().min(1),
 		email: z.email(),

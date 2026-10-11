@@ -120,7 +120,7 @@ async function handleCheckoutSessionPaid(event: Stripe.Event) {
 	const orderId = session.metadata?.order_id;
 
 	if (!orderId) {
-		console.warn('Stripe session without order_id metadata', {
+		console.log('Stripe session without order_id metadata', {
 			eventId: event.id,
 			sessionId: session.id,
 		});

@@ -23,7 +23,20 @@ export const calculateCheckoutSummarySchema: FastifySchema = {
 	body: bodySchema,
 	response: {
 		200: responseSchema,
-		400: getBadRequestErrorSchema.startWith('BAD_REQUEST_ERROR').include('EMPTY_CART').getErrorSchema(),
-		404: getNotFoundErrorSchema.startWith('RESOURCE_NOT_FOUND_ERROR').include('ACTIVE_CART_NOT_FOUND').getErrorSchema(),
+		400: getBadRequestErrorSchema
+			.startWith('BAD_REQUEST_ERROR')
+			.include('EMPTY_CART')
+			.include('PROMOTION_CODE_INACTIVE')
+			.include('PROMOTION_CODE_MARKET_MISMATCH')
+			.include('PROMOTION_CODE_NOT_STARTED')
+			.include('PROMOTION_CODE_EXPIRED')
+			.include('PROMOTION_CODE_USAGE_LIMIT_REACHED')
+			.include('PROMOTION_CODE_CUSTOMER_USAGE_LIMIT_REACHED')
+			.getErrorSchema(),
+		404: getNotFoundErrorSchema
+			.startWith('RESOURCE_NOT_FOUND_ERROR')
+			.include('ACTIVE_CART_NOT_FOUND')
+			.include('PROMOTION_CODE_NOT_FOUND')
+			.getErrorSchema(),
 	},
 };

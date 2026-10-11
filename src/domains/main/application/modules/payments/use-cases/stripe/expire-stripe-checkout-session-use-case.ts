@@ -6,6 +6,7 @@ import type { IOrderRepository } from '../../../orders/repositories/order-reposi
 import { failure, success, type Outcome } from '@/core/outcome';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
+import { IPromotionRedemptionRepository } from '../../../promotions/repositories/promotion-redemption-repository';
 
 interface IRequest {
 	orderId: string;
@@ -21,7 +22,9 @@ export class ExpireStripeCheckoutSessionUseCase {
 		@inject(DEPENDENCY_IDENTIFIERS.PAYMENT_REPOSITORY)
 		private paymentRepository: IPaymentRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.ORDER_REPOSITORY)
-		private orderRepository: IOrderRepository
+		private orderRepository: IOrderRepository,
+		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_REPOSITORY)
+		private promotionRedemptionRepository: IPromotionRedemptionRepository
 	) {}
 
 	async execute(input: IRequest): Promise<Response> {
@@ -46,6 +49,14 @@ export class ExpireStripeCheckoutSessionUseCase {
 		orderDetails.order.markAsExpired();
 
 		await this.orderRepository.save(orderDetails.order);
+
+		const redemption = await this.promotionRedemptionRepository.findByOrderId(orderDetails.id.toString());
+
+		if (redemption) {
+			redemption.markAsExpired();
+
+			await this.promotionRedemptionRepository.save(redemption);
+		}
 
 		return success(null);
 	}

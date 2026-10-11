@@ -43,6 +43,7 @@ import { PrismaPromotionRedemptionRepository } from '@/infra/database/repositori
 import { PrismaStripeWebhookEventRepository } from '@/infra/database/repositories/events/stripe/prisma-stripe-webhook-event-repository';
 import { PrismaMelhorEnvioConnectionRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-connection-repository';
 import { PrismaMelhorEnvioOAuthStateRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-oauth-state-repository';
+import { PromotionResolverService } from '@/domains/main/application/modules/promotions/services/promotion-resolver-service';
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -87,6 +88,7 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_AUTHENTICATION, MelhorEnvi
 registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_SERVICE, MelhorEnvioShippingService);
 registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_RATE_RESOLVER, ShippingRateResolver);
 registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_CODE_RESOLVER, PromotionCodeResolver);
+registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_RESOLVER_SERVICE, PromotionResolverService);
 
 // Use cases
 registerSingleton(DEPENDENCY_IDENTIFIERS.ENQUEUE_BLING_ORDER_SYNC_USE_CASE, EnqueueBlingOrderSyncUseCase);

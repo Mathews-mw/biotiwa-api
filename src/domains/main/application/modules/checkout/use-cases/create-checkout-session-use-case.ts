@@ -5,24 +5,31 @@ import type { IOrderRepository } from '../../orders/repositories/order-repositor
 import type { IPaymentService } from '@/services/payments/payment-service.interface';
 import type { IPaymentRepository } from '../../payments/repositories/payment-repository';
 
+import promotionConfig from '@/config/promotion-config';
 import { Order } from '@/domains/main/models/entities/order';
 import { failure, success, type Outcome } from '@/core/outcome';
 import { Payment } from '@/domains/main/models/entities/payment';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { BadRequestError } from '@/core/errors/bad-request-errors';
+import { PromotionCode } from '@/domains/main/models/entities/promotion-code';
 import { OrderCustomer } from '@/domains/main/models/entities/order-customer';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
+import { OrderPromotion } from '@/domains/main/models/entities/order-promotion';
 import { calculateCheckoutSummary } from '../services/calculate-checkout-summary';
+import { calculateCartSummary } from '../../carts/services/calculate-cart-summary';
 import { createOrderItemsFromCart } from '../helpers/create-order-items-from-cart';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
 import { CheckoutSession } from '@/domains/main/models/value-objects/checkout-session';
 import { OrderShippingRate } from '@/domains/main/models/entities/order-shipping-rate';
+import { PromotionRedemption } from '@/domains/main/models/entities/promotion-redemption';
 import { OrderShippingAddress } from '@/domains/main/models/entities/order-shipping-address';
+import { PromotionResolverService } from '../../promotions/services/promotion-resolver-service';
 import { ResolveShippingRateForCheckoutUseCase } from '../../shipping/use-cases/resolve-shipping-rate-for-checkout-use-case';
 
 interface IRequest {
 	userId: string;
 	shippingRateId: string;
+	promotionCode?: string | null;
 	customer: {
 		name: string;
 		email: string;
@@ -61,7 +68,9 @@ export class CreateCheckoutSessionUseCase {
 		@inject(DEPENDENCY_IDENTIFIERS.PAYMENT_SERVICE)
 		private paymentService: IPaymentService,
 		@inject(DEPENDENCY_IDENTIFIERS.RESOLVE_SHIPPING_RATE_FOR_CHECKOUT_USE_CASE)
-		private resolveShippingRateForCheckoutUseCase: ResolveShippingRateForCheckoutUseCase
+		private resolveShippingRateForCheckoutUseCase: ResolveShippingRateForCheckoutUseCase,
+		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_RESOLVER_SERVICE)
+		private promotionResolverService: PromotionResolverService
 	) {}
 
 	async execute(input: IRequest): Promise<Response> {
@@ -75,36 +84,94 @@ export class CreateCheckoutSessionUseCase {
 			return failure(new BadRequestError('Cart is empty', 'EMPTY_CART'));
 		}
 
-		const shippingResult = await this.resolveShippingRateForCheckoutUseCase.execute({
-			userId: input.userId,
-			shippingRateId: input.shippingRateId,
-			cart,
-			destinationPostalCode: input.shippingAddress.zipCode,
-		});
-
-		if (shippingResult.isFalse()) {
-			return failure(shippingResult.value);
-		}
-
-		const { quote, rate } = shippingResult.value.shippingRate;
-
-		const summary = calculateCheckoutSummary({ cart, shippingAmount: rate.amount });
-
-		if (summary.itemsAmount <= 0) {
-			return failure(new BadRequestError('Invalid checkout amount', 'INVALID_CHECKOUT_AMOUNT'));
-		}
-
+		// Primeiro verificamos se este carrinho já possui um checkout iniciado;
+		// Se possuir, a Order existente é o snapshot definitivo daquele checkout.
 		let orderDetails = await this.orderRepository.findPendingByCartId(cart.id.toString());
 
-		// Depois que começou o pagamento, não podemos trocar frete embaixo daquela Order
-		// Ou seja, Se a Order existente foi criada usando: shipping_rate_id A e uma nova requisição chega com: shipping_rate_id B não reutilize silenciosamente a Order.
-		if (orderDetails && orderDetails.orderShippingRate?.shippingQuoteRateId !== input.shippingRateId) {
-			return failure(
-				new BadRequestError('Checkout already started with another shipping rate', 'CHECKOUT_SHIPPING_RATE_CHANGED')
-			);
+		/*
+		 * ========================================
+		 * EXISTING ORDER
+		 * ========================================
+		 */
+
+		if (orderDetails) {
+			// Depois que uma Order existe, não permitimos trocar o frete
+			if (orderDetails.orderShippingRate?.shippingQuoteRateId !== input.shippingRateId) {
+				return failure(
+					new BadRequestError('Checkout already started with another shipping rate', 'CHECKOUT_SHIPPING_RATE_CHANGED')
+				);
+			}
+
+			// Também não podemos trocar promoção depois da criação da Order
+			const requestedPromotionCode = input.promotionCode ? PromotionCode.normalizeCode(input.promotionCode) : null;
+
+			const existingPromotionCode = orderDetails.orderPromotion?.code ?? null;
+
+			if (existingPromotionCode !== requestedPromotionCode) {
+				return failure(
+					new BadRequestError('Checkout already started with another promotion code', 'CHECKOUT_PROMOTION_CHANGED')
+				);
+			}
 		}
 
+		/*
+		 * ========================================
+		 * NEW ORDER
+		 * ========================================
+		 */
+
 		if (!orderDetails) {
+			const cartSummary = calculateCartSummary({
+				cartDetails: cart,
+			});
+
+			let resolvedPromotion: PromotionCode | null = null;
+			let promotionDiscountAmount = 0;
+
+			// Resolve e calcula promoção somente na criação de uma nova Order
+			if (input.promotionCode) {
+				const result = await this.promotionResolverService.resolve({
+					userId: input.userId,
+					promotionCode: input.promotionCode,
+					marketCode: cart.marketCode,
+					cartSummary,
+				});
+
+				if (result.isFalse()) {
+					return failure(result.value);
+				}
+
+				const { resolvedPromotionCode, promotionDiscountAmount: resolvedDiscountAmount } = result.value;
+
+				resolvedPromotion = resolvedPromotionCode;
+				promotionDiscountAmount = resolvedDiscountAmount;
+			}
+
+			// O frete também é validado definitivamente aqui
+			const shippingResult = await this.resolveShippingRateForCheckoutUseCase.execute({
+				userId: input.userId,
+				shippingRateId: input.shippingRateId,
+				cart,
+				destinationPostalCode: input.shippingAddress.zipCode,
+			});
+
+			if (shippingResult.isFalse()) {
+				return failure(shippingResult.value);
+			}
+
+			const { quote, rate } = shippingResult.value.shippingRate;
+
+			// Fonte definitiva dos valores do pedido
+			const summary = calculateCheckoutSummary({
+				cart,
+				shippingAmount: rate.amount,
+				promotionDiscountAmount,
+			});
+
+			if (summary.totalAmount <= 0) {
+				return failure(new BadRequestError('Invalid checkout amount', 'INVALID_CHECKOUT_AMOUNT'));
+			}
+
 			const order = Order.create({
 				userId: new UniqueEntityId(input.userId),
 				cartId: cart.id,
@@ -120,7 +187,10 @@ export class CreateCheckoutSessionUseCase {
 				totalAmount: summary.totalAmount,
 			});
 
-			const orderItems = createOrderItemsFromCart({ orderId: order.id.toString(), cart });
+			const orderItems = createOrderItemsFromCart({
+				orderId: order.id.toString(),
+				cart,
+			});
 
 			if (orderItems.length === 0) {
 				return failure(new BadRequestError('Cart has no checkout items', 'EMPTY_CART'));
@@ -161,17 +231,51 @@ export class CreateCheckoutSessionUseCase {
 				rawPayload: rate.rawPayload,
 			});
 
+			// Snapshot histórico da promoção
+			const orderPromotion = resolvedPromotion
+				? OrderPromotion.create({
+						orderId: order.id,
+						sourcePromotionCodeId: resolvedPromotion.id,
+						code: resolvedPromotion.code,
+						type: resolvedPromotion.type,
+						discountType: resolvedPromotion.discountType,
+						discountValue: resolvedPromotion.discountValue,
+						discountAmount: promotionDiscountAmount,
+					})
+				: null;
+
+			// Reserva de uso da promoção. Ainda NÃO é um uso confirmado: isso acontecerá somente quando o webhook confirmar pagamento
+			const promotionRedemption = resolvedPromotion
+				? PromotionRedemption.create({
+						promotionCodeId: resolvedPromotion.id,
+						userId: new UniqueEntityId(input.userId),
+						orderId: order.id,
+						status: 'PENDING',
+						discountAmount: promotionDiscountAmount,
+						reservedUntil: new Date(Date.now() + promotionConfig.PROMOTION_RESERVATION_TTL_MS),
+					})
+				: null;
+
 			orderDetails = await this.orderRepository.createWithItems({
 				order,
-				orderCustomer: orderCustomer,
+				orderCustomer,
 				shippingAddress: orderShippingAddress,
 				shippingRate: orderShippingRate,
+				orderPromotion,
+				promotionRedemption,
 				items: orderItems,
 			});
 		}
 
+		/*
+		 * ========================================
+		 * PAYMENT
+		 * ========================================
+		 */
+
 		const existingPendingPayment = await this.paymentsRepository.findPendingByOrderId(orderDetails.id.toString());
 
+		// Idempotência: se já criamos a Stripe Session, apenas devolvemos a mesma
 		if (existingPendingPayment?.providerCheckoutUrl) {
 			return success({
 				checkoutSession: CheckoutSession.create({
@@ -222,6 +326,8 @@ export class CreateCheckoutSessionUseCase {
 			providerPaymentIntent: gatewaySession.providerPaymentIntent,
 		});
 
-		return success({ checkoutSession });
+		return success({
+			checkoutSession,
+		});
 	}
 }

@@ -2,6 +2,8 @@ import { prisma } from '../../prisma';
 import { Prisma } from '@/generated/prisma/client';
 import { Order } from '@/domains/main/models/entities/order';
 import { OrderDetailsMapper } from '../../mappers/order/order-details-mapper';
+import { OrderPromotionMapper } from '../../mappers/promotion/order-promotion-mapper';
+import { PromotionRedemptionMapper } from '../../mappers/promotion/promotion-redemption-mapper';
 
 import type {
 	ICreateOrderWithItemsInput,
@@ -117,6 +119,18 @@ export class PrismaOrderRepository implements IOrderRepository {
 						createdAt: input.shippingRate.createdAt,
 						updatedAt: input.shippingRate.updatedAt,
 					},
+				});
+			}
+
+			if (input.orderPromotion) {
+				await tx.orderPromotion.create({
+					data: OrderPromotionMapper.toPrisma(input.orderPromotion),
+				});
+			}
+
+			if (input.promotionRedemption) {
+				await tx.promotionRedemption.create({
+					data: PromotionRedemptionMapper.toPrisma(input.promotionRedemption),
 				});
 			}
 

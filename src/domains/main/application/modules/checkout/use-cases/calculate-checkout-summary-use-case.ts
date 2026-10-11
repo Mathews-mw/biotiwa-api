@@ -8,8 +8,7 @@ import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { calculateCartSummary } from '../../carts/services/calculate-cart-summary';
 import { ShippingRateResolver } from '../../shipping/services/shipping-rate-resolver';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
-import { PromotionCodeResolver } from '../../promotions/services/promotion-code-resolver';
-import { calculatePromotionDiscount } from '../../promotions/services/calculate-promotion-discount';
+import { PromotionResolverService } from '../../promotions/services/promotion-resolver-service';
 import {
 	calculateCheckoutSummary,
 	type ICheckoutPromotionSummary,
@@ -36,8 +35,8 @@ export class CalculateCheckoutSummaryUseCase {
 		private cartRepository: ICartRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.SHIPPING_RATE_RESOLVER)
 		private shippingRateResolver: ShippingRateResolver,
-		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_CODE_RESOLVER)
-		private promotionCodeResolver: PromotionCodeResolver
+		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_RESOLVER_SERVICE)
+		private promotionResolverService: PromotionResolverService
 	) {}
 
 	async execute({ userId, shippingRateId, promotionCode }: IRequest): Promise<Response> {
@@ -57,27 +56,21 @@ export class CalculateCheckoutSummaryUseCase {
 		let promotion: ICheckoutPromotionSummary | null = null;
 
 		if (promotionCode) {
-			const promotionResult = await this.promotionCodeResolver.resolve({
-				code: promotionCode,
+			const result = await this.promotionResolverService.resolve({
 				userId,
+				promotionCode,
 				marketCode: cart.marketCode,
+				cartSummary,
 			});
 
-			if (promotionResult.isFalse()) {
-				return failure(promotionResult.value);
+			if (result.isFalse()) {
+				return failure(result.value);
 			}
 
-			const resolvedPromotionCode = promotionResult.value.promotionCode;
+			const { checkoutPromotionSummary, promotionDiscountAmount: promotionDiscountAmountResult } = result.value;
 
-			const promotionCalculation = calculatePromotionDiscount({ cartSummary, promotionCode: resolvedPromotionCode });
-
-			promotionDiscountAmount = promotionCalculation.discountAmount;
-
-			promotion = {
-				code: resolvedPromotionCode.code,
-				type: resolvedPromotionCode.type,
-				discountAmount: promotionDiscountAmount,
-			};
+			promotionDiscountAmount = promotionDiscountAmountResult;
+			promotion = checkoutPromotionSummary;
 		}
 
 		// Caso em que usuário não selecionou nenhuma opção de entrega

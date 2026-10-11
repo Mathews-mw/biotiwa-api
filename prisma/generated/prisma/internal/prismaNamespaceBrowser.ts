@@ -70,6 +70,7 @@ export const ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   OrderCustomer: 'OrderCustomer',
+  OrderPromotion: 'OrderPromotion',
   OrderShippingAddress: 'OrderShippingAddress',
   Payment: 'Payment',
   ShippingQuote: 'ShippingQuote',
@@ -398,6 +399,22 @@ export const OrderCustomerScalarFieldEnum = {
 export type OrderCustomerScalarFieldEnum = (typeof OrderCustomerScalarFieldEnum)[keyof typeof OrderCustomerScalarFieldEnum]
 
 
+export const OrderPromotionScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  sourcePromotionCodeId: 'sourcePromotionCodeId',
+  code: 'code',
+  type: 'type',
+  discountType: 'discountType',
+  discountValue: 'discountValue',
+  discountAmount: 'discountAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderPromotionScalarFieldEnum = (typeof OrderPromotionScalarFieldEnum)[keyof typeof OrderPromotionScalarFieldEnum]
+
+
 export const OrderShippingAddressScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
@@ -588,8 +605,11 @@ export const PromotionRedemptionScalarFieldEnum = {
   orderId: 'orderId',
   status: 'status',
   discountAmount: 'discountAmount',
-  createdAt: 'createdAt',
+  reservedUntil: 'reservedUntil',
   redeemedAt: 'redeemedAt',
+  canceledAt: 'canceledAt',
+  expiredAt: 'expiredAt',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 

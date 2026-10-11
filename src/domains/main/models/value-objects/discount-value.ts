@@ -24,7 +24,7 @@ export class PromotionDiscount extends ValueObject<PromotionDiscountProps> {
 			return Math.min(this.value, baseAmount);
 		}
 
-		const discount = Math.round(baseAmount * (this.value / 10_000));
+		const discount = Math.round(baseAmount * (this.value / 100));
 
 		return Math.min(discount, baseAmount);
 	}

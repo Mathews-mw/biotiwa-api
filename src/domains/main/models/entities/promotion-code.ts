@@ -26,7 +26,7 @@ export interface PromotionCodeProps {
 	startsAt: Date | null;
 	expiresAt: Date | null;
 	createdAt: Date;
-	updatedAt: Date;
+	updatedAt?: Date | null;
 }
 
 export class PromotionCode extends Entity<PromotionCodeProps> {

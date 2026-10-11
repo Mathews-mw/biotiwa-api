@@ -3,6 +3,7 @@ import type { IOrderProps, Order } from '../entities/order';
 import { OrderItemDetails } from './order-item-details';
 import { ValueObject } from '@/core/entities/value-object';
 import { OrderCustomer } from '../entities/order-customer';
+import { OrderPromotion } from '../entities/order-promotion';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { OrderShippingRate } from '../entities/order-shipping-rate';
 import { OrderShippingAddress } from '../entities/order-shipping-address';
@@ -13,6 +14,7 @@ export interface IOrderDetailsProps extends IOrderProps {
 	orderCustomer?: OrderCustomer | null;
 	orderShippingAddress?: OrderShippingAddress | null;
 	orderShippingRate?: OrderShippingRate | null;
+	orderPromotion: OrderPromotion | null;
 	items: Array<OrderItemDetails>;
 }
 
@@ -95,6 +97,10 @@ export class OrderDetails extends ValueObject<IOrderDetailsProps> {
 
 	get orderShippingRate() {
 		return this.props.orderShippingRate;
+	}
+
+	get orderPromotion() {
+		return this.props.orderPromotion;
 	}
 
 	get items() {

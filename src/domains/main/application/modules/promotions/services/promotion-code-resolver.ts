@@ -72,7 +72,6 @@ export class PromotionCodeResolver {
 		if (promotionCode.maxUsesPerCustomer !== null) {
 			const usages = await this.promotionRedemptionRepository.countReservedUsagesByCustomer({
 				promotionCodeId: promotionCode.id.toString(),
-
 				userId,
 			});
 

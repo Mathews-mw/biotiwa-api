@@ -24,8 +24,8 @@ export interface ICheckoutSummary {
 	itemsAmount: number;
 	orderBumpAmount: number;
 	subtotalAmount: number;
-	discountAmount: number;
-	promotionDiscountAmount: number;
+	discountAmount: number; // Todos os descontos aplicados
+	promotionDiscountAmount: number; // Somente desconto do cupom
 	taxAmount: number;
 	/**
 	 * valor atual do carrinho

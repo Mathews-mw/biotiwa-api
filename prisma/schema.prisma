@@ -491,6 +491,8 @@ model Order {
   orderShippingAddress OrderShippingAddress?
   blingOrderSync       BlingOrderSync?
   orderShippingRate    OrderShippingRate?
+  orderPromotion       OrderPromotion?
+  promotionRedemptions PromotionRedemption[]
 
   @@index([userId])
   @@index([cartId])
@@ -533,6 +535,23 @@ model OrderCustomer {
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("order_customers")
+}
+
+model OrderPromotion {
+  id                    String                @id @default(cuid())
+  orderId               String                @unique @map("order_id")
+  sourcePromotionCodeId String?               @map("source_promotion_code_id") // Referência histórica
+  code                  String
+  type                  PromotionCodeType
+  discountType          PromotionDiscountType @map("discount_type")
+  discountValue         Int                   @map("discount_value")
+  discountAmount        Int                   @map("discount_amount")
+  createdAt             DateTime              @default(now()) @map("created_at")
+  updatedAt             DateTime?             @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_promotions")
 }
 
 model OrderShippingAddress {
@@ -730,7 +749,7 @@ model PromotionCode {
   startsAt           DateTime?             @map("starts_at")
   expiresAt          DateTime?             @map("expires_at")
   createdAt          DateTime              @default(now()) @map("created_at")
-  updatedAt          DateTime              @updatedAt @map("updated_at")
+  updatedAt          DateTime?             @updatedAt @map("updated_at")
 
   redemptions PromotionRedemption[]
 
@@ -744,18 +763,21 @@ model PromotionRedemption {
   id              String                    @id @default(cuid())
   promotionCodeId String                    @map("promotion_code_id")
   userId          String                    @map("user_id")
-  orderId         String?                   @map("order_id")
+  orderId         String                    @unique @map("order_id")
   status          PromotionRedemptionStatus @default(PENDING)
   discountAmount  Int                       @map("discount_amount")
-  createdAt       DateTime                  @default(now()) @map("created_at")
+  reservedUntil   DateTime?                 @map("reserved_until")
   redeemedAt      DateTime?                 @map("redeemed_at")
-  updatedAt       DateTime                  @updatedAt @map("updated_at")
+  canceledAt      DateTime?                 @map("canceled_at")
+  expiredAt       DateTime?                 @map("expired_at")
+  createdAt       DateTime                  @default(now()) @map("created_at")
+  updatedAt       DateTime?                 @updatedAt @map("updated_at")
 
   promotionCode PromotionCode @relation(fields: [promotionCodeId], references: [id])
   user          User          @relation(fields: [userId], references: [id])
+  order         Order         @relation(fields: [orderId], references: [id])
 
   @@index([promotionCodeId, status])
   @@index([promotionCodeId, userId, status])
-  @@index([orderId])
   @@map("promotion_redemptions")
 }

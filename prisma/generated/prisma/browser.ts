@@ -113,6 +113,11 @@ export type OrderItem = Prisma.OrderItemModel
  */
 export type OrderCustomer = Prisma.OrderCustomerModel
 /**
+ * Model OrderPromotion
+ * 
+ */
+export type OrderPromotion = Prisma.OrderPromotionModel
+/**
  * Model OrderShippingAddress
  * 
  */

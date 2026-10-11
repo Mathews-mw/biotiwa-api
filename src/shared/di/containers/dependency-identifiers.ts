@@ -36,6 +36,7 @@ export const DEPENDENCY_IDENTIFIERS = {
 	SHIPPING_SERVICE: Symbol.for('ShippingService'),
 	SHIPPING_RATE_RESOLVER: Symbol.for('ShippingRateResolver'),
 	PROMOTION_CODE_RESOLVER: Symbol.for('PromotionCodeResolver'),
+	PROMOTION_RESOLVER_SERVICE: Symbol.for('PromotionResolverService'),
 
 	// use cases
 	ENQUEUE_BLING_ORDER_SYNC_USE_CASE: Symbol.for('EnqueueBlingOrderSyncUseCase'),
