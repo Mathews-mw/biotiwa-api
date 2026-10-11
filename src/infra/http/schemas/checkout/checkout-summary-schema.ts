@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
 import { currencyCodeSchema } from '@/core/types/currency-code';
-import { checkoutShippingSummarySchema } from './checkout-shipping-summary-schema';
 import { cartSummaryItemSchema } from '../cart/cart-summary-item-schema';
+import { checkoutShippingSummarySchema } from './checkout-shipping-summary-schema';
+import { promotionCodeTypeSchema } from '@/domains/main/models/entities/promotion-code';
 
 export const checkoutSummarySchema = z.object({
 	items_amount: z.coerce.number(),
@@ -18,6 +19,14 @@ export const checkoutSummarySchema = z.object({
 		.describe('Frete escolhido. `Null` => frete ainda não calculado/selecionado; `0` => frete realmente grátis'),
 	shipping: checkoutShippingSummarySchema.nullable().optional(),
 	total_amount: z.coerce.number().describe('Valor efetivamente cobrado no checkout'),
+	promotion: z
+		.object({
+			code: z.string(),
+			type: promotionCodeTypeSchema,
+			discount_amount: z.coerce.number(),
+		})
+		.nullable()
+		.optional(),
 	currency: currencyCodeSchema,
 	items: z.array(cartSummaryItemSchema),
 });

@@ -16,6 +16,13 @@ export class CheckoutSummaryPresenter {
 			shipping_amount: data.shippingAmount,
 			shipping: data.shipping ? CheckoutShippingSummaryPresenter.toHTTP(data.shipping) : null,
 			total_amount: data.totalAmount,
+			promotion: data.promotion
+				? {
+						code: data.promotion.code,
+						type: data.promotion.type,
+						discount_amount: data.promotion.discountAmount,
+					}
+				: null,
 			currency: data.currency,
 			items: data.items.map(CartSummaryItemPresenter.toHTTP),
 		};

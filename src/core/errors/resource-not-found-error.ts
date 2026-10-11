@@ -18,6 +18,7 @@ export const notFoundErrors = createHttpErrorSchemaFactory({
 		'SHIPPING_RATE_NOT_FOUND',
 		'BLING_CONNECTION_NOT_FOUND',
 		'MELHOR_ENVIO_CONNECTION_NOT_FOUND',
+		'PROMOTION_CODE_NOT_FOUND',
 	],
 	defaultCode: 'RESOURCE_NOT_FOUND_ERROR',
 });

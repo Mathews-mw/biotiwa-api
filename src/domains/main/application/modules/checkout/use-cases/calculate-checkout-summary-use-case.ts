@@ -5,13 +5,21 @@ import type { ICartRepository } from '../../carts/repositories/cart-repository';
 import { failure, success, type Outcome } from '@/core/outcome';
 import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
+import { calculateCartSummary } from '../../carts/services/calculate-cart-summary';
 import { ShippingRateResolver } from '../../shipping/services/shipping-rate-resolver';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
-import { calculateCheckoutSummary, ICheckoutSummary } from '../services/calculate-checkout-summary';
+import { PromotionCodeResolver } from '../../promotions/services/promotion-code-resolver';
+import { calculatePromotionDiscount } from '../../promotions/services/calculate-promotion-discount';
+import {
+	calculateCheckoutSummary,
+	type ICheckoutPromotionSummary,
+	type ICheckoutSummary,
+} from '../services/calculate-checkout-summary';
 
 interface IRequest {
 	userId: string;
 	shippingRateId?: string | null;
+	promotionCode?: string | null;
 }
 
 type Response = Outcome<
@@ -27,10 +35,12 @@ export class CalculateCheckoutSummaryUseCase {
 		@inject(DEPENDENCY_IDENTIFIERS.CARTS_REPOSITORY)
 		private cartRepository: ICartRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.SHIPPING_RATE_RESOLVER)
-		private shippingRateResolver: ShippingRateResolver
+		private shippingRateResolver: ShippingRateResolver,
+		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_CODE_RESOLVER)
+		private promotionCodeResolver: PromotionCodeResolver
 	) {}
 
-	async execute({ userId, shippingRateId }: IRequest): Promise<Response> {
+	async execute({ userId, shippingRateId, promotionCode }: IRequest): Promise<Response> {
 		const cart = await this.cartRepository.findActiveByUserId(userId);
 
 		if (!cart) {
@@ -41,13 +51,48 @@ export class CalculateCheckoutSummaryUseCase {
 			return failure(new BadRequestError('Cart is empty', 'EMPTY_CART'));
 		}
 
+		const cartSummary = calculateCartSummary({ cartDetails: cart });
+
+		let promotionDiscountAmount = 0;
+		let promotion: ICheckoutPromotionSummary | null = null;
+
+		if (promotionCode) {
+			const promotionResult = await this.promotionCodeResolver.resolve({
+				code: promotionCode,
+				userId,
+				marketCode: cart.marketCode,
+			});
+
+			if (promotionResult.isFalse()) {
+				return failure(promotionResult.value);
+			}
+
+			const resolvedPromotionCode = promotionResult.value.promotionCode;
+
+			const promotionCalculation = calculatePromotionDiscount({ cartSummary, promotionCode: resolvedPromotionCode });
+
+			promotionDiscountAmount = promotionCalculation.discountAmount;
+
+			promotion = {
+				code: resolvedPromotionCode.code,
+				type: resolvedPromotionCode.type,
+				discountAmount: promotionDiscountAmount,
+			};
+		}
+
 		// Caso em que usuário não selecionou nenhuma opção de entrega
 		if (!shippingRateId) {
+			const checkoutSummary = calculateCheckoutSummary({
+				cart,
+				shippingAmount: null,
+				promotionDiscountAmount,
+			});
+
 			return success({
-				summary: calculateCheckoutSummary({
-					cart,
-					shippingAmount: null,
-				}),
+				summary: {
+					...checkoutSummary,
+					promotion,
+				},
 			});
 		}
 
@@ -68,7 +113,9 @@ export class CalculateCheckoutSummaryUseCase {
 			...calculateCheckoutSummary({
 				cart,
 				shippingAmount: rate.amount,
+				promotionDiscountAmount,
 			}),
+			promotion,
 			shipping: {
 				rateId: rate.id.toString(),
 				provider: rate.provider,

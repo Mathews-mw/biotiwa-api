@@ -133,6 +133,28 @@ enum MelhorEnvioConnectionStatus {
   ERROR
 }
 
+enum PromotionCodeType {
+  COUPON
+  AFFILIATE
+}
+
+enum PromotionCodeStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum PromotionDiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+enum PromotionRedemptionStatus {
+  PENDING
+  REDEEMED
+  CANCELED
+  EXPIRED
+}
+
 model User {
   id            String    @id @unique @default(cuid())
   name          String
@@ -143,14 +165,15 @@ model User {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime? @updatedAt @map("updated_at")
 
-  customerProfile CustomerProfile?
-  addresses       Address[]
-  consents        UserConsent[]
-  accounts        Account[]
-  sessions        Session[]
-  carts           Cart[]
-  orders          Order[]
-  shippingQuotes  ShippingQuote[]
+  customerProfile      CustomerProfile?
+  addresses            Address[]
+  consents             UserConsent[]
+  accounts             Account[]
+  sessions             Session[]
+  carts                Cart[]
+  orders               Order[]
+  shippingQuotes       ShippingQuote[]
+  promotionRedemptions PromotionRedemption[]
 
   @@map("users")
 }
@@ -692,4 +715,47 @@ model MelhorEnvioOAuthState {
 
   @@index([expiresAt])
   @@map("melhor_envio_oauth_states")
+}
+
+model PromotionCode {
+  id                 String                @id @default(cuid())
+  code               String                @unique
+  type               PromotionCodeType
+  status             PromotionCodeStatus   @default(ACTIVE)
+  marketCode         MarketCode            @map("market_code")
+  discountType       PromotionDiscountType @map("discount_type")
+  discountValue      Int                   @map("discount_value")
+  maxUses            Int?                  @map("max_uses")
+  maxUsesPerCustomer Int?                  @map("max_uses_per_customer")
+  startsAt           DateTime?             @map("starts_at")
+  expiresAt          DateTime?             @map("expires_at")
+  createdAt          DateTime              @default(now()) @map("created_at")
+  updatedAt          DateTime              @updatedAt @map("updated_at")
+
+  redemptions PromotionRedemption[]
+
+  @@index([code])
+  @@index([status])
+  @@index([marketCode])
+  @@map("promotion_codes")
+}
+
+model PromotionRedemption {
+  id              String                    @id @default(cuid())
+  promotionCodeId String                    @map("promotion_code_id")
+  userId          String                    @map("user_id")
+  orderId         String?                   @map("order_id")
+  status          PromotionRedemptionStatus @default(PENDING)
+  discountAmount  Int                       @map("discount_amount")
+  createdAt       DateTime                  @default(now()) @map("created_at")
+  redeemedAt      DateTime?                 @map("redeemed_at")
+  updatedAt       DateTime                  @updatedAt @map("updated_at")
+
+  promotionCode PromotionCode @relation(fields: [promotionCodeId], references: [id])
+  user          User          @relation(fields: [userId], references: [id])
+
+  @@index([promotionCodeId, status])
+  @@index([promotionCodeId, userId, status])
+  @@index([orderId])
+  @@map("promotion_redemptions")
 }

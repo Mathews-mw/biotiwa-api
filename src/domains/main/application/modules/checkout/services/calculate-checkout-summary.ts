@@ -3,6 +3,7 @@ import type { CartDetails } from '@/domains/main/models/value-objects/cart-detai
 import type { IShippingProvider } from '@/domains/main/models/entities/shipping-quote-rate';
 
 import { calculateCartSummary, type ICartSummaryItem } from '../../carts/services/calculate-cart-summary';
+import { IPromotionCodeType } from '@/domains/main/models/entities/promotion-code';
 
 export interface ICheckoutShippingSummary {
 	rateId: string;
@@ -13,11 +14,18 @@ export interface ICheckoutShippingSummary {
 	estimatedDays: number | null;
 }
 
+export interface ICheckoutPromotionSummary {
+	code: string;
+	type: IPromotionCodeType;
+	discountAmount: number;
+}
+
 export interface ICheckoutSummary {
 	itemsAmount: number;
 	orderBumpAmount: number;
 	subtotalAmount: number;
 	discountAmount: number;
+	promotionDiscountAmount: number;
 	taxAmount: number;
 	/**
 	 * valor atual do carrinho
@@ -36,6 +44,7 @@ export interface ICheckoutSummary {
 	 * valor efetivamente cobrado no checkout
 	 */
 	totalAmount: number;
+	promotion: ICheckoutPromotionSummary | null;
 	currency: ICurrencyCode;
 	items: Array<ICartSummaryItem>;
 }
@@ -43,26 +52,34 @@ export interface ICheckoutSummary {
 interface ICalculateCheckoutSummaryInput {
 	cart: CartDetails;
 	shippingAmount?: number | null;
+	promotionDiscountAmount?: number;
 }
 
 export function calculateCheckoutSummary({
 	cart,
 	shippingAmount = null,
+	promotionDiscountAmount = 0,
 }: ICalculateCheckoutSummaryInput): ICheckoutSummary {
 	const cartSummary = calculateCartSummary({ cartDetails: cart });
 
-	const totalAmount = cartSummary.totalAmount + (shippingAmount ?? 0);
+	const discountAmount = cartSummary.discountAmount + promotionDiscountAmount;
+
+	const cartAmount = Math.max(0, cartSummary.totalAmount - promotionDiscountAmount);
+
+	const totalAmount = cartAmount + (shippingAmount ?? 0);
 
 	return {
 		itemsAmount: cartSummary.itemsAmount,
 		orderBumpAmount: cartSummary.orderBumpAmount,
 		subtotalAmount: cartSummary.subtotalAmount,
-		discountAmount: cartSummary.discountAmount,
+		discountAmount,
+		promotionDiscountAmount,
 		taxAmount: cartSummary.taxAmount,
-		cartAmount: cartSummary.totalAmount,
+		cartAmount,
 		shippingAmount,
 		totalAmount,
 		currency: cartSummary.currency,
 		items: cartSummary.items,
+		promotion: null,
 	};
 }

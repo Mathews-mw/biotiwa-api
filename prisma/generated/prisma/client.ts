@@ -186,3 +186,13 @@ export type MelhorEnvioConnection = Prisma.MelhorEnvioConnectionModel
  * 
  */
 export type MelhorEnvioOAuthState = Prisma.MelhorEnvioOAuthStateModel
+/**
+ * Model PromotionCode
+ * 
+ */
+export type PromotionCode = Prisma.PromotionCodeModel
+/**
+ * Model PromotionRedemption
+ * 
+ */
+export type PromotionRedemption = Prisma.PromotionRedemptionModel

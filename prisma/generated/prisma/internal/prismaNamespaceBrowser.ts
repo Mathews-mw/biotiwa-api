@@ -79,7 +79,9 @@ export const ModelName = {
   BlingConnection: 'BlingConnection',
   BlingOrderSync: 'BlingOrderSync',
   MelhorEnvioConnection: 'MelhorEnvioConnection',
-  MelhorEnvioOAuthState: 'MelhorEnvioOAuthState'
+  MelhorEnvioOAuthState: 'MelhorEnvioOAuthState',
+  PromotionCode: 'PromotionCode',
+  PromotionRedemption: 'PromotionRedemption'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -558,6 +560,40 @@ export const MelhorEnvioOAuthStateScalarFieldEnum = {
 } as const
 
 export type MelhorEnvioOAuthStateScalarFieldEnum = (typeof MelhorEnvioOAuthStateScalarFieldEnum)[keyof typeof MelhorEnvioOAuthStateScalarFieldEnum]
+
+
+export const PromotionCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  type: 'type',
+  status: 'status',
+  marketCode: 'marketCode',
+  discountType: 'discountType',
+  discountValue: 'discountValue',
+  maxUses: 'maxUses',
+  maxUsesPerCustomer: 'maxUsesPerCustomer',
+  startsAt: 'startsAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PromotionCodeScalarFieldEnum = (typeof PromotionCodeScalarFieldEnum)[keyof typeof PromotionCodeScalarFieldEnum]
+
+
+export const PromotionRedemptionScalarFieldEnum = {
+  id: 'id',
+  promotionCodeId: 'promotionCodeId',
+  userId: 'userId',
+  orderId: 'orderId',
+  status: 'status',
+  discountAmount: 'discountAmount',
+  createdAt: 'createdAt',
+  redeemedAt: 'redeemedAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PromotionRedemptionScalarFieldEnum = (typeof PromotionRedemptionScalarFieldEnum)[keyof typeof PromotionRedemptionScalarFieldEnum]
 
 
 export const SortOrder = {

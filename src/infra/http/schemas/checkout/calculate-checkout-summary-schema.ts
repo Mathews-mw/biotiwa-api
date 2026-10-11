@@ -6,6 +6,7 @@ import { getBadRequestErrorSchema, getNotFoundErrorSchema } from '../erros/erros
 
 const bodySchema = z.object({
 	shipping_rate_id: z.string().nullable().optional(),
+	promotion_code: z.string().trim().nullable().optional(),
 });
 
 const responseSchema = checkoutSummarySchema;

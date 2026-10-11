@@ -193,3 +193,37 @@ export const MelhorEnvioConnectionStatus = {
 } as const
 
 export type MelhorEnvioConnectionStatus = (typeof MelhorEnvioConnectionStatus)[keyof typeof MelhorEnvioConnectionStatus]
+
+
+export const PromotionCodeType = {
+  COUPON: 'COUPON',
+  AFFILIATE: 'AFFILIATE'
+} as const
+
+export type PromotionCodeType = (typeof PromotionCodeType)[keyof typeof PromotionCodeType]
+
+
+export const PromotionCodeStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type PromotionCodeStatus = (typeof PromotionCodeStatus)[keyof typeof PromotionCodeStatus]
+
+
+export const PromotionDiscountType = {
+  PERCENTAGE: 'PERCENTAGE',
+  FIXED: 'FIXED'
+} as const
+
+export type PromotionDiscountType = (typeof PromotionDiscountType)[keyof typeof PromotionDiscountType]
+
+
+export const PromotionRedemptionStatus = {
+  PENDING: 'PENDING',
+  REDEEMED: 'REDEEMED',
+  CANCELED: 'CANCELED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type PromotionRedemptionStatus = (typeof PromotionRedemptionStatus)[keyof typeof PromotionRedemptionStatus]

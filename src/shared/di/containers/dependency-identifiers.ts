@@ -22,6 +22,8 @@ export const DEPENDENCY_IDENTIFIERS = {
 	MELHOR_ENVIO_CONNECTION_REPOSITORY: Symbol('MelhorEnvioConnectionRepository'),
 	MELHOR_ENVIO_OAUTH_STATE_REPOSITORY: Symbol('MelhorEnvioOAuthStateRepository'),
 	SHIPPING_QUOTE_REPOSITORY: Symbol('ShippingQuoteRepository'),
+	PROMOTION_CODES_REPOSITORY: Symbol('PromotionCodesRepository'),
+	PROMOTION_REDEMPTION_REPOSITORY: Symbol('PromotionRedemptionRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),
@@ -33,6 +35,7 @@ export const DEPENDENCY_IDENTIFIERS = {
 	MELHOR_ENVIO_AUTHENTICATION: Symbol.for('MelhorEnvioAuthenticationService'),
 	SHIPPING_SERVICE: Symbol.for('ShippingService'),
 	SHIPPING_RATE_RESOLVER: Symbol.for('ShippingRateResolver'),
+	PROMOTION_CODE_RESOLVER: Symbol.for('PromotionCodeResolver'),
 
 	// use cases
 	ENQUEUE_BLING_ORDER_SYNC_USE_CASE: Symbol.for('EnqueueBlingOrderSyncUseCase'),
