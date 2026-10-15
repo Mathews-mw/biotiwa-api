@@ -24,6 +24,9 @@ export const DEPENDENCY_IDENTIFIERS = {
 	SHIPPING_QUOTE_REPOSITORY: Symbol('ShippingQuoteRepository'),
 	PROMOTION_CODES_REPOSITORY: Symbol('PromotionCodesRepository'),
 	PROMOTION_REDEMPTION_REPOSITORY: Symbol('PromotionRedemptionRepository'),
+	AFFILIATES_REPOSITORY: Symbol('PrismaAffiliateRepository'),
+	AFFILIATE_PROMOTION_CODES_REPOSITORY: Symbol('PrismaAffiliatePromotionCodesRepository'),
+	AFFILIATE_PROGRAM_SETTINGS_REPOSITORY: Symbol('PrismaAffiliateProgramSettingsRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),
@@ -37,6 +40,8 @@ export const DEPENDENCY_IDENTIFIERS = {
 	SHIPPING_RATE_RESOLVER: Symbol.for('ShippingRateResolver'),
 	PROMOTION_CODE_RESOLVER: Symbol.for('PromotionCodeResolver'),
 	PROMOTION_RESOLVER_SERVICE: Symbol.for('PromotionResolverService'),
+	PROMOTION_REDEMPTION_LIFECYCLE_SERVICE: Symbol.for('PromotionRedemptionLifecycleService'),
+	AFFILIATE_PROMOTION_VALIDATOR_SERVICE: Symbol.for('AffiliatePromotionValidatorService'),
 
 	// use cases
 	ENQUEUE_BLING_ORDER_SYNC_USE_CASE: Symbol.for('EnqueueBlingOrderSyncUseCase'),

@@ -227,3 +227,21 @@ export const PromotionRedemptionStatus = {
 } as const
 
 export type PromotionRedemptionStatus = (typeof PromotionRedemptionStatus)[keyof typeof PromotionRedemptionStatus]
+
+
+export const AffiliateType = {
+  PROMOTER: 'PROMOTER',
+  RESELLER: 'RESELLER'
+} as const
+
+export type AffiliateType = (typeof AffiliateType)[keyof typeof AffiliateType]
+
+
+export const AffiliateStatus = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type AffiliateStatus = (typeof AffiliateStatus)[keyof typeof AffiliateStatus]

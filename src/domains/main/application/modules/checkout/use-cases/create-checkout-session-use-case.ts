@@ -24,6 +24,7 @@ import { OrderShippingRate } from '@/domains/main/models/entities/order-shipping
 import { PromotionRedemption } from '@/domains/main/models/entities/promotion-redemption';
 import { OrderShippingAddress } from '@/domains/main/models/entities/order-shipping-address';
 import { PromotionResolverService } from '../../promotions/services/promotion-resolver-service';
+import { PromotionRedemptionLifecycleService } from '../../promotions/services/promotion-redemption-lifecycle-service';
 import { ResolveShippingRateForCheckoutUseCase } from '../../shipping/use-cases/resolve-shipping-rate-for-checkout-use-case';
 
 interface IRequest {
@@ -70,7 +71,9 @@ export class CreateCheckoutSessionUseCase {
 		@inject(DEPENDENCY_IDENTIFIERS.RESOLVE_SHIPPING_RATE_FOR_CHECKOUT_USE_CASE)
 		private resolveShippingRateForCheckoutUseCase: ResolveShippingRateForCheckoutUseCase,
 		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_RESOLVER_SERVICE)
-		private promotionResolverService: PromotionResolverService
+		private promotionResolverService: PromotionResolverService,
+		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_LIFECYCLE_SERVICE)
+		private promotionRedemptionLifecycleService: PromotionRedemptionLifecycleService
 	) {}
 
 	async execute(input: IRequest): Promise<Response> {
@@ -290,7 +293,7 @@ export class CreateCheckoutSessionUseCase {
 
 		const stripePaymentService = this.paymentService.stripe();
 
-		const gatewaySession = await stripePaymentService.createCheckoutSession({
+		const gatewaySessionResult = await stripePaymentService.createCheckoutSession({
 			orderId: orderDetails.id.toString(),
 			userId: input.userId,
 			customerEmail: orderDetails.orderCustomer?.email ?? cart.user.email,
@@ -303,6 +306,14 @@ export class CreateCheckoutSessionUseCase {
 				unitAmount: item.unitAmount,
 			})),
 		});
+
+		if (gatewaySessionResult.isFalse()) {
+			await this.promotionRedemptionLifecycleService.cancel(orderDetails.id.toString());
+
+			return failure(gatewaySessionResult.value);
+		}
+
+		const gatewaySession = gatewaySessionResult.value;
 
 		const payment = Payment.create({
 			orderId: orderDetails.id,

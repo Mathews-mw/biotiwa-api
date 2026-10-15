@@ -12,15 +12,10 @@ export class PrismaPromotionRedemptionRepository implements IPromotionRedemption
 	async save(promotionRedemption: PromotionRedemption): Promise<void> {
 		const prismaData = PromotionRedemptionMapper.toPrisma(promotionRedemption);
 
-		await prisma.promotionRedemption.upsert({
+		await prisma.promotionRedemption.update({
+			data: prismaData,
 			where: {
 				id: promotionRedemption.id.toString(),
-			},
-			update: {
-				...prismaData,
-			},
-			create: {
-				...prismaData,
 			},
 		});
 	}

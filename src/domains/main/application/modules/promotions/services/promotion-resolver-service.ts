@@ -11,6 +11,7 @@ import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { calculatePromotionDiscount } from './calculate-promotion-discount';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
+import { AffiliatePromotionCodeDetails } from '@/domains/main/models/value-objects/affiliate-promotion-code-details';
 
 interface IInput {
 	promotionCode: string;
@@ -24,6 +25,7 @@ type IResponse = Outcome<
 	{
 		resolvedPromotionCode: PromotionCode;
 		checkoutPromotionSummary: ICheckoutPromotionSummary;
+		affiliatePromotionCode: AffiliatePromotionCodeDetails | null;
 		promotionDiscountAmount: number;
 	}
 >;
@@ -46,7 +48,7 @@ export class PromotionResolverService {
 			return failure(promotionResult.value);
 		}
 
-		const resolvedPromotionCode = promotionResult.value.promotionCode;
+		const { promotionCode: resolvedPromotionCode, affiliatePromotionCode } = promotionResult.value;
 
 		const promotionCalculation = calculatePromotionDiscount({
 			cartSummary: input.cartSummary,
@@ -62,8 +64,9 @@ export class PromotionResolverService {
 		};
 
 		return success({
-			checkoutPromotionSummary,
 			resolvedPromotionCode,
+			checkoutPromotionSummary,
+			affiliatePromotionCode,
 			promotionDiscountAmount,
 		});
 	}

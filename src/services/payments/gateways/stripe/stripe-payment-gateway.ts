@@ -1,3 +1,5 @@
+import { BadRequestError } from '@/core/errors/bad-request-errors';
+import { Outcome } from '@/core/outcome';
 import type { ICurrencyCode } from '@/core/types/currency-code';
 
 export interface ICreatePaymentGatewayCheckoutSessionInput {
@@ -17,8 +19,8 @@ export interface ICreatePaymentGatewayCheckoutSessionOutput {
 	rawPayload: unknown;
 }
 
+type Response = Outcome<BadRequestError, ICreatePaymentGatewayCheckoutSessionOutput>;
+
 export interface IStripePaymentGateway {
-	createCheckoutSession(
-		input: ICreatePaymentGatewayCheckoutSessionInput
-	): Promise<ICreatePaymentGatewayCheckoutSessionOutput>;
+	createCheckoutSession(input: ICreatePaymentGatewayCheckoutSessionInput): Promise<Response>;
 }

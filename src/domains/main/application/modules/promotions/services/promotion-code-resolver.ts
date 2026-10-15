@@ -9,6 +9,8 @@ import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { PromotionCode } from '@/domains/main/models/entities/promotion-code';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
+import { AffiliatePromotionValidatorService } from './affiliate-promotion-validator-service';
+import { AffiliatePromotionCodeDetails } from '@/domains/main/models/value-objects/affiliate-promotion-code-details';
 
 interface IRequest {
 	code: string;
@@ -20,6 +22,7 @@ type Response = Outcome<
 	BadRequestError | ResourceNotFoundError,
 	{
 		promotionCode: PromotionCode;
+		affiliatePromotionCode: AffiliatePromotionCodeDetails | null;
 	}
 >;
 
@@ -29,7 +32,9 @@ export class PromotionCodeResolver {
 		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_CODES_REPOSITORY)
 		private readonly promotionCodeRepository: IPromotionCodeRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_REPOSITORY)
-		private readonly promotionRedemptionRepository: IPromotionRedemptionRepository
+		private readonly promotionRedemptionRepository: IPromotionRedemptionRepository,
+		@inject(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROMOTION_VALIDATOR_SERVICE)
+		private readonly affiliatePromotionValidator: AffiliatePromotionValidatorService
 	) {}
 
 	async resolve({ code, userId, marketCode }: IRequest): Promise<Response> {
@@ -47,6 +52,21 @@ export class PromotionCodeResolver {
 			return failure(
 				new BadRequestError('Promotion code is not available for this market.', 'PROMOTION_CODE_MARKET_MISMATCH')
 			);
+		}
+
+		let affiliatePromotionCode: AffiliatePromotionCodeDetails | null = null;
+
+		if (promotionCode.type === 'AFFILIATE') {
+			const affiliateResult = await this.affiliatePromotionValidator.validate({
+				promotionCodeId: promotionCode.id.toString(),
+				userId,
+			});
+
+			if (affiliateResult.isFalse()) {
+				return failure(affiliateResult.value);
+			}
+
+			affiliatePromotionCode = affiliateResult.value.affiliatePromotionCode;
 		}
 
 		const now = new Date();
@@ -85,6 +105,6 @@ export class PromotionCodeResolver {
 			}
 		}
 
-		return success({ promotionCode });
+		return success({ promotionCode, affiliatePromotionCode });
 	}
 }

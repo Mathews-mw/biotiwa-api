@@ -7,8 +7,8 @@ import type { IOrderRepository } from '../../../orders/repositories/order-reposi
 import { failure, success, type Outcome } from '@/core/outcome';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
-import { IPromotionRedemptionRepository } from '../../../promotions/repositories/promotion-redemption-repository';
 import { EnqueueBlingOrderSyncUseCase } from '../../../integrations/bling/use-cases/enqueue-bling-order-sync-use-case';
+import { PromotionRedemptionLifecycleService } from '../../../promotions/services/promotion-redemption-lifecycle-service';
 
 interface IRequest {
 	orderId: string;
@@ -30,8 +30,8 @@ export class ConfirmStripeCheckoutSessionUseCase {
 		private cartRepository: ICartRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.ENQUEUE_BLING_ORDER_SYNC_USE_CASE)
 		private enqueueBlingOrderSyncUseCase: EnqueueBlingOrderSyncUseCase,
-		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_REPOSITORY)
-		private promotionRedemptionRepository: IPromotionRedemptionRepository
+		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_LIFECYCLE_SERVICE)
+		private promotionRedemptionLifecycleService: PromotionRedemptionLifecycleService
 	) {}
 
 	async execute(input: IRequest): Promise<Response> {
@@ -62,13 +62,7 @@ export class ConfirmStripeCheckoutSessionUseCase {
 			await this.cartRepository.markAsConverted(orderDetails.cartId.toString());
 		}
 
-		const redemption = await this.promotionRedemptionRepository.findByOrderId(orderDetails.id.toString());
-
-		if (redemption) {
-			redemption.markAsRedeemed();
-
-			await this.promotionRedemptionRepository.save(redemption);
-		}
+		await this.promotionRedemptionLifecycleService.redeem(orderDetails.id.toString());
 
 		// Quando o pagamento for confirmado, o use case deve criar a pendência de sync com o Bling
 		await this.enqueueBlingOrderSyncUseCase.execute({

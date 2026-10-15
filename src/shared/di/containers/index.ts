@@ -44,6 +44,11 @@ import { PrismaStripeWebhookEventRepository } from '@/infra/database/repositorie
 import { PrismaMelhorEnvioConnectionRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-connection-repository';
 import { PrismaMelhorEnvioOAuthStateRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-oauth-state-repository';
 import { PromotionResolverService } from '@/domains/main/application/modules/promotions/services/promotion-resolver-service';
+import { PromotionRedemptionLifecycleService } from '@/domains/main/application/modules/promotions/services/promotion-redemption-lifecycle-service';
+import { AffiliatePromotionValidatorService } from '@/domains/main/application/modules/promotions/services/affiliate-promotion-validator-service';
+import { PrismaAffiliateRepository } from '@/infra/database/repositories/affiliates/prisma-affiliates-repository';
+import { PrismaAffiliatePromotionCodesRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-promotion-codes-repository';
+import { PrismaAffiliateProgramSettingsRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-program-settings-repository';
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -76,6 +81,12 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_OAUTH_STATE_REPOSITORY, Pr
 registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_QUOTE_REPOSITORY, PrismaShippingQuoteRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_CODES_REPOSITORY, PrismaPromotionCodesRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_REPOSITORY, PrismaPromotionRedemptionRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATES_REPOSITORY, PrismaAffiliateRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROMOTION_CODES_REPOSITORY, PrismaAffiliatePromotionCodesRepository);
+registerSingleton(
+	DEPENDENCY_IDENTIFIERS.AFFILIATE_PROGRAM_SETTINGS_REPOSITORY,
+	PrismaAffiliateProgramSettingsRepository
+);
 
 // Providers
 registerSingleton(DEPENDENCY_IDENTIFIERS.IDENTITY_PROVIDER, BetterAuthIdentityProvider);
@@ -89,6 +100,8 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_SERVICE, MelhorEnvioShippingSe
 registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_RATE_RESOLVER, ShippingRateResolver);
 registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_CODE_RESOLVER, PromotionCodeResolver);
 registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_RESOLVER_SERVICE, PromotionResolverService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_LIFECYCLE_SERVICE, PromotionRedemptionLifecycleService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROMOTION_VALIDATOR_SERVICE, AffiliatePromotionValidatorService);
 
 // Use cases
 registerSingleton(DEPENDENCY_IDENTIFIERS.ENQUEUE_BLING_ORDER_SYNC_USE_CASE, EnqueueBlingOrderSyncUseCase);

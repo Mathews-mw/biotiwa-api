@@ -155,6 +155,18 @@ enum PromotionRedemptionStatus {
   EXPIRED
 }
 
+enum AffiliateType {
+  PROMOTER
+  RESELLER
+}
+
+enum AffiliateStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  INACTIVE
+}
+
 model User {
   id            String    @id @unique @default(cuid())
   name          String
@@ -174,6 +186,7 @@ model User {
   orders               Order[]
   shippingQuotes       ShippingQuote[]
   promotionRedemptions PromotionRedemption[]
+  affiliate            Affiliate?
 
   @@map("users")
 }
@@ -751,7 +764,8 @@ model PromotionCode {
   createdAt          DateTime              @default(now()) @map("created_at")
   updatedAt          DateTime?             @updatedAt @map("updated_at")
 
-  redemptions PromotionRedemption[]
+  redemptions            PromotionRedemption[]
+  affiliatePromotionCode AffiliatePromotionCode?
 
   @@index([code])
   @@index([status])
@@ -780,4 +794,48 @@ model PromotionRedemption {
   @@index([promotionCodeId, status])
   @@index([promotionCodeId, userId, status])
   @@map("promotion_redemptions")
+}
+
+model Affiliate {
+  id        String          @id @default(cuid())
+  userId    String          @unique @map("user_id")
+  type      AffiliateType
+  status    AffiliateStatus @default(PENDING)
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime?       @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  affiliatePromotionCodes AffiliatePromotionCode[]
+
+  @@index([status])
+  @@map("affiliates")
+}
+
+model AffiliateProgramSettings {
+  id                    String     @id @default(cuid())
+  marketCode            MarketCode @unique @map("market_code")
+  minCodeLifetimeDays   Int        @map("min_code_lifetime_days")
+  maxCodeLifetimeDays   Int        @map("max_code_lifetime_days")
+  attributionWindowDays Int        @default(30) @map("attribution_window_days")
+  isActive              Boolean    @default(true) @map("is_active")
+  createdAt             DateTime   @default(now()) @map("created_at")
+  updatedAt             DateTime?  @updatedAt @map("updated_at")
+
+  @@map("affiliate_program_settings")
+}
+
+model AffiliatePromotionCode {
+  id              String    @id @default(cuid())
+  affiliateId     String    @map("affiliate_id")
+  promotionCodeId String    @unique @map("promotion_code_id")
+  commissionRate  Int       @map("commission_rate")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at")
+
+  affiliate     Affiliate     @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  promotionCode PromotionCode @relation(fields: [promotionCodeId], references: [id], onDelete: Cascade)
+
+  @@index([affiliateId])
+  @@map("affiliate_promotion_codes")
 }

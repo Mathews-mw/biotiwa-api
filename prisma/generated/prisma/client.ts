@@ -201,3 +201,18 @@ export type PromotionCode = Prisma.PromotionCodeModel
  * 
  */
 export type PromotionRedemption = Prisma.PromotionRedemptionModel
+/**
+ * Model Affiliate
+ * 
+ */
+export type Affiliate = Prisma.AffiliateModel
+/**
+ * Model AffiliateProgramSettings
+ * 
+ */
+export type AffiliateProgramSettings = Prisma.AffiliateProgramSettingsModel
+/**
+ * Model AffiliatePromotionCode
+ * 
+ */
+export type AffiliatePromotionCode = Prisma.AffiliatePromotionCodeModel
