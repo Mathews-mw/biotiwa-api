@@ -52,6 +52,8 @@ import { AffiliatePromotionValidator } from '@/domains/main/application/modules/
 import { PrismaAffiliateCommissionRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-commission-repository';
 import { CreateAffiliateCommissionForOrderUseCase } from '@/domains/main/application/modules/affiliates/use-cases/create-affiliate-commission-for-order-use-case';
 import { CancelAffiliateCommissionByOrderUseCase } from '@/domains/main/application/modules/affiliates/use-cases/cancel-affiliate-commission-by-order-use-case';
+import { PrismaAffiliateDashboardRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-dashboard-repository';
+import { PrismaAffiliateSalesRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-sales-repository';
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -87,6 +89,8 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_REPOSITORY, Prisma
 registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATES_REPOSITORY, PrismaAffiliateRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROMOTION_CODES_REPOSITORY, PrismaAffiliatePromotionCodesRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_COMMISSION_REPOSITORY, PrismaAffiliateCommissionRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_DASHBOARD_REPOSITORY, PrismaAffiliateDashboardRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_SALES_REPOSITORY, PrismaAffiliateSalesRepository);
 registerSingleton(
 	DEPENDENCY_IDENTIFIERS.AFFILIATE_PROGRAM_SETTINGS_REPOSITORY,
 	PrismaAffiliateProgramSettingsRepository

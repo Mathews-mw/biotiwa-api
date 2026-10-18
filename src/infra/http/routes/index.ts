@@ -10,6 +10,7 @@ import { checkoutRoutes } from './checkout-routes';
 import { webhooksRoutes } from './webhooks-routes';
 import { shippingRoutes } from './shipping-routes';
 import { healthCheckApi } from './health-check-api';
+import { affiliatesRoutes } from './affiliates-routes';
 import { integrationsRoutes } from './integrations-routes';
 import { betterAuthRoutesHandler } from './handlers/better-auth-routes-handler';
 
@@ -25,6 +26,7 @@ export async function routes(app: FastifyInstance) {
 	app.register(checkoutRoutes, { prefix: '/checkout' });
 	app.register(ordersRoutes, { prefix: '/orders' });
 	app.register(shippingRoutes, { prefix: '/shipping' });
+	app.register(affiliatesRoutes, { prefix: '/affiliates' });
 
 	app.register(integrationsRoutes, { prefix: '/integrations' });
 

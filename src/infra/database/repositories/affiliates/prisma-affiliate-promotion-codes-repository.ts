@@ -36,6 +36,29 @@ export class PrismaAffiliatePromotionCodesRepository implements IAffiliatePromot
 		});
 	}
 
+	async findManyByAffiliateId(affiliateId: string): Promise<AffiliatePromotionCodeDetails[]> {
+		const records = await prisma.affiliatePromotionCode.findMany({
+			where: {
+				affiliateId: affiliateId.toString(),
+			},
+			include: {
+				affiliate: true,
+				promotionCode: true,
+			},
+			orderBy: {
+				createdAt: 'desc',
+			},
+		});
+
+		return records.map((record) => {
+			return AffiliatePromotionCodeDetailsMapper.toDomain({
+				affiliate: record.affiliate,
+				affiliatePromotionCode: record,
+				promotionCode: record.promotionCode,
+			});
+		});
+	}
+
 	async findByPromotionCodeId(promotionCodeId: string): Promise<AffiliatePromotionCodeDetails | null> {
 		const affiliatePromotionCode = await prisma.affiliatePromotionCode.findUnique({
 			where: {

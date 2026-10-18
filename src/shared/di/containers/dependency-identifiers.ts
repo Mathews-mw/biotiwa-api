@@ -28,6 +28,8 @@ export const DEPENDENCY_IDENTIFIERS = {
 	AFFILIATE_PROMOTION_CODES_REPOSITORY: Symbol('PrismaAffiliatePromotionCodesRepository'),
 	AFFILIATE_PROGRAM_SETTINGS_REPOSITORY: Symbol('PrismaAffiliateProgramSettingsRepository'),
 	AFFILIATE_COMMISSION_REPOSITORY: Symbol('AffiliateCommissionRepository'),
+	AFFILIATE_DASHBOARD_REPOSITORY: Symbol('AffiliateDashboardRepository'),
+	AFFILIATE_SALES_REPOSITORY: Symbol('AffiliateSalesRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),

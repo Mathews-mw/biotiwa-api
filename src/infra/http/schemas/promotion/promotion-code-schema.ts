@@ -23,6 +23,7 @@ export const promotionCodeSchema = z.object({
 	max_uses_per_customer: z.coerce.number().nullable().optional(),
 	starts_at: z.coerce.date().nullable().optional(),
 	expires_at: z.coerce.date().nullable().optional(),
+	is_active: z.coerce.boolean(),
 	created_at: z.coerce.date(),
 	updated_at: z.coerce.date().nullable().optional(),
 });
