@@ -27,6 +27,7 @@ export const DEPENDENCY_IDENTIFIERS = {
 	AFFILIATES_REPOSITORY: Symbol('PrismaAffiliateRepository'),
 	AFFILIATE_PROMOTION_CODES_REPOSITORY: Symbol('PrismaAffiliatePromotionCodesRepository'),
 	AFFILIATE_PROGRAM_SETTINGS_REPOSITORY: Symbol('PrismaAffiliateProgramSettingsRepository'),
+	AFFILIATE_COMMISSION_REPOSITORY: Symbol('AffiliateCommissionRepository'),
 
 	// Providers
 	IDENTITY_PROVIDER: Symbol('IdentityProvider'),
@@ -41,7 +42,7 @@ export const DEPENDENCY_IDENTIFIERS = {
 	PROMOTION_CODE_RESOLVER: Symbol.for('PromotionCodeResolver'),
 	PROMOTION_RESOLVER_SERVICE: Symbol.for('PromotionResolverService'),
 	PROMOTION_REDEMPTION_LIFECYCLE_SERVICE: Symbol.for('PromotionRedemptionLifecycleService'),
-	AFFILIATE_PROMOTION_VALIDATOR_SERVICE: Symbol.for('AffiliatePromotionValidatorService'),
+	AFFILIATE_PROMOTION_VALIDATOR: Symbol.for('AffiliatePromotionValidator'),
 
 	// use cases
 	ENQUEUE_BLING_ORDER_SYNC_USE_CASE: Symbol.for('EnqueueBlingOrderSyncUseCase'),
@@ -49,6 +50,8 @@ export const DEPENDENCY_IDENTIFIERS = {
 	PROCESS_BLING_ORDER_SYNC_BATCH_USE_CASE: Symbol.for('ProcessBlingOrderSyncBatchUseCase'),
 	GET_VALID_MELHOR_ENVIO_ACCESS_TOKEN_USE_CASE: Symbol.for('GetValidMelhorEnvioAccessTokenUseCase'),
 	RESOLVE_SHIPPING_RATE_FOR_CHECKOUT_USE_CASE: Symbol.for('ResolveShippingRateForCheckoutUseCase'),
+	CREATE_AFFILIATE_COMMISSION_FOR_ORDER_USE_CASE: Symbol.for('CreateAffiliateCommissionForOrderUseCase'),
+	CANCEL_AFFILIATE_COMMISSION_BY_ORDER_USE_CASE: Symbol.for('CancelAffiliateCommissionByOrderUseCase'),
 } as const;
 
 export type DependencyIdentifiers = (typeof DEPENDENCY_IDENTIFIERS)[keyof typeof DEPENDENCY_IDENTIFIERS];

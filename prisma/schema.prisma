@@ -167,6 +167,13 @@ enum AffiliateStatus {
   INACTIVE
 }
 
+enum AffiliateCommissionStatus {
+  PENDING
+  AVAILABLE
+  PAID
+  CANCELED
+}
+
 model User {
   id            String    @id @unique @default(cuid())
   name          String
@@ -506,6 +513,7 @@ model Order {
   orderShippingRate    OrderShippingRate?
   orderPromotion       OrderPromotion?
   promotionRedemptions PromotionRedemption[]
+  affiliateCommission  AffiliateCommission?
 
   @@index([userId])
   @@index([cartId])
@@ -551,16 +559,19 @@ model OrderCustomer {
 }
 
 model OrderPromotion {
-  id                    String                @id @default(cuid())
-  orderId               String                @unique @map("order_id")
-  sourcePromotionCodeId String?               @map("source_promotion_code_id") // Referência histórica
-  code                  String
-  type                  PromotionCodeType
-  discountType          PromotionDiscountType @map("discount_type")
-  discountValue         Int                   @map("discount_value")
-  discountAmount        Int                   @map("discount_amount")
-  createdAt             DateTime              @default(now()) @map("created_at")
-  updatedAt             DateTime?             @updatedAt @map("updated_at")
+  id                       String                @id @default(cuid())
+  orderId                  String                @unique @map("order_id")
+  sourcePromotionCodeId    String?               @map("source_promotion_code_id") // Referência histórica
+  code                     String
+  type                     PromotionCodeType
+  discountType             PromotionDiscountType @map("discount_type")
+  discountValue            Int                   @map("discount_value")
+  discountAmount           Int                   @map("discount_amount")
+  affiliateId              String?               @map("affiliate_id")
+  affiliatePromotionCodeId String?               @map("affiliate_promotion_code_id")
+  affiliateCommissionRate  Int?                  @map("affiliate_commission_rate")
+  createdAt                DateTime              @default(now()) @map("created_at")
+  updatedAt                DateTime?             @updatedAt @map("updated_at")
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
@@ -807,6 +818,7 @@ model Affiliate {
   user User @relation(fields: [userId], references: [id])
 
   affiliatePromotionCodes AffiliatePromotionCode[]
+  affiliateCommissions    AffiliateCommission[]
 
   @@index([status])
   @@map("affiliates")
@@ -838,4 +850,28 @@ model AffiliatePromotionCode {
 
   @@index([affiliateId])
   @@map("affiliate_promotion_codes")
+}
+
+model AffiliateCommission {
+  id                   String                    @id @default(cuid())
+  affiliateId          String                    @map("affiliate_id")
+  orderId              String                    @unique @map("order_id")
+  promotionCode        String                    @map("promotion_code")
+  commissionBaseAmount Int                       @map("commission_base_amount")
+  commissionRate       Int                       @map("commission_rate")
+  commissionAmount     Int                       @map("commission_amount")
+  currency             CurrencyCode
+  status               AffiliateCommissionStatus @default(PENDING)
+  availableAt          DateTime?                 @map("available_at")
+  paidAt               DateTime?                 @map("paid_at")
+  canceledAt           DateTime?                 @map("canceled_at")
+  createdAt            DateTime                  @default(now()) @map("created_at")
+  updatedAt            DateTime?                 @updatedAt @map("updated_at")
+
+  affiliate Affiliate @relation(fields: [affiliateId], references: [id])
+  order     Order     @relation(fields: [orderId], references: [id])
+
+  @@index([affiliateId, status])
+  @@index([status])
+  @@map("affiliate_commissions")
 }

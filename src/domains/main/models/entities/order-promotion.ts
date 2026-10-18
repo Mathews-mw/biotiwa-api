@@ -12,6 +12,9 @@ export interface OrderPromotionProps {
 	discountType: IPromotionDiscountType;
 	discountValue: number;
 	discountAmount: number;
+	affiliateId?: UniqueEntityId | null;
+	affiliatePromotionCodeId?: UniqueEntityId | null;
+	affiliateCommissionRate?: number | null;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -77,6 +80,33 @@ export class OrderPromotion extends Entity<OrderPromotionProps> {
 
 	set discountAmount(discountAmount: number) {
 		this.props.discountAmount = discountAmount;
+		this._touch();
+	}
+
+	get affiliateId() {
+		return this.props.affiliateId;
+	}
+
+	set affiliateId(affiliateId: UniqueEntityId | undefined | null) {
+		this.props.affiliateId = affiliateId;
+		this._touch();
+	}
+
+	get affiliatePromotionCodeId() {
+		return this.props.affiliatePromotionCodeId;
+	}
+
+	set affiliatePromotionCodeId(affiliatePromotionCodeId: UniqueEntityId | undefined | null) {
+		this.props.affiliatePromotionCodeId = affiliatePromotionCodeId;
+		this._touch();
+	}
+
+	get affiliateCommissionRate() {
+		return this.props.affiliateCommissionRate;
+	}
+
+	set affiliateCommissionRate(affiliateCommissionRate: number | undefined | null) {
+		this.props.affiliateCommissionRate = affiliateCommissionRate;
 		this._touch();
 	}
 

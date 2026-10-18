@@ -192,3 +192,8 @@ export type AffiliateProgramSettings = Prisma.AffiliateProgramSettingsModel
  * 
  */
 export type AffiliatePromotionCode = Prisma.AffiliatePromotionCodeModel
+/**
+ * Model AffiliateCommission
+ * 
+ */
+export type AffiliateCommission = Prisma.AffiliateCommissionModel

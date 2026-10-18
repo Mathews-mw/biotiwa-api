@@ -245,3 +245,13 @@ export const AffiliateStatus = {
 } as const
 
 export type AffiliateStatus = (typeof AffiliateStatus)[keyof typeof AffiliateStatus]
+
+
+export const AffiliateCommissionStatus = {
+  PENDING: 'PENDING',
+  AVAILABLE: 'AVAILABLE',
+  PAID: 'PAID',
+  CANCELED: 'CANCELED'
+} as const
+
+export type AffiliateCommissionStatus = (typeof AffiliateCommissionStatus)[keyof typeof AffiliateCommissionStatus]

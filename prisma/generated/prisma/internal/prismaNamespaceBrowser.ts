@@ -85,7 +85,8 @@ export const ModelName = {
   PromotionRedemption: 'PromotionRedemption',
   Affiliate: 'Affiliate',
   AffiliateProgramSettings: 'AffiliateProgramSettings',
-  AffiliatePromotionCode: 'AffiliatePromotionCode'
+  AffiliatePromotionCode: 'AffiliatePromotionCode',
+  AffiliateCommission: 'AffiliateCommission'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -411,6 +412,9 @@ export const OrderPromotionScalarFieldEnum = {
   discountType: 'discountType',
   discountValue: 'discountValue',
   discountAmount: 'discountAmount',
+  affiliateId: 'affiliateId',
+  affiliatePromotionCodeId: 'affiliatePromotionCodeId',
+  affiliateCommissionRate: 'affiliateCommissionRate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -655,6 +659,26 @@ export const AffiliatePromotionCodeScalarFieldEnum = {
 } as const
 
 export type AffiliatePromotionCodeScalarFieldEnum = (typeof AffiliatePromotionCodeScalarFieldEnum)[keyof typeof AffiliatePromotionCodeScalarFieldEnum]
+
+
+export const AffiliateCommissionScalarFieldEnum = {
+  id: 'id',
+  affiliateId: 'affiliateId',
+  orderId: 'orderId',
+  promotionCode: 'promotionCode',
+  commissionBaseAmount: 'commissionBaseAmount',
+  commissionRate: 'commissionRate',
+  commissionAmount: 'commissionAmount',
+  currency: 'currency',
+  status: 'status',
+  availableAt: 'availableAt',
+  paidAt: 'paidAt',
+  canceledAt: 'canceledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AffiliateCommissionScalarFieldEnum = (typeof AffiliateCommissionScalarFieldEnum)[keyof typeof AffiliateCommissionScalarFieldEnum]
 
 
 export const SortOrder = {

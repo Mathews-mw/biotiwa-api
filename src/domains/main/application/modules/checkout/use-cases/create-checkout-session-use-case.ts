@@ -26,6 +26,7 @@ import { OrderShippingAddress } from '@/domains/main/models/entities/order-shipp
 import { PromotionResolverService } from '../../promotions/services/promotion-resolver-service';
 import { PromotionRedemptionLifecycleService } from '../../promotions/services/promotion-redemption-lifecycle-service';
 import { ResolveShippingRateForCheckoutUseCase } from '../../shipping/use-cases/resolve-shipping-rate-for-checkout-use-case';
+import { AffiliatePromotionCodeDetails } from '@/domains/main/models/value-objects/affiliate-promotion-code-details';
 
 interface IRequest {
 	userId: string;
@@ -129,6 +130,7 @@ export class CreateCheckoutSessionUseCase {
 			});
 
 			let resolvedPromotion: PromotionCode | null = null;
+			let resolvedAffiliatePromotion: AffiliatePromotionCodeDetails | null = null;
 			let promotionDiscountAmount = 0;
 
 			// Resolve e calcula promoção somente na criação de uma nova Order
@@ -144,9 +146,14 @@ export class CreateCheckoutSessionUseCase {
 					return failure(result.value);
 				}
 
-				const { resolvedPromotionCode, promotionDiscountAmount: resolvedDiscountAmount } = result.value;
+				const {
+					resolvedPromotionCode,
+					promotionDiscountAmount: resolvedDiscountAmount,
+					affiliatePromotionCode,
+				} = result.value;
 
 				resolvedPromotion = resolvedPromotionCode;
+				resolvedAffiliatePromotion = affiliatePromotionCode;
 				promotionDiscountAmount = resolvedDiscountAmount;
 			}
 
@@ -244,6 +251,9 @@ export class CreateCheckoutSessionUseCase {
 						discountType: resolvedPromotion.discountType,
 						discountValue: resolvedPromotion.discountValue,
 						discountAmount: promotionDiscountAmount,
+						affiliateId: resolvedAffiliatePromotion?.affiliate.id ?? null,
+						affiliatePromotionCodeId: resolvedAffiliatePromotion?.affiliatePromotionCode.id ?? null,
+						affiliateCommissionRate: resolvedAffiliatePromotion?.affiliatePromotionCode.commissionRate ?? null,
 					})
 				: null;
 

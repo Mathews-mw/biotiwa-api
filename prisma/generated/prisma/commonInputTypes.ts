@@ -739,6 +739,23 @@ export type EnumAffiliateStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAffiliateStatusFilter<$PrismaModel>
 }
 
+export type EnumAffiliateCommissionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AffiliateCommissionStatus | Prisma.EnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AffiliateCommissionStatus[] | Prisma.ListEnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AffiliateCommissionStatus[] | Prisma.ListEnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAffiliateCommissionStatusFilter<$PrismaModel> | $Enums.AffiliateCommissionStatus
+}
+
+export type EnumAffiliateCommissionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AffiliateCommissionStatus | Prisma.EnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AffiliateCommissionStatus[] | Prisma.ListEnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AffiliateCommissionStatus[] | Prisma.ListEnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAffiliateCommissionStatusWithAggregatesFilter<$PrismaModel> | $Enums.AffiliateCommissionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAffiliateCommissionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAffiliateCommissionStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1448,6 +1465,23 @@ export type NestedEnumAffiliateStatusWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAffiliateStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAffiliateStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumAffiliateCommissionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AffiliateCommissionStatus | Prisma.EnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AffiliateCommissionStatus[] | Prisma.ListEnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AffiliateCommissionStatus[] | Prisma.ListEnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAffiliateCommissionStatusFilter<$PrismaModel> | $Enums.AffiliateCommissionStatus
+}
+
+export type NestedEnumAffiliateCommissionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AffiliateCommissionStatus | Prisma.EnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AffiliateCommissionStatus[] | Prisma.ListEnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AffiliateCommissionStatus[] | Prisma.ListEnumAffiliateCommissionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAffiliateCommissionStatusWithAggregatesFilter<$PrismaModel> | $Enums.AffiliateCommissionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAffiliateCommissionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAffiliateCommissionStatusFilter<$PrismaModel>
 }
 
 

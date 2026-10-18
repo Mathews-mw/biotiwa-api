@@ -431,7 +431,8 @@ export const ModelName = {
   PromotionRedemption: 'PromotionRedemption',
   Affiliate: 'Affiliate',
   AffiliateProgramSettings: 'AffiliateProgramSettings',
-  AffiliatePromotionCode: 'AffiliatePromotionCode'
+  AffiliatePromotionCode: 'AffiliatePromotionCode',
+  AffiliateCommission: 'AffiliateCommission'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -447,7 +448,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verification" | "customerProfile" | "address" | "userConsent" | "consentTerm" | "market" | "product" | "productShippingProfile" | "offer" | "offerItem" | "orderBump" | "cart" | "cartItem" | "order" | "orderItem" | "orderCustomer" | "orderPromotion" | "orderShippingAddress" | "payment" | "shippingQuote" | "shippingQuoteRate" | "orderShippingRate" | "stripeWebhookEvent" | "blingConnection" | "blingOrderSync" | "melhorEnvioConnection" | "melhorEnvioOAuthState" | "promotionCode" | "promotionRedemption" | "affiliate" | "affiliateProgramSettings" | "affiliatePromotionCode"
+    modelProps: "user" | "account" | "session" | "verification" | "customerProfile" | "address" | "userConsent" | "consentTerm" | "market" | "product" | "productShippingProfile" | "offer" | "offerItem" | "orderBump" | "cart" | "cartItem" | "order" | "orderItem" | "orderCustomer" | "orderPromotion" | "orderShippingAddress" | "payment" | "shippingQuote" | "shippingQuoteRate" | "orderShippingRate" | "stripeWebhookEvent" | "blingConnection" | "blingOrderSync" | "melhorEnvioConnection" | "melhorEnvioOAuthState" | "promotionCode" | "promotionRedemption" | "affiliate" | "affiliateProgramSettings" | "affiliatePromotionCode" | "affiliateCommission"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3041,6 +3042,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AffiliateCommission: {
+      payload: Prisma.$AffiliateCommissionPayload<ExtArgs>
+      fields: Prisma.AffiliateCommissionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AffiliateCommissionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AffiliateCommissionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload>
+        }
+        findFirst: {
+          args: Prisma.AffiliateCommissionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AffiliateCommissionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload>
+        }
+        findMany: {
+          args: Prisma.AffiliateCommissionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload>[]
+        }
+        create: {
+          args: Prisma.AffiliateCommissionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload>
+        }
+        createMany: {
+          args: Prisma.AffiliateCommissionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AffiliateCommissionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload>[]
+        }
+        delete: {
+          args: Prisma.AffiliateCommissionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload>
+        }
+        update: {
+          args: Prisma.AffiliateCommissionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload>
+        }
+        deleteMany: {
+          args: Prisma.AffiliateCommissionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AffiliateCommissionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AffiliateCommissionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload>[]
+        }
+        upsert: {
+          args: Prisma.AffiliateCommissionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AffiliateCommissionPayload>
+        }
+        aggregate: {
+          args: Prisma.AffiliateCommissionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAffiliateCommission>
+        }
+        groupBy: {
+          args: Prisma.AffiliateCommissionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AffiliateCommissionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AffiliateCommissionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AffiliateCommissionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3387,6 +3462,9 @@ export const OrderPromotionScalarFieldEnum = {
   discountType: 'discountType',
   discountValue: 'discountValue',
   discountAmount: 'discountAmount',
+  affiliateId: 'affiliateId',
+  affiliatePromotionCodeId: 'affiliatePromotionCodeId',
+  affiliateCommissionRate: 'affiliateCommissionRate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -3631,6 +3709,26 @@ export const AffiliatePromotionCodeScalarFieldEnum = {
 } as const
 
 export type AffiliatePromotionCodeScalarFieldEnum = (typeof AffiliatePromotionCodeScalarFieldEnum)[keyof typeof AffiliatePromotionCodeScalarFieldEnum]
+
+
+export const AffiliateCommissionScalarFieldEnum = {
+  id: 'id',
+  affiliateId: 'affiliateId',
+  orderId: 'orderId',
+  promotionCode: 'promotionCode',
+  commissionBaseAmount: 'commissionBaseAmount',
+  commissionRate: 'commissionRate',
+  commissionAmount: 'commissionAmount',
+  currency: 'currency',
+  status: 'status',
+  availableAt: 'availableAt',
+  paidAt: 'paidAt',
+  canceledAt: 'canceledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AffiliateCommissionScalarFieldEnum = (typeof AffiliateCommissionScalarFieldEnum)[keyof typeof AffiliateCommissionScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -4122,6 +4220,20 @@ export type ListEnumAffiliateStatusFieldRefInput<$PrismaModel> = FieldRefInputTy
 
 
 /**
+ * Reference to a field of type 'AffiliateCommissionStatus'
+ */
+export type EnumAffiliateCommissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AffiliateCommissionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AffiliateCommissionStatus[]'
+ */
+export type ListEnumAffiliateCommissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AffiliateCommissionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -4320,6 +4432,7 @@ export type GlobalOmitConfig = {
   affiliate?: Prisma.AffiliateOmit
   affiliateProgramSettings?: Prisma.AffiliateProgramSettingsOmit
   affiliatePromotionCode?: Prisma.AffiliatePromotionCodeOmit
+  affiliateCommission?: Prisma.AffiliateCommissionOmit
 }
 
 /* Types for Logging */

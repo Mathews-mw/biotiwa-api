@@ -9,7 +9,7 @@ import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { PromotionCode } from '@/domains/main/models/entities/promotion-code';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
-import { AffiliatePromotionValidatorService } from './affiliate-promotion-validator-service';
+import { AffiliatePromotionValidator } from '../../affiliates/services/affiliate-promotion-validator';
 import { AffiliatePromotionCodeDetails } from '@/domains/main/models/value-objects/affiliate-promotion-code-details';
 
 interface IRequest {
@@ -33,8 +33,8 @@ export class PromotionCodeResolver {
 		private readonly promotionCodeRepository: IPromotionCodeRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_REPOSITORY)
 		private readonly promotionRedemptionRepository: IPromotionRedemptionRepository,
-		@inject(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROMOTION_VALIDATOR_SERVICE)
-		private readonly affiliatePromotionValidator: AffiliatePromotionValidatorService
+		@inject(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROMOTION_VALIDATOR)
+		private readonly affiliatePromotionValidator: AffiliatePromotionValidator
 	) {}
 
 	async resolve({ code, userId, marketCode }: IRequest): Promise<Response> {
@@ -52,21 +52,6 @@ export class PromotionCodeResolver {
 			return failure(
 				new BadRequestError('Promotion code is not available for this market.', 'PROMOTION_CODE_MARKET_MISMATCH')
 			);
-		}
-
-		let affiliatePromotionCode: AffiliatePromotionCodeDetails | null = null;
-
-		if (promotionCode.type === 'AFFILIATE') {
-			const affiliateResult = await this.affiliatePromotionValidator.validate({
-				promotionCodeId: promotionCode.id.toString(),
-				userId,
-			});
-
-			if (affiliateResult.isFalse()) {
-				return failure(affiliateResult.value);
-			}
-
-			affiliatePromotionCode = affiliateResult.value.affiliatePromotionCode;
 		}
 
 		const now = new Date();
@@ -103,6 +88,23 @@ export class PromotionCodeResolver {
 					)
 				);
 			}
+		}
+
+		// Se for uma promoção de afiliado, aplica regras específicas
+		let affiliatePromotionCode: AffiliatePromotionCodeDetails | null = null;
+
+		if (promotionCode.type === 'AFFILIATE') {
+			const affiliateResult = await this.affiliatePromotionValidator.validate({
+				promotionCodeId: promotionCode.id.toString(),
+				userId,
+				marketCode,
+			});
+
+			if (affiliateResult.isFalse()) {
+				return failure(affiliateResult.value);
+			}
+
+			affiliatePromotionCode = affiliateResult.value.affiliatePromotion;
 		}
 
 		return success({ promotionCode, affiliatePromotionCode });

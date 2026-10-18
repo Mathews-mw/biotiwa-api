@@ -5,10 +5,12 @@ import type { ICartRepository } from '../../../carts/repositories/cart-repositor
 import type { IOrderRepository } from '../../../orders/repositories/order-repository';
 
 import { failure, success, type Outcome } from '@/core/outcome';
+import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
 import { EnqueueBlingOrderSyncUseCase } from '../../../integrations/bling/use-cases/enqueue-bling-order-sync-use-case';
 import { PromotionRedemptionLifecycleService } from '../../../promotions/services/promotion-redemption-lifecycle-service';
+import { CreateAffiliateCommissionForOrderUseCase } from '../../../affiliates/use-cases/create-affiliate-commission-for-order-use-case';
 
 interface IRequest {
 	orderId: string;
@@ -17,7 +19,7 @@ interface IRequest {
 	rawPayload?: unknown | null;
 }
 
-type Response = Outcome<ResourceNotFoundError, null>;
+type Response = Outcome<ResourceNotFoundError | BadRequestError, null>;
 
 @injectable()
 export class ConfirmStripeCheckoutSessionUseCase {
@@ -31,7 +33,9 @@ export class ConfirmStripeCheckoutSessionUseCase {
 		@inject(DEPENDENCY_IDENTIFIERS.ENQUEUE_BLING_ORDER_SYNC_USE_CASE)
 		private enqueueBlingOrderSyncUseCase: EnqueueBlingOrderSyncUseCase,
 		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_LIFECYCLE_SERVICE)
-		private promotionRedemptionLifecycleService: PromotionRedemptionLifecycleService
+		private promotionRedemptionLifecycleService: PromotionRedemptionLifecycleService,
+		@inject(DEPENDENCY_IDENTIFIERS.CREATE_AFFILIATE_COMMISSION_FOR_ORDER_USE_CASE)
+		private createAffiliateCommissionForOrderUseCase: CreateAffiliateCommissionForOrderUseCase
 	) {}
 
 	async execute(input: IRequest): Promise<Response> {
@@ -68,6 +72,14 @@ export class ConfirmStripeCheckoutSessionUseCase {
 		await this.enqueueBlingOrderSyncUseCase.execute({
 			orderId: orderDetails.id.toString(),
 		});
+
+		const commissionResult = await this.createAffiliateCommissionForOrderUseCase.execute({
+			order: orderDetails,
+		});
+
+		if (commissionResult.isFalse()) {
+			return failure(commissionResult.value);
+		}
 
 		return success(null);
 	}
