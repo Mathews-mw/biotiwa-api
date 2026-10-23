@@ -9,7 +9,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 export const affiliateCommissionStatusSchema = z.enum(['PENDING', 'AVAILABLE', 'PAID', 'CANCELED']);
 export type IAffiliateCommissionStatus = z.infer<typeof affiliateCommissionStatusSchema>;
 
-interface AffiliateCommissionProps {
+export interface AffiliateCommissionProps {
 	affiliateId: UniqueEntityId;
 	orderId: UniqueEntityId;
 	promotionCode: string;

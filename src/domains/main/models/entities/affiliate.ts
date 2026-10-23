@@ -7,7 +7,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 export const affiliateTypeSchema = z.enum(['PROMOTER', 'RESELLER']);
 export type IAffiliateType = z.infer<typeof affiliateTypeSchema>;
 
-export const affiliateStatusSchema = z.enum(['PENDING', 'ACTIVE', 'SUSPENDED', 'INACTIVE']);
+export const affiliateStatusSchema = z.enum(['PENDING', 'ACTIVE', 'SUSPENDED', 'REJECT', 'INACTIVE']);
 export type IAffiliateStatus = z.infer<typeof affiliateStatusSchema>;
 
 interface AffiliateProps {
@@ -58,6 +58,10 @@ export class Affiliate extends Entity<AffiliateProps> {
 		return this.props.status === 'ACTIVE';
 	}
 
+	get isPending() {
+		return this.props.status === 'PENDING';
+	}
+
 	activate() {
 		if (this.props.status === 'ACTIVE') {
 			return;
@@ -67,17 +71,48 @@ export class Affiliate extends Entity<AffiliateProps> {
 		this._touch();
 	}
 
+	approve() {
+		if (this.props.status !== 'PENDING') {
+			throw new Error('Only pending affiliates can be approved.');
+		}
+
+		this.props.status = 'ACTIVE';
+
+		this._touch();
+	}
+
+	reject() {
+		if (this.props.status !== 'PENDING') {
+			throw new Error('Only pending affiliates can be rejected.');
+		}
+
+		this.props.status = 'REJECT';
+
+		this._touch();
+	}
+
 	suspend() {
-		if (this.props.status === 'SUSPENDED') {
+		if (this.props.status !== 'ACTIVE') {
 			return;
 		}
 
 		this.props.status = 'SUSPENDED';
+
 		this._touch();
 	}
 
 	deactivate() {
 		this.props.status = 'INACTIVE';
+		this._touch();
+	}
+
+	reactivate() {
+		if (this.props.status !== 'SUSPENDED' && this.props.status !== 'INACTIVE') {
+			return;
+		}
+
+		this.props.status = 'ACTIVE';
+
 		this._touch();
 	}
 

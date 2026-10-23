@@ -1,6 +1,5 @@
 import { inject, injectable } from 'tsyringe';
 
-import { Affiliate, type IAffiliateType } from '@/domains/main/models/entities/affiliate';
 import type { IUserRepository } from '../../users/repositories/user-repository';
 import type { IAffiliateRepository } from '../repositories/affiliate-repository';
 
@@ -9,6 +8,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
+import { Affiliate, type IAffiliateType } from '@/domains/main/models/entities/affiliate';
 
 interface IRequest {
 	userId: string;
@@ -23,7 +23,7 @@ type Response = Outcome<
 >;
 
 @injectable()
-export class CreateAffiliateUseCase {
+export class CreateAffiliateAdminUseCase {
 	constructor(
 		@inject(DEPENDENCY_IDENTIFIERS.AFFILIATES_REPOSITORY)
 		private affiliateRepository: IAffiliateRepository,

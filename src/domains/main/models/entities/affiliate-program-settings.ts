@@ -4,7 +4,7 @@ import { Entity } from '@/core/entities/entity';
 import { Optional } from '@/core/types/optional';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 
-interface AffiliateProgramSettingsProps {
+export interface AffiliateProgramSettingsProps {
 	marketCode: IMarketCode;
 	minCodeLifetimeDays: number;
 	maxCodeLifetimeDays: number;

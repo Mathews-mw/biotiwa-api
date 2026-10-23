@@ -164,6 +164,7 @@ enum AffiliateStatus {
   PENDING
   ACTIVE
   SUSPENDED
+  REJECT
   INACTIVE
 }
 

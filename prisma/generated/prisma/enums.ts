@@ -241,6 +241,7 @@ export const AffiliateStatus = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
   SUSPENDED: 'SUSPENDED',
+  REJECT: 'REJECT',
   INACTIVE: 'INACTIVE'
 } as const
 
