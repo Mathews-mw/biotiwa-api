@@ -641,6 +641,12 @@ export const AffiliateProgramSettingsScalarFieldEnum = {
   minCodeLifetimeDays: 'minCodeLifetimeDays',
   maxCodeLifetimeDays: 'maxCodeLifetimeDays',
   attributionWindowDays: 'attributionWindowDays',
+  selfServiceCodeCreationEnabled: 'selfServiceCodeCreationEnabled',
+  maxActiveCodesPerAffiliate: 'maxActiveCodesPerAffiliate',
+  defaultAffiliateDiscountType: 'defaultAffiliateDiscountType',
+  defaultAffiliateDiscountValue: 'defaultAffiliateDiscountValue',
+  defaultAffiliateCommissionRate: 'defaultAffiliateCommissionRate',
+  maxUsesPerCustomerLimit: 'maxUsesPerCustomerLimit',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

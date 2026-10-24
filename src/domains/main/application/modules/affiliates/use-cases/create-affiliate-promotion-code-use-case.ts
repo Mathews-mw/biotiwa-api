@@ -12,6 +12,7 @@ import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
 import { AffiliatePromotionCode } from '@/domains/main/models/entities/affiliate-promotion-code';
 import { PromotionCode, type IPromotionDiscountType } from '@/domains/main/models/entities/promotion-code';
+import { IAffiliateProgramSettingsRepository } from '../repositories/affiliate-program-settings-repository';
 
 interface IRequest {
 	affiliateId: string;
@@ -56,13 +57,13 @@ type Response = Outcome<
 @injectable()
 export class CreateAffiliatePromotionCodeUseCase {
 	constructor(
-		@inject(DEPENDENCY_IDENTIFIERS.AFFILIATE_REPOSITORY)
+		@inject(DEPENDENCY_IDENTIFIERS.AFFILIATES_REPOSITORY)
 		private readonly affiliateRepository: IAffiliateRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROGRAM_SETTINGS_REPOSITORY)
 		private readonly affiliateProgramSettingsRepository: IAffiliateProgramSettingsRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.PROMOTION_CODES_REPOSITORY)
 		private readonly promotionCodeRepository: IPromotionCodeRepository,
-		@inject(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROMOTION_CODE_REPOSITORY)
+		@inject(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROMOTION_CODES_REPOSITORY)
 		private readonly affiliatePromotionCodeRepository: IAffiliatePromotionCodeRepository
 	) {}
 

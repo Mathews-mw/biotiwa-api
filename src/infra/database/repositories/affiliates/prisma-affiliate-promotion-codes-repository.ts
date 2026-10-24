@@ -36,10 +36,35 @@ export class PrismaAffiliatePromotionCodesRepository implements IAffiliatePromot
 		});
 	}
 
+	async countActiveByAffiliateId(affiliateId: string): Promise<number> {
+		const now = new Date();
+
+		return prisma.affiliatePromotionCode.count({
+			where: {
+				affiliateId: affiliateId,
+
+				promotionCode: {
+					status: 'ACTIVE',
+
+					OR: [
+						{
+							expiresAt: null,
+						},
+						{
+							expiresAt: {
+								gt: now,
+							},
+						},
+					],
+				},
+			},
+		});
+	}
+
 	async findManyByAffiliateId(affiliateId: string): Promise<AffiliatePromotionCodeDetails[]> {
 		const records = await prisma.affiliatePromotionCode.findMany({
 			where: {
-				affiliateId: affiliateId.toString(),
+				affiliateId: affiliateId,
 			},
 			include: {
 				affiliate: true,
@@ -62,7 +87,7 @@ export class PrismaAffiliatePromotionCodesRepository implements IAffiliatePromot
 	async findByPromotionCodeId(promotionCodeId: string): Promise<AffiliatePromotionCodeDetails | null> {
 		const affiliatePromotionCode = await prisma.affiliatePromotionCode.findUnique({
 			where: {
-				promotionCodeId: promotionCodeId.toString(),
+				promotionCodeId: promotionCodeId,
 			},
 
 			include: {

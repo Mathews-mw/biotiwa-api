@@ -12,13 +12,25 @@ import { getAffiliateDashboardResponseSchema } from '../schemas/affiliates/get-a
 import { getAffiliateDashboardController } from '../controllers/affiliates/get-affiliate-dashboard-controller';
 import { approvalAffiliateRegistrationSchema } from '../schemas/affiliates/approval-affiliate-registration-schema';
 import { listAffiliatePromotionCodesResponseSchema } from '../schemas/affiliates/list-affiliate-promotion-codes-schema';
+import { createOwnAffiliatePromotionCodeSchema } from '../schemas/affiliates/create-own-affiliate-promotion-code-schema';
 import { listAffiliatePromotionCodesController } from '../controllers/affiliates/list-affiliate-promotion-codes-controller';
 import { approvalAffiliateRegistrationController } from '../controllers/affiliates/approval-affiliate-registration-controller';
+import { getAffiliatePromotionCodeSettingsResponseSchema } from '../schemas/affiliates/get-affiliate-promotion-cde-settings-schema';
+import { createOwnAffiliatePromotionCodeController } from '../controllers/affiliates/create-own-affiliate-promotion-code-controller';
+import { getAffiliatePromotionCodeSettingsController } from '../controllers/affiliates/get-affiliate-promotion-code-settings-controller';
 
 export async function affiliatesRoutes(app: FastifyInstance) {
 	app
 		.withTypeProvider<ZodTypeProvider>()
 		.post('/register', { preHandler: [authMiddleware], schema: registerAffiliateSchema }, registerAffiliateController);
+
+	app
+		.withTypeProvider<ZodTypeProvider>()
+		.post(
+			'/me/promotion-codes',
+			{ preHandler: [authMiddleware], schema: createOwnAffiliatePromotionCodeSchema },
+			createOwnAffiliatePromotionCodeController
+		);
 
 	app
 		.withTypeProvider<ZodTypeProvider>()
@@ -54,5 +66,13 @@ export async function affiliatesRoutes(app: FastifyInstance) {
 			'/me/promotion-codes',
 			{ preHandler: [authMiddleware], schema: listAffiliatePromotionCodesResponseSchema },
 			listAffiliatePromotionCodesController
+		);
+
+	app
+		.withTypeProvider<ZodTypeProvider>()
+		.get(
+			'/me/promotion-code-settings',
+			{ preHandler: [authMiddleware], schema: getAffiliatePromotionCodeSettingsResponseSchema },
+			getAffiliatePromotionCodeSettingsController
 		);
 }

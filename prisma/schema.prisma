@@ -826,14 +826,20 @@ model Affiliate {
 }
 
 model AffiliateProgramSettings {
-  id                    String     @id @default(cuid())
-  marketCode            MarketCode @unique @map("market_code")
-  minCodeLifetimeDays   Int        @map("min_code_lifetime_days")
-  maxCodeLifetimeDays   Int        @map("max_code_lifetime_days")
-  attributionWindowDays Int        @default(30) @map("attribution_window_days")
-  isActive              Boolean    @default(true) @map("is_active")
-  createdAt             DateTime   @default(now()) @map("created_at")
-  updatedAt             DateTime?  @updatedAt @map("updated_at")
+  id                             String                @id @default(cuid())
+  marketCode                     MarketCode            @unique @map("market_code")
+  minCodeLifetimeDays            Int                   @map("min_code_lifetime_days")
+  maxCodeLifetimeDays            Int                   @map("max_code_lifetime_days")
+  attributionWindowDays          Int                   @default(30) @map("attribution_window_days")
+  selfServiceCodeCreationEnabled Boolean               @default(true) @map("self_service_code_creation_enabled")
+  maxActiveCodesPerAffiliate     Int                   @default(3) @map("max_active_codes_per_affiliate")
+  defaultAffiliateDiscountType   PromotionDiscountType @default(PERCENTAGE) @map("default_affiliate_discount_type")
+  defaultAffiliateDiscountValue  Int                   @default(1000) @map("default_affiliate_discount_value") // 10%
+  defaultAffiliateCommissionRate Int                   @default(800) @map("default_affiliate_commission_rate") // 8%
+  maxUsesPerCustomerLimit        Int                   @default(3) @map("max_uses_per_customer_limit")
+  isActive                       Boolean               @default(true) @map("is_active")
+  createdAt                      DateTime              @default(now()) @map("created_at")
+  updatedAt                      DateTime?             @updatedAt @map("updated_at")
 
   @@map("affiliate_program_settings")
 }

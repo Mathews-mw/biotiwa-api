@@ -1,5 +1,7 @@
 import type { IMarketCode } from '@/core/types/market-code';
 
+import type { IPromotionDiscountType } from './promotion-code';
+
 import { Entity } from '@/core/entities/entity';
 import { Optional } from '@/core/types/optional';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
@@ -9,6 +11,12 @@ export interface AffiliateProgramSettingsProps {
 	minCodeLifetimeDays: number;
 	maxCodeLifetimeDays: number;
 	attributionWindowDays: number;
+	selfServiceCodeCreationEnabled: boolean;
+	maxActiveCodesPerAffiliate: number;
+	defaultAffiliateDiscountType: IPromotionDiscountType;
+	defaultAffiliateDiscountValue: number;
+	defaultAffiliateCommissionRate: number;
+	maxUsesPerCustomerLimit: number;
 	isActive: boolean;
 	createdAt: Date;
 	updatedAt?: Date | null;
@@ -48,6 +56,60 @@ export class AffiliateProgramSettings extends Entity<AffiliateProgramSettingsPro
 
 	set attributionWindowDays(attributionWindowDays: number) {
 		this.props.attributionWindowDays = attributionWindowDays;
+		this._touch();
+	}
+
+	get selfServiceCodeCreationEnabled() {
+		return this.props.selfServiceCodeCreationEnabled;
+	}
+
+	set selfServiceCodeCreationEnabled(selfServiceCodeCreationEnabled: boolean) {
+		this.props.selfServiceCodeCreationEnabled = selfServiceCodeCreationEnabled;
+		this._touch();
+	}
+
+	get maxActiveCodesPerAffiliate() {
+		return this.props.maxActiveCodesPerAffiliate;
+	}
+
+	set maxActiveCodesPerAffiliate(maxActiveCodesPerAffiliate: number) {
+		this.props.maxActiveCodesPerAffiliate = maxActiveCodesPerAffiliate;
+		this._touch();
+	}
+
+	get defaultAffiliateDiscountType() {
+		return this.props.defaultAffiliateDiscountType;
+	}
+
+	set defaultAffiliateDiscountType(defaultAffiliateDiscountType: IPromotionDiscountType) {
+		this.props.defaultAffiliateDiscountType = defaultAffiliateDiscountType;
+		this._touch();
+	}
+
+	get defaultAffiliateDiscountValue() {
+		return this.props.defaultAffiliateDiscountValue;
+	}
+
+	set defaultAffiliateDiscountValue(defaultAffiliateDiscountValue: number) {
+		this.props.defaultAffiliateDiscountValue = defaultAffiliateDiscountValue;
+		this._touch();
+	}
+
+	get defaultAffiliateCommissionRate() {
+		return this.props.defaultAffiliateCommissionRate;
+	}
+
+	set defaultAffiliateCommissionRate(defaultAffiliateCommissionRate: number) {
+		this.props.defaultAffiliateCommissionRate = defaultAffiliateCommissionRate;
+		this._touch();
+	}
+
+	get maxUsesPerCustomerLimit() {
+		return this.props.maxUsesPerCustomerLimit;
+	}
+
+	set maxUsesPerCustomerLimit(maxUsesPerCustomerLimit: number) {
+		this.props.maxUsesPerCustomerLimit = maxUsesPerCustomerLimit;
 		this._touch();
 	}
 

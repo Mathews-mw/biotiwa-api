@@ -9,6 +9,7 @@ export interface ICreateAffiliatePromotionCodeInput {
 
 export abstract class IAffiliatePromotionCodeRepository {
 	abstract createWithPromotionCode(input: ICreateAffiliatePromotionCodeInput): Promise<AffiliatePromotionCodeDetails>;
+	abstract countActiveByAffiliateId(affiliateId: string): Promise<number>;
 	abstract findManyByAffiliateId(affiliateId: string): Promise<AffiliatePromotionCodeDetails[]>;
 	abstract findByPromotionCodeId(promotionCodeId: string): Promise<AffiliatePromotionCodeDetails | null>;
 }
