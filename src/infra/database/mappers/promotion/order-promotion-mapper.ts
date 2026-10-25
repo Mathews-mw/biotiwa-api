@@ -13,6 +13,11 @@ export class OrderPromotionMapper {
 				discountType: data.discountType,
 				discountValue: data.discountValue,
 				discountAmount: data.discountAmount,
+				affiliateCommissionRate: data.affiliateCommissionRate,
+				affiliateId: data.affiliateId ? new UniqueEntityId(data.affiliateId) : null,
+				affiliatePromotionCodeId: data.affiliatePromotionCodeId
+					? new UniqueEntityId(data.affiliatePromotionCodeId)
+					: null,
 				createdAt: data.createdAt,
 				updatedAt: data.updatedAt,
 			},
@@ -30,6 +35,9 @@ export class OrderPromotionMapper {
 			discountType: data.discountType,
 			discountValue: data.discountValue,
 			discountAmount: data.discountAmount,
+			affiliateCommissionRate: data.affiliateCommissionRate ?? null,
+			affiliateId: data.affiliateId ? data.affiliateId.toString() : null,
+			affiliatePromotionCodeId: data.affiliatePromotionCodeId ? data.affiliatePromotionCodeId.toString() : null,
 			createdAt: data.createdAt,
 			updatedAt: data.updatedAt ?? null,
 		};

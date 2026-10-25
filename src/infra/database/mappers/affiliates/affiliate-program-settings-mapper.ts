@@ -8,7 +8,6 @@ export class AffiliateProgramSettingsMapper {
 		return AffiliateProgramSettings.create(
 			{
 				marketCode: raw.marketCode,
-				isActive: raw.isActive,
 				minCodeLifetimeDays: raw.minCodeLifetimeDays,
 				maxCodeLifetimeDays: raw.maxCodeLifetimeDays,
 				attributionWindowDays: raw.attributionWindowDays,
@@ -18,6 +17,8 @@ export class AffiliateProgramSettingsMapper {
 				defaultAffiliateDiscountValue: raw.defaultAffiliateDiscountValue,
 				defaultAffiliateCommissionRate: raw.defaultAffiliateCommissionRate,
 				maxUsesPerCustomerLimit: raw.maxUsesPerCustomerLimit,
+				commissionHoldDays: raw.commissionHoldDays,
+				isActive: raw.isActive,
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
 			},
@@ -29,7 +30,6 @@ export class AffiliateProgramSettingsMapper {
 		return {
 			id: settings.id.toString(),
 			marketCode: settings.marketCode,
-			isActive: settings.isActive,
 			minCodeLifetimeDays: settings.minCodeLifetimeDays,
 			maxCodeLifetimeDays: settings.maxCodeLifetimeDays,
 			attributionWindowDays: settings.attributionWindowDays,
@@ -39,6 +39,8 @@ export class AffiliateProgramSettingsMapper {
 			defaultAffiliateDiscountValue: settings.defaultAffiliateDiscountValue,
 			defaultAffiliateCommissionRate: settings.defaultAffiliateCommissionRate,
 			maxUsesPerCustomerLimit: settings.maxUsesPerCustomerLimit,
+			commissionHoldDays: settings.commissionHoldDays,
+			isActive: settings.isActive,
 			createdAt: settings.createdAt,
 			updatedAt: settings.updatedAt ?? null,
 		};

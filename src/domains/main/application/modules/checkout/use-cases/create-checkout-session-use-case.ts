@@ -27,6 +27,7 @@ import { PromotionResolverService } from '../../promotions/services/promotion-re
 import { PromotionRedemptionLifecycleService } from '../../promotions/services/promotion-redemption-lifecycle-service';
 import { ResolveShippingRateForCheckoutUseCase } from '../../shipping/use-cases/resolve-shipping-rate-for-checkout-use-case';
 import { AffiliatePromotionCodeDetails } from '@/domains/main/models/value-objects/affiliate-promotion-code-details';
+import { ICountryCode } from '@/core/types/country-code';
 
 interface IRequest {
 	userId: string;
@@ -47,7 +48,7 @@ interface IRequest {
 		district?: string | null;
 		city: string;
 		state: string;
-		countryCode: string;
+		countryCode: ICountryCode;
 	};
 }
 
@@ -98,6 +99,8 @@ export class CreateCheckoutSessionUseCase {
 		 * ========================================
 		 */
 
+		console.log('orderDetails: ', orderDetails?.orderShippingRate);
+		console.log('shippingRateId: ', input.shippingRateId);
 		if (orderDetails) {
 			// Depois que uma Order existe, não permitimos trocar o frete
 			if (orderDetails.orderShippingRate?.shippingQuoteRateId !== input.shippingRateId) {
@@ -156,6 +159,14 @@ export class CreateCheckoutSessionUseCase {
 				resolvedAffiliatePromotion = affiliatePromotionCode;
 				promotionDiscountAmount = resolvedDiscountAmount;
 			}
+
+			console.log('resolvedPromotion: ', resolvedPromotion);
+			console.log(
+				'resolvedAffiliatePromotion: ',
+				resolvedAffiliatePromotion?.affiliate,
+				resolvedAffiliatePromotion?.affiliatePromotionCode
+			);
+			console.log('promotionDiscountAmount: ', promotionDiscountAmount);
 
 			// O frete também é validado definitivamente aqui
 			const shippingResult = await this.resolveShippingRateForCheckoutUseCase.execute({
@@ -257,6 +268,8 @@ export class CreateCheckoutSessionUseCase {
 					})
 				: null;
 
+			console.log('orderPromotion: ', orderPromotion);
+
 			// Reserva de uso da promoção. Ainda NÃO é um uso confirmado: isso acontecerá somente quando o webhook confirmar pagamento
 			const promotionRedemption = resolvedPromotion
 				? PromotionRedemption.create({
@@ -268,6 +281,8 @@ export class CreateCheckoutSessionUseCase {
 						reservedUntil: new Date(Date.now() + promotionConfig.PROMOTION_RESERVATION_TTL_MS),
 					})
 				: null;
+
+			console.log('promotionRedemption: ', promotionRedemption);
 
 			orderDetails = await this.orderRepository.createWithItems({
 				order,

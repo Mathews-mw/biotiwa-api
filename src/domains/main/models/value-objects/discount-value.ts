@@ -24,7 +24,9 @@ export class PromotionDiscount extends ValueObject<PromotionDiscountProps> {
 			return Math.min(this.value, baseAmount);
 		}
 
-		const discount = Math.round(baseAmount * (this.value / 100));
+		// value / 10² => Os valores são registrados em centavos.
+		// Antes, devemos transformar para  real (1ª /100) e depois tirar a porcentagem (2ª /100)
+		const discount = Math.round(baseAmount * (this.value / Math.pow(100, 2)));
 
 		return Math.min(discount, baseAmount);
 	}

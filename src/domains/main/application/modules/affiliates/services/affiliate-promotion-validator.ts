@@ -10,6 +10,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { BadRequestError } from '@/core/errors/bad-request-errors';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
+import { AffiliateProgramSettings } from '@/domains/main/models/entities/affiliate-program-settings';
 
 interface IRequest {
 	promotionCodeId: string;
@@ -21,6 +22,7 @@ type Response = Outcome<
 	ResourceNotFoundError | BadRequestError,
 	{
 		affiliatePromotion: AffiliatePromotionCodeDetails;
+		affiliateProgramSettings: AffiliateProgramSettings;
 	}
 >;
 
@@ -73,6 +75,7 @@ export class AffiliatePromotionValidator {
 
 		return success({
 			affiliatePromotion,
+			affiliateProgramSettings: settings,
 		});
 	}
 }

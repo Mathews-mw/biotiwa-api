@@ -14,6 +14,7 @@ export const affiliateProgramSettingsSchema = z.object({
 	default_affiliate_discount_value: z.coerce.number(),
 	default_affiliate_commission_rate: z.coerce.number(),
 	max_uses_per_customer_limit: z.coerce.number(),
+	commission_hold_days: z.coerce.number(),
 	is_active: z.coerce.boolean(),
 	created_at: z.coerce.date(),
 	updated_at: z.coerce.date().nullable().optional(),

@@ -32,11 +32,20 @@ export const calculateCheckoutSummarySchema: FastifySchema = {
 			.include('PROMOTION_CODE_EXPIRED')
 			.include('PROMOTION_CODE_USAGE_LIMIT_REACHED')
 			.include('PROMOTION_CODE_CUSTOMER_USAGE_LIMIT_REACHED')
+			.include('SHIPPING_QUOTE_EXPIRED')
+			.include('SHIPPING_RATE_MARKET_MISMATCH')
+			.include('SHIPPING_RATE_CART_MISMATCH')
+			.include('AFFILIATE_NOT_ACTIVE')
+			.include('AFFILIATE_PROGRAM_NOT_ACTIVE')
+			.include('AFFILIATE_SELF_REDEMPTION_NOT_ALLOWED')
 			.getErrorSchema(),
 		404: getNotFoundErrorSchema
 			.startWith('RESOURCE_NOT_FOUND_ERROR')
 			.include('ACTIVE_CART_NOT_FOUND')
 			.include('PROMOTION_CODE_NOT_FOUND')
+			.include('SHIPPING_RATE_NOT_FOUND')
+			.include('AFFILIATE_PROMOTION_NOT_FOUND')
+			.include('AFFILIATE_PROGRAM_SETTINGS_NOT_FOUND')
 			.getErrorSchema(),
 	},
 };

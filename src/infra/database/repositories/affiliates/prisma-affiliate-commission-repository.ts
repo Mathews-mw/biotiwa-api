@@ -32,6 +32,42 @@ export class PrismaAffiliateCommissionRepository implements IAffiliateCommission
 		});
 	}
 
+	async saveMany(commissions: AffiliateCommission[]): Promise<void> {
+		await prisma.$transaction(
+			commissions.map((commission) =>
+				prisma.affiliateCommission.update({
+					where: {
+						id: commission.id.toString(),
+					},
+					data: {
+						status: commission.status,
+						availableAt: commission.availableAt,
+						paidAt: commission.paidAt,
+						canceledAt: commission.canceledAt,
+						updatedAt: commission.updatedAt,
+					},
+				})
+			)
+		);
+	}
+
+	async findPendingEligibleForRelease(now: Date): Promise<AffiliateCommission[]> {
+		const commissions = await prisma.affiliateCommission.findMany({
+			where: {
+				status: 'PENDING',
+				availableAt: {
+					not: null,
+					lte: now,
+				},
+			},
+			orderBy: {
+				availableAt: 'asc',
+			},
+		});
+
+		return commissions.map(PrismaAffiliateCommissionMapper.toDomain);
+	}
+
 	async findByOrderId(orderId: string): Promise<AffiliateCommission | null> {
 		const commission = await prisma.affiliateCommission.findUnique({
 			where: {

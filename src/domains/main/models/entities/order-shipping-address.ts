@@ -3,6 +3,7 @@
 import { Entity } from '@/core/entities/entity';
 import { Optional } from '@/core/types/optional';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
+import { ICountryCode } from '@/core/types/country-code';
 
 export interface IOrderShippingAddressProps {
 	orderId: UniqueEntityId;
@@ -13,7 +14,7 @@ export interface IOrderShippingAddressProps {
 	district?: string | null;
 	city: string;
 	state: string;
-	countryCode: string;
+	countryCode: ICountryCode;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -95,7 +96,7 @@ export class OrderShippingAddress extends Entity<IOrderShippingAddressProps> {
 		return this.props.countryCode;
 	}
 
-	set countryCode(countryCode: string) {
+	set countryCode(countryCode: ICountryCode) {
 		this.props.countryCode = countryCode;
 		this._touch();
 	}

@@ -17,6 +17,7 @@ export interface AffiliateProgramSettingsProps {
 	defaultAffiliateDiscountValue: number;
 	defaultAffiliateCommissionRate: number;
 	maxUsesPerCustomerLimit: number;
+	commissionHoldDays: number; //commissionHoldDays = 0 → comissão pode ser liberada imediatamente
 	isActive: boolean;
 	createdAt: Date;
 	updatedAt?: Date | null;
@@ -113,6 +114,15 @@ export class AffiliateProgramSettings extends Entity<AffiliateProgramSettingsPro
 		this._touch();
 	}
 
+	get commissionHoldDays() {
+		return this.props.commissionHoldDays;
+	}
+
+	set commissionHoldDays(commissionHoldDays: number) {
+		this.props.commissionHoldDays = commissionHoldDays;
+		this._touch();
+	}
+
 	get isActive() {
 		return this.props.isActive;
 	}
@@ -168,6 +178,16 @@ export class AffiliateProgramSettings extends Entity<AffiliateProgramSettingsPro
 		this._touch();
 	}
 
+	updateCommissionHoldDays(commissionHoldDays: number) {
+		if (!Number.isInteger(commissionHoldDays) || commissionHoldDays < 0) {
+			throw new Error('Commission hold days must be a non-negative integer.');
+		}
+
+		this.props.commissionHoldDays = commissionHoldDays;
+
+		this._touch();
+	}
+
 	private _touch() {
 		this.props.updatedAt = new Date();
 	}
@@ -187,9 +207,14 @@ export class AffiliateProgramSettings extends Entity<AffiliateProgramSettingsPro
 	}
 
 	static create(
-		props: Optional<AffiliateProgramSettingsProps, 'isActive' | 'attributionWindowDays' | 'createdAt' | 'updatedAt'>,
+		props: Optional<
+			AffiliateProgramSettingsProps,
+			'isActive' | 'attributionWindowDays' | 'commissionHoldDays' | 'createdAt' | 'updatedAt'
+		>,
 		id?: UniqueEntityId
 	) {
+		const now = new Date();
+
 		AffiliateProgramSettings._validateCodeLifetimeRange(props.minCodeLifetimeDays, props.maxCodeLifetimeDays);
 
 		const attributionWindowDays = props.attributionWindowDays ?? 30;
@@ -198,11 +223,16 @@ export class AffiliateProgramSettings extends Entity<AffiliateProgramSettingsPro
 			throw new Error('Attribution window must be a positive integer.');
 		}
 
-		const now = new Date();
+		const commissionHoldDays = props.commissionHoldDays ?? 9;
+
+		if (!Number.isInteger(commissionHoldDays) || commissionHoldDays < 0) {
+			throw new Error('Commission hold days must be a non-negative integer.');
+		}
 
 		return new AffiliateProgramSettings(
 			{
 				...props,
+				commissionHoldDays,
 				isActive: props.isActive ?? true,
 				attributionWindowDays,
 				createdAt: props.createdAt ?? now,

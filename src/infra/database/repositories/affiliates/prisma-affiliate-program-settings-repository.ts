@@ -21,6 +21,7 @@ export class PrismaAffiliateProgramSettingsRepository implements IAffiliateProgr
 				minCodeLifetimeDays: settings.minCodeLifetimeDays,
 				maxCodeLifetimeDays: settings.maxCodeLifetimeDays,
 				attributionWindowDays: settings.attributionWindowDays,
+				commissionHoldDays: settings.commissionHoldDays,
 				updatedAt: settings.updatedAt,
 			},
 		});

@@ -27,6 +27,14 @@ export async function affiliatesRoutes(app: FastifyInstance) {
 	app
 		.withTypeProvider<ZodTypeProvider>()
 		.post(
+			'/admin/affiliate-commissions/release-eligible',
+			{ preHandler: [authMiddleware], schema: createOwnAffiliatePromotionCodeSchema },
+			createOwnAffiliatePromotionCodeController
+		);
+
+	app
+		.withTypeProvider<ZodTypeProvider>()
+		.post(
 			'/me/promotion-codes',
 			{ preHandler: [authMiddleware], schema: createOwnAffiliatePromotionCodeSchema },
 			createOwnAffiliatePromotionCodeController

@@ -20,6 +20,8 @@ export async function calculateCheckoutSummaryController(request: FastifyRequest
 		promotionCode: promotion_code,
 	});
 
+	console.log('result: ', result);
+
 	if (result.isFalse()) {
 		throw result.value;
 	}

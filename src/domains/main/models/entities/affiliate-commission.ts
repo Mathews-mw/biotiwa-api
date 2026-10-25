@@ -133,7 +133,7 @@ export class AffiliateCommission extends Entity<AffiliateCommissionProps> {
 		return this.props.updatedAt;
 	}
 
-	markAsAvailable(availableAt = new Date()) {
+	markAsAvailable(now = new Date()) {
 		if (this.props.status === 'AVAILABLE') {
 			return;
 		}
@@ -142,10 +142,11 @@ export class AffiliateCommission extends Entity<AffiliateCommissionProps> {
 			return;
 		}
 
+		if (!this.props.availableAt || this.props.availableAt > now) {
+			return;
+		}
+
 		this.props.status = 'AVAILABLE';
-
-		this.props.availableAt = availableAt;
-
 		this.touch();
 	}
 

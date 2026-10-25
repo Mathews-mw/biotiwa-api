@@ -39,13 +39,19 @@ export class ConfirmStripeCheckoutSessionUseCase {
 	) {}
 
 	async execute(input: IRequest): Promise<Response> {
+		console.log('Confirm payment input: ', input);
+
 		const orderDetails = await this.orderRepository.findById(input.orderId);
+
+		console.log('Confirm payment orderDetails: ', orderDetails);
 
 		if (!orderDetails) {
 			return failure(new ResourceNotFoundError('Order not found', 'ORDER_NOT_FOUND'));
 		}
 
 		const payment = await this.paymentRepository.findByProviderSessionId(input.providerSessionId);
+
+		console.log('Confirm payment payment: ', payment);
 
 		if (!payment) {
 			return failure(new ResourceNotFoundError('Payment not found', 'PAYMENT_NOT_FOUND'));
@@ -77,7 +83,10 @@ export class ConfirmStripeCheckoutSessionUseCase {
 			order: orderDetails,
 		});
 
+		console.log('commissionResult: ', commissionResult.value);
+
 		if (commissionResult.isFalse()) {
+			console.log('ERROR WHILE TRYING TO CREATE A COMMISSION FOR AN AFFILIATE: ', commissionResult.value);
 			return failure(commissionResult.value);
 		}
 

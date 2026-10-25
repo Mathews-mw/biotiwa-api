@@ -14,6 +14,8 @@ import type {
 const orderInclude = {
 	orderCustomer: true,
 	orderShippingAddress: true,
+	orderShippingRate: true,
+	orderPromotion: true,
 	items: {
 		include: {
 			product: true,

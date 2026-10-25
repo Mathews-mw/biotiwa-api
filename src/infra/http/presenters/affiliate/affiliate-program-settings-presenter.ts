@@ -15,6 +15,7 @@ export class AffiliateProgramSettingsPresenter {
 			default_affiliate_discount_value: data.defaultAffiliateDiscountValue,
 			default_affiliate_commission_rate: data.defaultAffiliateCommissionRate,
 			max_uses_per_customer_limit: data.maxUsesPerCustomerLimit,
+			commission_hold_days: data.commissionHoldDays,
 			is_active: data.isActive,
 			created_at: data.createdAt,
 			updated_at: data.updatedAt ?? null,

@@ -647,6 +647,7 @@ export const AffiliateProgramSettingsScalarFieldEnum = {
   defaultAffiliateDiscountValue: 'defaultAffiliateDiscountValue',
   defaultAffiliateCommissionRate: 'defaultAffiliateCommissionRate',
   maxUsesPerCustomerLimit: 'maxUsesPerCustomerLimit',
+  commissionHoldDays: 'commissionHoldDays',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
