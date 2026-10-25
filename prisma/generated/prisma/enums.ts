@@ -193,3 +193,66 @@ export const MelhorEnvioConnectionStatus = {
 } as const
 
 export type MelhorEnvioConnectionStatus = (typeof MelhorEnvioConnectionStatus)[keyof typeof MelhorEnvioConnectionStatus]
+
+
+export const PromotionCodeType = {
+  COUPON: 'COUPON',
+  AFFILIATE: 'AFFILIATE'
+} as const
+
+export type PromotionCodeType = (typeof PromotionCodeType)[keyof typeof PromotionCodeType]
+
+
+export const PromotionCodeStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type PromotionCodeStatus = (typeof PromotionCodeStatus)[keyof typeof PromotionCodeStatus]
+
+
+export const PromotionDiscountType = {
+  PERCENTAGE: 'PERCENTAGE',
+  FIXED: 'FIXED'
+} as const
+
+export type PromotionDiscountType = (typeof PromotionDiscountType)[keyof typeof PromotionDiscountType]
+
+
+export const PromotionRedemptionStatus = {
+  PENDING: 'PENDING',
+  REDEEMED: 'REDEEMED',
+  CANCELED: 'CANCELED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type PromotionRedemptionStatus = (typeof PromotionRedemptionStatus)[keyof typeof PromotionRedemptionStatus]
+
+
+export const AffiliateType = {
+  PROMOTER: 'PROMOTER',
+  RESELLER: 'RESELLER'
+} as const
+
+export type AffiliateType = (typeof AffiliateType)[keyof typeof AffiliateType]
+
+
+export const AffiliateStatus = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  REJECT: 'REJECT',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type AffiliateStatus = (typeof AffiliateStatus)[keyof typeof AffiliateStatus]
+
+
+export const AffiliateCommissionStatus = {
+  PENDING: 'PENDING',
+  AVAILABLE: 'AVAILABLE',
+  PAID: 'PAID',
+  CANCELED: 'CANCELED'
+} as const
+
+export type AffiliateCommissionStatus = (typeof AffiliateCommissionStatus)[keyof typeof AffiliateCommissionStatus]

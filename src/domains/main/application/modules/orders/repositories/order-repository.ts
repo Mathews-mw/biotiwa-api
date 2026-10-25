@@ -3,8 +3,10 @@ import type { IPaginationParams, IPaginationResponse } from '@/core/interfaces/p
 import { Order } from '@/domains/main/models/entities/order';
 import { OrderItem } from '@/domains/main/models/entities/order-item';
 import { OrderCustomer } from '@/domains/main/models/entities/order-customer';
+import { OrderPromotion } from '@/domains/main/models/entities/order-promotion';
 import { OrderDetails } from '@/domains/main/models/value-objects/order-details';
 import { OrderShippingRate } from '@/domains/main/models/entities/order-shipping-rate';
+import { PromotionRedemption } from '@/domains/main/models/entities/promotion-redemption';
 import { OrderShippingAddress } from '@/domains/main/models/entities/order-shipping-address';
 
 export interface ICreateOrderWithItemsInput {
@@ -12,6 +14,8 @@ export interface ICreateOrderWithItemsInput {
 	orderCustomer?: OrderCustomer | null;
 	shippingAddress?: OrderShippingAddress | null;
 	shippingRate?: OrderShippingRate | null;
+	orderPromotion?: OrderPromotion | null;
+	promotionRedemption?: PromotionRedemption | null;
 	items: Array<OrderItem>;
 }
 
@@ -25,10 +29,10 @@ export interface IFindOrdersByUserResponse {
 	orders: Array<OrderDetails>;
 }
 
-export interface IOrderRepository {
-	createWithItems(input: ICreateOrderWithItemsInput): Promise<OrderDetails>;
-	save(order: Order): Promise<OrderDetails>;
-	findManyByUser(query: IFindOrdersByUserParams): Promise<IFindOrdersByUserResponse>;
-	findById(orderId: string): Promise<OrderDetails | null>;
-	findPendingByCartId(cartId: string): Promise<OrderDetails | null>;
+export abstract class IOrderRepository {
+	abstract createWithItems(input: ICreateOrderWithItemsInput): Promise<OrderDetails>;
+	abstract save(order: Order): Promise<OrderDetails>;
+	abstract findManyByUser(query: IFindOrdersByUserParams): Promise<IFindOrdersByUserResponse>;
+	abstract findById(orderId: string): Promise<OrderDetails | null>;
+	abstract findPendingByCartId(cartId: string): Promise<OrderDetails | null>;
 }

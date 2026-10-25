@@ -1,8 +1,8 @@
 import { container } from 'tsyringe';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { UserProfilePresenter } from '../../presenters/users/user-profile-presenter';
 import { getAuthenticatedSession } from '../../helpers/get-authenticated-session';
+import { UserProfilePresenter } from '../../presenters/users/user-profile-presenter';
 import { GetCurrentUserUseCase } from '@/domains/main/application/modules/users/use-cases/get-current-user-use-case';
 
 export async function getCurrentUserController(request: FastifyRequest, reply: FastifyReply) {
@@ -18,7 +18,11 @@ export async function getCurrentUserController(request: FastifyRequest, reply: F
 		throw result.value;
 	}
 
-	return reply
-		.status(200)
-		.send(UserProfilePresenter.toHTTP({ user: result.value.user, profile: result.value.customerProfile ?? null }));
+	return reply.status(200).send(
+		UserProfilePresenter.toHTTP({
+			user: result.value.user,
+			profile: result.value.customerProfile ?? null,
+			affiliate: result.value.affiliate ?? null,
+		})
+	);
 }

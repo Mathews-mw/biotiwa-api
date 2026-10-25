@@ -6,11 +6,13 @@ import type {
 
 import { env } from '@/env';
 import { stripe } from './stripe';
+import { failure, Outcome, success } from '@/core/outcome';
+import { BadRequestError } from '@/core/errors/bad-request-errors';
+
+type Response = Outcome<BadRequestError, ICreatePaymentGatewayCheckoutSessionOutput>;
 
 export class StripePaymentService implements IStripePaymentGateway {
-	async createCheckoutSession(
-		input: ICreatePaymentGatewayCheckoutSessionInput
-	): Promise<ICreatePaymentGatewayCheckoutSessionOutput> {
+	async createCheckoutSession(input: ICreatePaymentGatewayCheckoutSessionInput): Promise<Response> {
 		const session = await stripe.checkout.sessions.create(
 			{
 				mode: 'payment',
@@ -37,15 +39,20 @@ export class StripePaymentService implements IStripePaymentGateway {
 		);
 
 		if (!session.url) {
-			throw new Error('Stripe checkout session URL was not generated.');
+			return failure(
+				new BadRequestError(
+					'Stripe checkout session URL was not generated.',
+					'STRIPE_CHECKOUT_SESSION_URL_NOT_GENERATED'
+				)
+			);
 		}
 
-		return {
+		return success({
 			provider: 'STRIPE',
 			providerSessionId: session.id,
 			providerPaymentIntent: typeof session.payment_intent === 'string' ? session.payment_intent : null,
 			paymentUrl: session.url,
 			rawPayload: session,
-		};
+		});
 	}
 }

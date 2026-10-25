@@ -11,6 +11,7 @@ import { BlingAuthenticationService } from '@/services/bling/bling-authenticatio
 import { MelhorEnvioShippingService } from '@/services/melhor-envio/melhor-envio-shipping-service';
 import { MelhorEnvioAuthenticationService } from '@/services/melhor-envio/melhor-envio-authentication-service';
 import { ShippingRateResolver } from '@/domains/main/application/modules/shipping/services/shipping-rate-resolver';
+import { PromotionCodeResolver } from '@/domains/main/application/modules/promotions/services/promotion-code-resolver';
 
 import { EnqueueBlingOrderSyncUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/enqueue-bling-order-sync-use-case';
 import { ProcessNextBlingOrderSyncUseCase } from '@/domains/main/application/modules/integrations/bling/use-cases/process-next-bling-order-sync-use-case';
@@ -31,15 +32,28 @@ import { PrismaProductsRepository } from '@/infra/database/repositories/commerce
 import { PrismaOfferItemsRepository } from '@/infra/database/repositories/commerce/prisma-offer-items-repository';
 import { PrismaOrderBumpsRepository } from '@/infra/database/repositories/commerce/prisma-order-bumps-repository';
 import { PrismaUserConsentsRepository } from '@/infra/database/repositories/users/prisma-user-consents-repository';
+import { PrismaShippingQuoteRepository } from '@/infra/database/repositories/shipping/prisma-shipping-quote-repository';
 import { PrismaCustomerProfilesRepository } from '@/infra/database/repositories/users/prisma-customer-profiles-repository';
 import { PrismaConsentTermsRepository } from '@/infra/database/repositories/consent-terms/prisma-consent-terms-repository';
 import { PrismaCommerceCatalogRepository } from '@/infra/database/repositories/commerce/prisma-commerce-catalog-repository';
+import { PrismaPromotionCodesRepository } from '@/infra/database/repositories/promotions/prisma-promotion-codes-repository';
 import { PrismaBlingOrderSyncRepository } from '@/infra/database/repositories/integrations/bling/prisma-bling-order-sync-repository';
 import { PrismaBlingConnectionRepository } from '@/infra/database/repositories/integrations/bling/prisma-bling-connection-repository';
+import { PrismaPromotionRedemptionRepository } from '@/infra/database/repositories/promotions/prisma-promotion-redemption-repository';
 import { PrismaStripeWebhookEventRepository } from '@/infra/database/repositories/events/stripe/prisma-stripe-webhook-event-repository';
 import { PrismaMelhorEnvioConnectionRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-connection-repository';
 import { PrismaMelhorEnvioOAuthStateRepository } from '@/infra/database/repositories/integrations/melhor-envio/prisma-melhor-envio-oauth-state-repository';
-import { PrismaShippingQuoteRepository } from '@/infra/database/repositories/shipping/prisma-shipping-quote-repository';
+import { PromotionResolverService } from '@/domains/main/application/modules/promotions/services/promotion-resolver-service';
+import { PromotionRedemptionLifecycleService } from '@/domains/main/application/modules/promotions/services/promotion-redemption-lifecycle-service';
+import { PrismaAffiliateRepository } from '@/infra/database/repositories/affiliates/prisma-affiliates-repository';
+import { PrismaAffiliatePromotionCodesRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-promotion-codes-repository';
+import { PrismaAffiliateProgramSettingsRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-program-settings-repository';
+import { AffiliatePromotionValidator } from '@/domains/main/application/modules/affiliates/services/affiliate-promotion-validator';
+import { PrismaAffiliateCommissionRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-commission-repository';
+import { CreateAffiliateCommissionForOrderUseCase } from '@/domains/main/application/modules/affiliates/use-cases/create-affiliate-commission-for-order-use-case';
+import { CancelAffiliateCommissionByOrderUseCase } from '@/domains/main/application/modules/affiliates/use-cases/cancel-affiliate-commission-by-order-use-case';
+import { PrismaAffiliateDashboardRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-dashboard-repository';
+import { PrismaAffiliateSalesRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-sales-repository';
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -70,6 +84,17 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_ORDER_SYNC_REPOSITORY, PrismaBlin
 registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_CONNECTION_REPOSITORY, PrismaMelhorEnvioConnectionRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_OAUTH_STATE_REPOSITORY, PrismaMelhorEnvioOAuthStateRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_QUOTE_REPOSITORY, PrismaShippingQuoteRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_CODES_REPOSITORY, PrismaPromotionCodesRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_REPOSITORY, PrismaPromotionRedemptionRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATES_REPOSITORY, PrismaAffiliateRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROMOTION_CODES_REPOSITORY, PrismaAffiliatePromotionCodesRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_COMMISSION_REPOSITORY, PrismaAffiliateCommissionRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_DASHBOARD_REPOSITORY, PrismaAffiliateDashboardRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_SALES_REPOSITORY, PrismaAffiliateSalesRepository);
+registerSingleton(
+	DEPENDENCY_IDENTIFIERS.AFFILIATE_PROGRAM_SETTINGS_REPOSITORY,
+	PrismaAffiliateProgramSettingsRepository
+);
 
 // Providers
 registerSingleton(DEPENDENCY_IDENTIFIERS.IDENTITY_PROVIDER, BetterAuthIdentityProvider);
@@ -81,6 +106,10 @@ registerSingleton(DEPENDENCY_IDENTIFIERS.BLING_AUTHENTICATION, BlingAuthenticati
 registerSingleton(DEPENDENCY_IDENTIFIERS.MELHOR_ENVIO_AUTHENTICATION, MelhorEnvioAuthenticationService);
 registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_SERVICE, MelhorEnvioShippingService);
 registerSingleton(DEPENDENCY_IDENTIFIERS.SHIPPING_RATE_RESOLVER, ShippingRateResolver);
+registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_CODE_RESOLVER, PromotionCodeResolver);
+registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_RESOLVER_SERVICE, PromotionResolverService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.PROMOTION_REDEMPTION_LIFECYCLE_SERVICE, PromotionRedemptionLifecycleService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AFFILIATE_PROMOTION_VALIDATOR, AffiliatePromotionValidator);
 
 // Use cases
 registerSingleton(DEPENDENCY_IDENTIFIERS.ENQUEUE_BLING_ORDER_SYNC_USE_CASE, EnqueueBlingOrderSyncUseCase);
@@ -93,4 +122,12 @@ registerSingleton(
 registerSingleton(
 	DEPENDENCY_IDENTIFIERS.GET_VALID_MELHOR_ENVIO_ACCESS_TOKEN_USE_CASE,
 	GetValidMelhorEnvioAccessTokenUseCase
+);
+registerSingleton(
+	DEPENDENCY_IDENTIFIERS.CREATE_AFFILIATE_COMMISSION_FOR_ORDER_USE_CASE,
+	CreateAffiliateCommissionForOrderUseCase
+);
+registerSingleton(
+	DEPENDENCY_IDENTIFIERS.CANCEL_AFFILIATE_COMMISSION_BY_ORDER_USE_CASE,
+	CancelAffiliateCommissionByOrderUseCase
 );

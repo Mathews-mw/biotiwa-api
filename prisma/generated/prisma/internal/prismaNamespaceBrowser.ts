@@ -70,6 +70,7 @@ export const ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   OrderCustomer: 'OrderCustomer',
+  OrderPromotion: 'OrderPromotion',
   OrderShippingAddress: 'OrderShippingAddress',
   Payment: 'Payment',
   ShippingQuote: 'ShippingQuote',
@@ -79,7 +80,13 @@ export const ModelName = {
   BlingConnection: 'BlingConnection',
   BlingOrderSync: 'BlingOrderSync',
   MelhorEnvioConnection: 'MelhorEnvioConnection',
-  MelhorEnvioOAuthState: 'MelhorEnvioOAuthState'
+  MelhorEnvioOAuthState: 'MelhorEnvioOAuthState',
+  PromotionCode: 'PromotionCode',
+  PromotionRedemption: 'PromotionRedemption',
+  Affiliate: 'Affiliate',
+  AffiliateProgramSettings: 'AffiliateProgramSettings',
+  AffiliatePromotionCode: 'AffiliatePromotionCode',
+  AffiliateCommission: 'AffiliateCommission'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -396,6 +403,25 @@ export const OrderCustomerScalarFieldEnum = {
 export type OrderCustomerScalarFieldEnum = (typeof OrderCustomerScalarFieldEnum)[keyof typeof OrderCustomerScalarFieldEnum]
 
 
+export const OrderPromotionScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  sourcePromotionCodeId: 'sourcePromotionCodeId',
+  code: 'code',
+  type: 'type',
+  discountType: 'discountType',
+  discountValue: 'discountValue',
+  discountAmount: 'discountAmount',
+  affiliateId: 'affiliateId',
+  affiliatePromotionCodeId: 'affiliatePromotionCodeId',
+  affiliateCommissionRate: 'affiliateCommissionRate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderPromotionScalarFieldEnum = (typeof OrderPromotionScalarFieldEnum)[keyof typeof OrderPromotionScalarFieldEnum]
+
+
 export const OrderShippingAddressScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
@@ -558,6 +584,108 @@ export const MelhorEnvioOAuthStateScalarFieldEnum = {
 } as const
 
 export type MelhorEnvioOAuthStateScalarFieldEnum = (typeof MelhorEnvioOAuthStateScalarFieldEnum)[keyof typeof MelhorEnvioOAuthStateScalarFieldEnum]
+
+
+export const PromotionCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  type: 'type',
+  status: 'status',
+  marketCode: 'marketCode',
+  discountType: 'discountType',
+  discountValue: 'discountValue',
+  maxUses: 'maxUses',
+  maxUsesPerCustomer: 'maxUsesPerCustomer',
+  startsAt: 'startsAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PromotionCodeScalarFieldEnum = (typeof PromotionCodeScalarFieldEnum)[keyof typeof PromotionCodeScalarFieldEnum]
+
+
+export const PromotionRedemptionScalarFieldEnum = {
+  id: 'id',
+  promotionCodeId: 'promotionCodeId',
+  userId: 'userId',
+  orderId: 'orderId',
+  status: 'status',
+  discountAmount: 'discountAmount',
+  reservedUntil: 'reservedUntil',
+  redeemedAt: 'redeemedAt',
+  canceledAt: 'canceledAt',
+  expiredAt: 'expiredAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PromotionRedemptionScalarFieldEnum = (typeof PromotionRedemptionScalarFieldEnum)[keyof typeof PromotionRedemptionScalarFieldEnum]
+
+
+export const AffiliateScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AffiliateScalarFieldEnum = (typeof AffiliateScalarFieldEnum)[keyof typeof AffiliateScalarFieldEnum]
+
+
+export const AffiliateProgramSettingsScalarFieldEnum = {
+  id: 'id',
+  marketCode: 'marketCode',
+  minCodeLifetimeDays: 'minCodeLifetimeDays',
+  maxCodeLifetimeDays: 'maxCodeLifetimeDays',
+  attributionWindowDays: 'attributionWindowDays',
+  selfServiceCodeCreationEnabled: 'selfServiceCodeCreationEnabled',
+  maxActiveCodesPerAffiliate: 'maxActiveCodesPerAffiliate',
+  defaultAffiliateDiscountType: 'defaultAffiliateDiscountType',
+  defaultAffiliateDiscountValue: 'defaultAffiliateDiscountValue',
+  defaultAffiliateCommissionRate: 'defaultAffiliateCommissionRate',
+  maxUsesPerCustomerLimit: 'maxUsesPerCustomerLimit',
+  commissionHoldDays: 'commissionHoldDays',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AffiliateProgramSettingsScalarFieldEnum = (typeof AffiliateProgramSettingsScalarFieldEnum)[keyof typeof AffiliateProgramSettingsScalarFieldEnum]
+
+
+export const AffiliatePromotionCodeScalarFieldEnum = {
+  id: 'id',
+  affiliateId: 'affiliateId',
+  promotionCodeId: 'promotionCodeId',
+  commissionRate: 'commissionRate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AffiliatePromotionCodeScalarFieldEnum = (typeof AffiliatePromotionCodeScalarFieldEnum)[keyof typeof AffiliatePromotionCodeScalarFieldEnum]
+
+
+export const AffiliateCommissionScalarFieldEnum = {
+  id: 'id',
+  affiliateId: 'affiliateId',
+  orderId: 'orderId',
+  promotionCode: 'promotionCode',
+  commissionBaseAmount: 'commissionBaseAmount',
+  commissionRate: 'commissionRate',
+  commissionAmount: 'commissionAmount',
+  currency: 'currency',
+  status: 'status',
+  availableAt: 'availableAt',
+  paidAt: 'paidAt',
+  canceledAt: 'canceledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AffiliateCommissionScalarFieldEnum = (typeof AffiliateCommissionScalarFieldEnum)[keyof typeof AffiliateCommissionScalarFieldEnum]
 
 
 export const SortOrder = {

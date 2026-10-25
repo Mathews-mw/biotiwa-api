@@ -9,7 +9,6 @@ import { OrderBump } from '@/domains/main/models/entities/order-bump';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
 import { ICommerceCatalogRepository } from '../repositories/commerce-catalog-repository';
-import { OfferWithItems } from '@/domains/main/models/value-objects/offer-with-item';
 
 interface IRequest {
 	marketCode: IMarketCode;

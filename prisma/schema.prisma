@@ -133,6 +133,48 @@ enum MelhorEnvioConnectionStatus {
   ERROR
 }
 
+enum PromotionCodeType {
+  COUPON
+  AFFILIATE
+}
+
+enum PromotionCodeStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum PromotionDiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+enum PromotionRedemptionStatus {
+  PENDING
+  REDEEMED
+  CANCELED
+  EXPIRED
+}
+
+enum AffiliateType {
+  PROMOTER
+  RESELLER
+}
+
+enum AffiliateStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  REJECT
+  INACTIVE
+}
+
+enum AffiliateCommissionStatus {
+  PENDING
+  AVAILABLE
+  PAID
+  CANCELED
+}
+
 model User {
   id            String    @id @unique @default(cuid())
   name          String
@@ -143,14 +185,16 @@ model User {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime? @updatedAt @map("updated_at")
 
-  customerProfile CustomerProfile?
-  addresses       Address[]
-  consents        UserConsent[]
-  accounts        Account[]
-  sessions        Session[]
-  carts           Cart[]
-  orders          Order[]
-  shippingQuotes  ShippingQuote[]
+  customerProfile      CustomerProfile?
+  addresses            Address[]
+  consents             UserConsent[]
+  accounts             Account[]
+  sessions             Session[]
+  carts                Cart[]
+  orders               Order[]
+  shippingQuotes       ShippingQuote[]
+  promotionRedemptions PromotionRedemption[]
+  affiliate            Affiliate?
 
   @@map("users")
 }
@@ -468,6 +512,9 @@ model Order {
   orderShippingAddress OrderShippingAddress?
   blingOrderSync       BlingOrderSync?
   orderShippingRate    OrderShippingRate?
+  orderPromotion       OrderPromotion?
+  promotionRedemptions PromotionRedemption[]
+  affiliateCommission  AffiliateCommission?
 
   @@index([userId])
   @@index([cartId])
@@ -510,6 +557,26 @@ model OrderCustomer {
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("order_customers")
+}
+
+model OrderPromotion {
+  id                       String                @id @default(cuid())
+  orderId                  String                @unique @map("order_id")
+  sourcePromotionCodeId    String?               @map("source_promotion_code_id") // Referência histórica
+  code                     String
+  type                     PromotionCodeType
+  discountType             PromotionDiscountType @map("discount_type")
+  discountValue            Int                   @map("discount_value")
+  discountAmount           Int                   @map("discount_amount")
+  affiliateId              String?               @map("affiliate_id")
+  affiliatePromotionCodeId String?               @map("affiliate_promotion_code_id")
+  affiliateCommissionRate  Int?                  @map("affiliate_commission_rate")
+  createdAt                DateTime              @default(now()) @map("created_at")
+  updatedAt                DateTime?             @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_promotions")
 }
 
 model OrderShippingAddress {
@@ -692,4 +759,127 @@ model MelhorEnvioOAuthState {
 
   @@index([expiresAt])
   @@map("melhor_envio_oauth_states")
+}
+
+model PromotionCode {
+  id                 String                @id @default(cuid())
+  code               String                @unique
+  type               PromotionCodeType
+  status             PromotionCodeStatus   @default(ACTIVE)
+  marketCode         MarketCode            @map("market_code")
+  discountType       PromotionDiscountType @map("discount_type")
+  discountValue      Int                   @map("discount_value")
+  maxUses            Int?                  @map("max_uses")
+  maxUsesPerCustomer Int?                  @map("max_uses_per_customer")
+  startsAt           DateTime?             @map("starts_at")
+  expiresAt          DateTime?             @map("expires_at")
+  createdAt          DateTime              @default(now()) @map("created_at")
+  updatedAt          DateTime?             @updatedAt @map("updated_at")
+
+  redemptions            PromotionRedemption[]
+  affiliatePromotionCode AffiliatePromotionCode?
+
+  @@index([code])
+  @@index([status])
+  @@index([marketCode])
+  @@map("promotion_codes")
+}
+
+model PromotionRedemption {
+  id              String                    @id @default(cuid())
+  promotionCodeId String                    @map("promotion_code_id")
+  userId          String                    @map("user_id")
+  orderId         String                    @unique @map("order_id")
+  status          PromotionRedemptionStatus @default(PENDING)
+  discountAmount  Int                       @map("discount_amount")
+  reservedUntil   DateTime?                 @map("reserved_until")
+  redeemedAt      DateTime?                 @map("redeemed_at")
+  canceledAt      DateTime?                 @map("canceled_at")
+  expiredAt       DateTime?                 @map("expired_at")
+  createdAt       DateTime                  @default(now()) @map("created_at")
+  updatedAt       DateTime?                 @updatedAt @map("updated_at")
+
+  promotionCode PromotionCode @relation(fields: [promotionCodeId], references: [id])
+  user          User          @relation(fields: [userId], references: [id])
+  order         Order         @relation(fields: [orderId], references: [id])
+
+  @@index([promotionCodeId, status])
+  @@index([promotionCodeId, userId, status])
+  @@map("promotion_redemptions")
+}
+
+model Affiliate {
+  id        String          @id @default(cuid())
+  userId    String          @unique @map("user_id")
+  type      AffiliateType
+  status    AffiliateStatus @default(PENDING)
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime?       @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  affiliatePromotionCodes AffiliatePromotionCode[]
+  affiliateCommissions    AffiliateCommission[]
+
+  @@index([status])
+  @@map("affiliates")
+}
+
+model AffiliateProgramSettings {
+  id                             String                @id @default(cuid())
+  marketCode                     MarketCode            @unique @map("market_code")
+  minCodeLifetimeDays            Int                   @map("min_code_lifetime_days")
+  maxCodeLifetimeDays            Int                   @map("max_code_lifetime_days")
+  attributionWindowDays          Int                   @default(30) @map("attribution_window_days")
+  selfServiceCodeCreationEnabled Boolean               @default(true) @map("self_service_code_creation_enabled")
+  maxActiveCodesPerAffiliate     Int                   @default(3) @map("max_active_codes_per_affiliate")
+  defaultAffiliateDiscountType   PromotionDiscountType @default(PERCENTAGE) @map("default_affiliate_discount_type")
+  defaultAffiliateDiscountValue  Int                   @default(1000) @map("default_affiliate_discount_value") // 10%
+  defaultAffiliateCommissionRate Int                   @default(800) @map("default_affiliate_commission_rate") // 8%
+  maxUsesPerCustomerLimit        Int                   @default(3) @map("max_uses_per_customer_limit")
+  commissionHoldDays             Int                   @default(9) @map("commission_hold_days")
+  isActive                       Boolean               @default(true) @map("is_active")
+  createdAt                      DateTime              @default(now()) @map("created_at")
+  updatedAt                      DateTime?             @updatedAt @map("updated_at")
+
+  @@map("affiliate_program_settings")
+}
+
+model AffiliatePromotionCode {
+  id              String    @id @default(cuid())
+  affiliateId     String    @map("affiliate_id")
+  promotionCodeId String    @unique @map("promotion_code_id")
+  commissionRate  Int       @map("commission_rate")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at")
+
+  affiliate     Affiliate     @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  promotionCode PromotionCode @relation(fields: [promotionCodeId], references: [id], onDelete: Cascade)
+
+  @@index([affiliateId])
+  @@map("affiliate_promotion_codes")
+}
+
+model AffiliateCommission {
+  id                   String                    @id @default(cuid())
+  affiliateId          String                    @map("affiliate_id")
+  orderId              String                    @unique @map("order_id")
+  promotionCode        String                    @map("promotion_code")
+  commissionBaseAmount Int                       @map("commission_base_amount")
+  commissionRate       Int                       @map("commission_rate")
+  commissionAmount     Int                       @map("commission_amount")
+  currency             CurrencyCode
+  status               AffiliateCommissionStatus @default(PENDING)
+  availableAt          DateTime?                 @map("available_at")
+  paidAt               DateTime?                 @map("paid_at")
+  canceledAt           DateTime?                 @map("canceled_at")
+  createdAt            DateTime                  @default(now()) @map("created_at")
+  updatedAt            DateTime?                 @updatedAt @map("updated_at")
+
+  affiliate Affiliate @relation(fields: [affiliateId], references: [id])
+  order     Order     @relation(fields: [orderId], references: [id])
+
+  @@index([affiliateId, status])
+  @@index([status])
+  @@map("affiliate_commissions")
 }

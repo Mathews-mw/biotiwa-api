@@ -1,0 +1,244 @@
+import type { IMarketCode } from '@/core/types/market-code';
+
+import type { IPromotionDiscountType } from './promotion-code';
+
+import { Entity } from '@/core/entities/entity';
+import { Optional } from '@/core/types/optional';
+import { UniqueEntityId } from '@/core/entities/unique-entity-id';
+
+export interface AffiliateProgramSettingsProps {
+	marketCode: IMarketCode;
+	minCodeLifetimeDays: number;
+	maxCodeLifetimeDays: number;
+	attributionWindowDays: number;
+	selfServiceCodeCreationEnabled: boolean;
+	maxActiveCodesPerAffiliate: number;
+	defaultAffiliateDiscountType: IPromotionDiscountType;
+	defaultAffiliateDiscountValue: number;
+	defaultAffiliateCommissionRate: number;
+	maxUsesPerCustomerLimit: number;
+	commissionHoldDays: number; //commissionHoldDays = 0 → comissão pode ser liberada imediatamente
+	isActive: boolean;
+	createdAt: Date;
+	updatedAt?: Date | null;
+}
+
+export class AffiliateProgramSettings extends Entity<AffiliateProgramSettingsProps> {
+	get marketCode() {
+		return this.props.marketCode;
+	}
+
+	set marketCode(marketCode: IMarketCode) {
+		this.props.marketCode = marketCode;
+		this._touch();
+	}
+
+	get minCodeLifetimeDays() {
+		return this.props.minCodeLifetimeDays;
+	}
+
+	set minCodeLifetimeDays(minCodeLifetimeDays: number) {
+		this.props.minCodeLifetimeDays = minCodeLifetimeDays;
+		this._touch();
+	}
+
+	get maxCodeLifetimeDays() {
+		return this.props.maxCodeLifetimeDays;
+	}
+
+	set maxCodeLifetimeDays(maxCodeLifetimeDays: number) {
+		this.props.maxCodeLifetimeDays = maxCodeLifetimeDays;
+		this._touch();
+	}
+
+	get attributionWindowDays() {
+		return this.props.attributionWindowDays;
+	}
+
+	set attributionWindowDays(attributionWindowDays: number) {
+		this.props.attributionWindowDays = attributionWindowDays;
+		this._touch();
+	}
+
+	get selfServiceCodeCreationEnabled() {
+		return this.props.selfServiceCodeCreationEnabled;
+	}
+
+	set selfServiceCodeCreationEnabled(selfServiceCodeCreationEnabled: boolean) {
+		this.props.selfServiceCodeCreationEnabled = selfServiceCodeCreationEnabled;
+		this._touch();
+	}
+
+	get maxActiveCodesPerAffiliate() {
+		return this.props.maxActiveCodesPerAffiliate;
+	}
+
+	set maxActiveCodesPerAffiliate(maxActiveCodesPerAffiliate: number) {
+		this.props.maxActiveCodesPerAffiliate = maxActiveCodesPerAffiliate;
+		this._touch();
+	}
+
+	get defaultAffiliateDiscountType() {
+		return this.props.defaultAffiliateDiscountType;
+	}
+
+	set defaultAffiliateDiscountType(defaultAffiliateDiscountType: IPromotionDiscountType) {
+		this.props.defaultAffiliateDiscountType = defaultAffiliateDiscountType;
+		this._touch();
+	}
+
+	get defaultAffiliateDiscountValue() {
+		return this.props.defaultAffiliateDiscountValue;
+	}
+
+	set defaultAffiliateDiscountValue(defaultAffiliateDiscountValue: number) {
+		this.props.defaultAffiliateDiscountValue = defaultAffiliateDiscountValue;
+		this._touch();
+	}
+
+	get defaultAffiliateCommissionRate() {
+		return this.props.defaultAffiliateCommissionRate;
+	}
+
+	set defaultAffiliateCommissionRate(defaultAffiliateCommissionRate: number) {
+		this.props.defaultAffiliateCommissionRate = defaultAffiliateCommissionRate;
+		this._touch();
+	}
+
+	get maxUsesPerCustomerLimit() {
+		return this.props.maxUsesPerCustomerLimit;
+	}
+
+	set maxUsesPerCustomerLimit(maxUsesPerCustomerLimit: number) {
+		this.props.maxUsesPerCustomerLimit = maxUsesPerCustomerLimit;
+		this._touch();
+	}
+
+	get commissionHoldDays() {
+		return this.props.commissionHoldDays;
+	}
+
+	set commissionHoldDays(commissionHoldDays: number) {
+		this.props.commissionHoldDays = commissionHoldDays;
+		this._touch();
+	}
+
+	get isActive() {
+		return this.props.isActive;
+	}
+
+	set isActive(isActive: boolean) {
+		this.props.isActive = isActive;
+		this._touch();
+	}
+
+	get createdAt() {
+		return this.props.createdAt;
+	}
+
+	get updatedAt() {
+		return this.props.updatedAt;
+	}
+
+	activate() {
+		if (this.props.isActive) {
+			return;
+		}
+
+		this.props.isActive = true;
+		this._touch();
+	}
+
+	deactivate() {
+		if (!this.props.isActive) {
+			return;
+		}
+
+		this.props.isActive = false;
+		this._touch();
+	}
+
+	updateCodeLifetimeRange(minCodeLifetimeDays: number, maxCodeLifetimeDays: number) {
+		AffiliateProgramSettings._validateCodeLifetimeRange(minCodeLifetimeDays, maxCodeLifetimeDays);
+
+		this.props.minCodeLifetimeDays = minCodeLifetimeDays;
+
+		this.props.maxCodeLifetimeDays = maxCodeLifetimeDays;
+
+		this._touch();
+	}
+
+	updateAttributionWindow(attributionWindowDays: number) {
+		if (!Number.isInteger(attributionWindowDays) || attributionWindowDays <= 0) {
+			throw new Error('Attribution window must be a positive integer.');
+		}
+
+		this.props.attributionWindowDays = attributionWindowDays;
+
+		this._touch();
+	}
+
+	updateCommissionHoldDays(commissionHoldDays: number) {
+		if (!Number.isInteger(commissionHoldDays) || commissionHoldDays < 0) {
+			throw new Error('Commission hold days must be a non-negative integer.');
+		}
+
+		this.props.commissionHoldDays = commissionHoldDays;
+
+		this._touch();
+	}
+
+	private _touch() {
+		this.props.updatedAt = new Date();
+	}
+
+	private static _validateCodeLifetimeRange(minCodeLifetimeDays: number, maxCodeLifetimeDays: number) {
+		if (!Number.isInteger(minCodeLifetimeDays) || minCodeLifetimeDays <= 0) {
+			throw new Error('Minimum code lifetime must be a positive integer.');
+		}
+
+		if (!Number.isInteger(maxCodeLifetimeDays) || maxCodeLifetimeDays <= 0) {
+			throw new Error('Maximum code lifetime must be a positive integer.');
+		}
+
+		if (minCodeLifetimeDays > maxCodeLifetimeDays) {
+			throw new Error('Minimum code lifetime cannot exceed maximum code lifetime.');
+		}
+	}
+
+	static create(
+		props: Optional<
+			AffiliateProgramSettingsProps,
+			'isActive' | 'attributionWindowDays' | 'commissionHoldDays' | 'createdAt' | 'updatedAt'
+		>,
+		id?: UniqueEntityId
+	) {
+		const now = new Date();
+
+		AffiliateProgramSettings._validateCodeLifetimeRange(props.minCodeLifetimeDays, props.maxCodeLifetimeDays);
+
+		const attributionWindowDays = props.attributionWindowDays ?? 30;
+
+		if (!Number.isInteger(attributionWindowDays) || attributionWindowDays <= 0) {
+			throw new Error('Attribution window must be a positive integer.');
+		}
+
+		const commissionHoldDays = props.commissionHoldDays ?? 9;
+
+		if (!Number.isInteger(commissionHoldDays) || commissionHoldDays < 0) {
+			throw new Error('Commission hold days must be a non-negative integer.');
+		}
+
+		return new AffiliateProgramSettings(
+			{
+				...props,
+				commissionHoldDays,
+				isActive: props.isActive ?? true,
+				attributionWindowDays,
+				createdAt: props.createdAt ?? now,
+				updatedAt: props.updatedAt ?? now,
+			},
+			id
+		);
+	}
+}

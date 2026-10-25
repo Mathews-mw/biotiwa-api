@@ -47,7 +47,7 @@ async function createConsentTerms() {
 	const currentYear = currentDate.getFullYear();
 	const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
 
-	const consetTermsData: Prisma.ConsentTermUncheckedCreateInput[] = [
+	const consentTermsData: Prisma.ConsentTermUncheckedCreateInput[] = [
 		{
 			type: 'TERMS_OF_USE',
 			version: `${currentYear}-${currentMonth}`,
@@ -68,7 +68,7 @@ async function createConsentTerms() {
 		},
 	];
 
-	for await (const term of consetTermsData) {
+	for await (const term of consentTermsData) {
 		await prisma.consentTerm.upsert({
 			where: { type_version: { type: term.type, version: term.version } },
 			update: {},
@@ -214,6 +214,21 @@ async function main() {
 			quantity: 1,
 			isActive: true,
 			sortOrder: 1,
+		},
+	});
+
+	console.log('Creating affiliate program settings...');
+	await prisma.affiliateProgramSettings.upsert({
+		where: {
+			marketCode: 'BR',
+		},
+		update: {},
+		create: {
+			marketCode: 'BR',
+			isActive: true,
+			minCodeLifetimeDays: 1,
+			maxCodeLifetimeDays: 90,
+			attributionWindowDays: 30,
 		},
 	});
 

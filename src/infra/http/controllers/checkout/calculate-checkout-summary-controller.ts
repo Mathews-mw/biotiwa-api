@@ -10,14 +10,17 @@ import { CalculateCheckoutSummaryUseCase } from '@/domains/main/application/modu
 export async function calculateCheckoutSummaryController(request: FastifyRequest, reply: FastifyReply) {
 	const session = getAuthenticatedSession(request);
 
-	const { shipping_rate_id } = request.body as ICalculateCheckoutSummaryRequest;
+	const { shipping_rate_id, promotion_code } = request.body as ICalculateCheckoutSummaryRequest;
 
 	const service = container.resolve(CalculateCheckoutSummaryUseCase);
 
 	const result = await service.execute({
 		userId: session.userId,
 		shippingRateId: shipping_rate_id,
+		promotionCode: promotion_code,
 	});
+
+	console.log('result: ', result);
 
 	if (result.isFalse()) {
 		throw result.value;

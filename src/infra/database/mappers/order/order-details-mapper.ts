@@ -11,12 +11,15 @@ import type {
 	OrderCustomer as PrismaOrderCustomer,
 	OrderShippingRate as PrismaOrderShippingRate,
 	OrderShippingAddress as PrismaOrderShippingAddress,
+	OrderPromotion as PrismaOrderPromotion,
 } from '@/generated/prisma/client';
+import { OrderPromotionMapper } from '../promotion/order-promotion-mapper';
 
 export type IPrismaOrderDetails = PrismaOrder & {
 	orderCustomer?: PrismaOrderCustomer | null;
 	orderShippingAddress?: PrismaOrderShippingAddress | null;
 	orderShippingRate?: PrismaOrderShippingRate | null;
+	orderPromotion?: PrismaOrderPromotion | null;
 	items: Array<IPrismaOrderItemDetails>;
 };
 
@@ -45,6 +48,7 @@ export class OrderDetailsMapper {
 			orderShippingAddress: data.orderShippingAddress
 				? OrderShippingAddressMapper.toDomain(data.orderShippingAddress)
 				: null,
+			orderPromotion: data.orderPromotion ? OrderPromotionMapper.toDomain(data.orderPromotion) : null,
 			items: data.items.map(OrderItemDetailsMapper.toDomain),
 		});
 	}

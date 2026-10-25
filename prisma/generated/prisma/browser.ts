@@ -113,6 +113,11 @@ export type OrderItem = Prisma.OrderItemModel
  */
 export type OrderCustomer = Prisma.OrderCustomerModel
 /**
+ * Model OrderPromotion
+ * 
+ */
+export type OrderPromotion = Prisma.OrderPromotionModel
+/**
  * Model OrderShippingAddress
  * 
  */
@@ -162,3 +167,33 @@ export type MelhorEnvioConnection = Prisma.MelhorEnvioConnectionModel
  * 
  */
 export type MelhorEnvioOAuthState = Prisma.MelhorEnvioOAuthStateModel
+/**
+ * Model PromotionCode
+ * 
+ */
+export type PromotionCode = Prisma.PromotionCodeModel
+/**
+ * Model PromotionRedemption
+ * 
+ */
+export type PromotionRedemption = Prisma.PromotionRedemptionModel
+/**
+ * Model Affiliate
+ * 
+ */
+export type Affiliate = Prisma.AffiliateModel
+/**
+ * Model AffiliateProgramSettings
+ * 
+ */
+export type AffiliateProgramSettings = Prisma.AffiliateProgramSettingsModel
+/**
+ * Model AffiliatePromotionCode
+ * 
+ */
+export type AffiliatePromotionCode = Prisma.AffiliatePromotionCodeModel
+/**
+ * Model AffiliateCommission
+ * 
+ */
+export type AffiliateCommission = Prisma.AffiliateCommissionModel
