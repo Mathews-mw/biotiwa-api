@@ -2,6 +2,7 @@ import type { AffiliatePromotionCodeDetails } from '@/domains/main/models/value-
 import type {
 	IAffiliatePromotionCodeRepository,
 	ICreateAffiliatePromotionCodeInput,
+	IFindManyByAffiliateIdParams,
 } from '@/domains/main/application/modules/affiliates/repositories/affiliate-promotion-code-repository';
 
 import { prisma } from '../../prisma';
@@ -24,14 +25,21 @@ export class PrismaAffiliatePromotionCodesRepository implements IAffiliatePromot
 
 				include: {
 					affiliate: true,
-					promotionCode: true,
+					promotionCode: {
+						include: {
+							redemptions: true,
+						},
+					},
 				},
 			});
 
 			return AffiliatePromotionCodeDetailsMapper.toDomain({
 				affiliate: affiliatePromotion.affiliate,
 				affiliatePromotionCode: affiliatePromotion,
-				promotionCode: affiliatePromotion.promotionCode,
+				promotionCode: {
+					promotionCode: affiliatePromotion.promotionCode,
+					redemptions: affiliatePromotion.promotionCode.redemptions,
+				},
 			});
 		});
 	}
@@ -61,14 +69,25 @@ export class PrismaAffiliatePromotionCodesRepository implements IAffiliatePromot
 		});
 	}
 
-	async findManyByAffiliateId(affiliateId: string): Promise<AffiliatePromotionCodeDetails[]> {
+	async findManyByAffiliateId({
+		affiliateId,
+		redemptionStatus,
+	}: IFindManyByAffiliateIdParams): Promise<AffiliatePromotionCodeDetails[]> {
 		const records = await prisma.affiliatePromotionCode.findMany({
 			where: {
 				affiliateId: affiliateId,
 			},
 			include: {
 				affiliate: true,
-				promotionCode: true,
+				promotionCode: {
+					include: {
+						redemptions: {
+							where: {
+								status: redemptionStatus,
+							},
+						},
+					},
+				},
 			},
 			orderBy: {
 				createdAt: 'desc',
@@ -79,7 +98,10 @@ export class PrismaAffiliatePromotionCodesRepository implements IAffiliatePromot
 			return AffiliatePromotionCodeDetailsMapper.toDomain({
 				affiliate: record.affiliate,
 				affiliatePromotionCode: record,
-				promotionCode: record.promotionCode,
+				promotionCode: {
+					promotionCode: record.promotionCode,
+					redemptions: record.promotionCode.redemptions,
+				},
 			});
 		});
 	}
@@ -92,7 +114,11 @@ export class PrismaAffiliatePromotionCodesRepository implements IAffiliatePromot
 
 			include: {
 				affiliate: true,
-				promotionCode: true,
+				promotionCode: {
+					include: {
+						redemptions: true,
+					},
+				},
 			},
 		});
 
@@ -103,7 +129,10 @@ export class PrismaAffiliatePromotionCodesRepository implements IAffiliatePromot
 		return AffiliatePromotionCodeDetailsMapper.toDomain({
 			affiliate: affiliatePromotionCode.affiliate,
 			affiliatePromotionCode,
-			promotionCode: affiliatePromotionCode.promotionCode,
+			promotionCode: {
+				promotionCode: affiliatePromotionCode.promotionCode,
+				redemptions: affiliatePromotionCode.promotionCode.redemptions,
+			},
 		});
 	}
 }

@@ -1,11 +1,11 @@
 import { Affiliate } from '../entities/affiliate';
-import { PromotionCode } from '../entities/promotion-code';
 import { ValueObject } from '@/core/entities/value-object';
+import { PromotionCodeDetails } from './promotion-code-details';
 import { AffiliatePromotionCode } from '../entities/affiliate-promotion-code';
 
 interface AffiliatePromotionCodeDetailsProps {
 	affiliate: Affiliate;
-	promotionCode: PromotionCode;
+	promotionCode: PromotionCodeDetails;
 	affiliatePromotionCode: AffiliatePromotionCode;
 }
 
