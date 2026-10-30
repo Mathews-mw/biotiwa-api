@@ -54,6 +54,10 @@ import { CreateAffiliateCommissionForOrderUseCase } from '@/domains/main/applica
 import { CancelAffiliateCommissionByOrderUseCase } from '@/domains/main/application/modules/affiliates/use-cases/cancel-affiliate-commission-by-order-use-case';
 import { PrismaAffiliateDashboardRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-dashboard-repository';
 import { PrismaAffiliateSalesRepository } from '@/infra/database/repositories/affiliates/prisma-affiliate-sales-repository';
+import { PrismaOrderAuthorizationRepository } from '@/infra/database/repositories/authorization/prisma-order-authorization-repository';
+import { UserSelfAccessPolicy } from '@/domains/main/application/authorization/policies/user-self-access.policy';
+import { AuthorizationService } from '@/domains/main/application/authorization/authorization-service';
+import { OrderOwnershipPolicy } from '@/domains/main/application/authorization/policies/order-ownership-policy';
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -131,3 +135,11 @@ registerSingleton(
 	DEPENDENCY_IDENTIFIERS.CANCEL_AFFILIATE_COMMISSION_BY_ORDER_USE_CASE,
 	CancelAffiliateCommissionByOrderUseCase
 );
+
+// Policies
+registerSingleton(DEPENDENCY_IDENTIFIERS.ORDER_AUTHORIZATION_REPOSITORY, PrismaOrderAuthorizationRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AUTHORIZATION_SERVICE, AuthorizationService);
+
+// Policies (Inject All) Aqui que entra a ideia de plugins: Todos as policies vão ser marcadas com o token de AUTHORIZATION_POLICY
+registerSingleton(DEPENDENCY_IDENTIFIERS.AUTHORIZATION_POLICY, OrderOwnershipPolicy);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AUTHORIZATION_POLICY, UserSelfAccessPolicy);

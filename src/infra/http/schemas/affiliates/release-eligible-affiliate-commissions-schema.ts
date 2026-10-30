@@ -2,6 +2,7 @@ import z from 'zod';
 import { FastifySchema } from 'fastify/types/schema';
 
 import { currencyCodeSchema } from '@/core/types/currency-code';
+import { getForbiddenErrorSchema } from '../erros/erros-schemas';
 
 const responseSchema = z.object({
 	analyzed_at: z.coerce.date(),
@@ -26,5 +27,6 @@ export const releaseEligibleAffiliateCommissionsSchema: FastifySchema = {
 	security: [{ cookieAuth: [] }],
 	response: {
 		200: responseSchema,
+		403: getForbiddenErrorSchema.startWith('FORBIDDEN_ERROR').include('INSUFFICIENT_PERMISSION_ERROR').getErrorSchema(),
 	},
 };

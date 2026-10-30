@@ -1,5 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
+import type { IUserAuth } from '@/core/auth/models/user-auth-model';
 import type { IOrderRepository } from '../../orders/repositories/order-repository';
 import type { IPaymentRepository } from '../../payments/repositories/payment-repository';
 
@@ -8,8 +9,10 @@ import { Payment } from '@/domains/main/models/entities/payment';
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 import { OrderDetails } from '@/domains/main/models/value-objects/order-details';
 import { DEPENDENCY_IDENTIFIERS } from '@/shared/di/containers/dependency-identifiers';
+import { AuthorizationService } from '../../../authorization/authorization-service';
 
 interface IRequest {
+	actor: IUserAuth;
 	orderId: string;
 }
 
@@ -24,13 +27,17 @@ type Response = Outcome<
 @injectable()
 export class GetOrderDetailsUseCase {
 	constructor(
+		@inject(DEPENDENCY_IDENTIFIERS.AUTHORIZATION_SERVICE)
+		private authorizationService: AuthorizationService,
 		@inject(DEPENDENCY_IDENTIFIERS.ORDER_REPOSITORY)
 		private orderRepository: IOrderRepository,
 		@inject(DEPENDENCY_IDENTIFIERS.PAYMENT_REPOSITORY)
 		private paymentRepository: IPaymentRepository
 	) {}
 
-	async execute({ orderId }: IRequest): Promise<Response> {
+	async execute({ actor, orderId }: IRequest): Promise<Response> {
+		await this.authorizationService.authorize({ user: actor, entity: 'Order', action: 'read', resourceId: orderId });
+
 		const order = await this.orderRepository.findById(orderId);
 
 		if (!order) {

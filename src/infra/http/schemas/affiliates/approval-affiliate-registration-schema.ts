@@ -2,7 +2,7 @@ import z from 'zod';
 import { FastifySchema } from 'fastify/types/schema';
 
 import { affiliateStatusSchema } from '@/domains/main/models/entities/affiliate';
-import { getBadRequestErrorSchema, getNotFoundErrorSchema } from '../erros/erros-schemas';
+import { getBadRequestErrorSchema, getForbiddenErrorSchema, getNotFoundErrorSchema } from '../erros/erros-schemas';
 
 const paramsSchema = z.object({
 	affiliateId: z.string(),
@@ -25,7 +25,7 @@ export type IApprovalAffiliateRegistrationParams = z.infer<typeof paramsSchema>;
 export type IApprovalAffiliateRegistrationResponse = z.infer<typeof responseSchema>;
 
 export const approvalAffiliateRegistrationSchema: FastifySchema = {
-	tags: ['Affiliates'],
+	tags: ['Admin'],
 	summary: 'Aprove or reject an affiliate registration',
 	security: [{ cookieAuth: [] }],
 	params: paramsSchema,
@@ -36,6 +36,7 @@ export const approvalAffiliateRegistrationSchema: FastifySchema = {
 			.startWith('BAD_REQUEST_ERROR')
 			.include('AFFILIATE_REGISTRATION_ALREADY_REVIEWED')
 			.getErrorSchema(),
+		403: getForbiddenErrorSchema.startWith('FORBIDDEN_ERROR').include('INSUFFICIENT_PERMISSION_ERROR').getErrorSchema(),
 		404: getNotFoundErrorSchema.startWith('RESOURCE_NOT_FOUND_ERROR').include('AFFILIATE_NOT_FOUND').getErrorSchema(),
 	},
 };

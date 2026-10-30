@@ -3,7 +3,7 @@ import { FastifySchema } from 'fastify/types/schema';
 
 import { paymentSchema } from '../payment/payment-schema';
 import { orderDetailsSchema } from './order-details-schema';
-import { getNotFoundErrorSchema } from '../erros/erros-schemas';
+import { getForbiddenErrorSchema, getNotFoundErrorSchema } from '../erros/erros-schemas';
 
 const paramsSchema = z.object({
 	orderId: z.string(),
@@ -24,6 +24,7 @@ export const getOrderDetailsSchema: FastifySchema = {
 	params: paramsSchema,
 	response: {
 		200: responseSchema,
+		403: getForbiddenErrorSchema.startWith('FORBIDDEN_ERROR').include('RESOURCE_ACCESS_FORBIDDEN').getErrorSchema(),
 		404: getNotFoundErrorSchema
 			.startWith('RESOURCE_NOT_FOUND_ERROR')
 			.include('ORDER_NOT_FOUND')

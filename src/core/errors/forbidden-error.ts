@@ -3,7 +3,13 @@ import { createHttpErrorSchemaFactory } from './http-error-factory';
 
 export const forbiddenErrors = createHttpErrorSchemaFactory({
 	status: 403,
-	codes: ['FORBIDDEN_ERROR', 'SAME_EMAIL_ERROR', 'INSUFFICIENT_PERMISSION_ERROR', 'OLD_PASSWORD_NOT_MATCH_ERROR'],
+	codes: [
+		'FORBIDDEN_ERROR',
+		'RESOURCE_ACCESS_FORBIDDEN',
+		'SAME_EMAIL_ERROR',
+		'INSUFFICIENT_PERMISSION_ERROR',
+		'OLD_PASSWORD_NOT_MATCH_ERROR',
+	],
 	defaultCode: 'FORBIDDEN_ERROR',
 });
 
