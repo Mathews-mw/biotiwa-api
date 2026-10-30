@@ -58,6 +58,10 @@ import { PrismaOrderAuthorizationRepository } from '@/infra/database/repositorie
 import { UserSelfAccessPolicy } from '@/domains/main/application/authorization/policies/user-self-access.policy';
 import { AuthorizationService } from '@/domains/main/application/authorization/authorization-service';
 import { OrderOwnershipPolicy } from '@/domains/main/application/authorization/policies/order-ownership-policy';
+import { PrismaCartAuthorizationRepository } from '@/infra/database/repositories/authorization/prisma-cart-authorization-repository';
+import { CartOwnershipPolicy } from '@/domains/main/application/authorization/policies/cart-ownership-policy';
+import { PrismaAddressAuthorizationRepository } from '@/infra/database/repositories/authorization/prisma-address-authorization-repository';
+import { AddressOwnershipPolicy } from '@/domains/main/application/authorization/policies/address-ownership-policy';
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -137,9 +141,13 @@ registerSingleton(
 );
 
 // Policies
-registerSingleton(DEPENDENCY_IDENTIFIERS.ORDER_AUTHORIZATION_REPOSITORY, PrismaOrderAuthorizationRepository);
 registerSingleton(DEPENDENCY_IDENTIFIERS.AUTHORIZATION_SERVICE, AuthorizationService);
+registerSingleton(DEPENDENCY_IDENTIFIERS.CART_AUTHORIZATION_REPOSITORY, PrismaCartAuthorizationRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.ORDER_AUTHORIZATION_REPOSITORY, PrismaOrderAuthorizationRepository);
+registerSingleton(DEPENDENCY_IDENTIFIERS.ADDRESS_AUTHORIZATION_REPOSITORY, PrismaAddressAuthorizationRepository);
 
 // Policies (Inject All) Aqui que entra a ideia de plugins: Todos as policies vão ser marcadas com o token de AUTHORIZATION_POLICY
-registerSingleton(DEPENDENCY_IDENTIFIERS.AUTHORIZATION_POLICY, OrderOwnershipPolicy);
 registerSingleton(DEPENDENCY_IDENTIFIERS.AUTHORIZATION_POLICY, UserSelfAccessPolicy);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AUTHORIZATION_POLICY, CartOwnershipPolicy);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AUTHORIZATION_POLICY, OrderOwnershipPolicy);
+registerSingleton(DEPENDENCY_IDENTIFIERS.AUTHORIZATION_POLICY, AddressOwnershipPolicy);
